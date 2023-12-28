@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Lato:wght@400;700&family=Open+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Lato:wght@400;700&family=Montserrat:wght@400;500&family=Open+Sans:wght@300;400;500&display=swap');
+
+
+
+@layer base{
+  .new-product-container{
+    @apply  bg-white shadow-lg cursor-pointer  shadow-slate-200 w-[95%] md:w-9/12 lg:w-[60%]  p-5;
+    margin: 4% auto 0;
+    transition: all 1s linear
+  }
+ 
+  .new-product-header h2{
+    @apply text-3xl tracking-wide font-medium;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .new-product-header h3{
+    @apply my-1 tracking-wider text-blue-700
+  }
+  .new-product-container form{
+    @apply mt-3
+  }
+  .new-product-container input,.new-product-container textarea,.category{
+    @apply w-full border border-slate-500 text-slate-700 outline-none px-2 py-1.5 rounded-[4px] text-sm tracking-wider mb-3
+  }
+  .new-product-container label{
+    @apply text-[14px]  font-semibold my-1 tracking-wide;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .img{
+    @apply h-[50px] w-[50px] object-cover ml-1.5 mt-2 select-none
+  }
+  .add-icon{
+    @apply bg-blue-200 p-1.5 rounded-[4px] select-none
+  }
+  .category{
+    @apply   outline-none cursor-pointer
+  }
+
+   .section-1{
+    @apply bg-white border-t-2 lg:border-t-4 border-blue-700 shadow-lg pb-8 shadow-slate-200 col-span-2
+  }
+  .section-1 h2{
+    @apply text-[25px] tracking-wider text-slate-700;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .section-1 article {
+    @apply mb-3 mt-1.5 text-slate-600 text-sm md:text-[15px] tracking-wide
+  }
+  .cart-btn{
+    @apply bg-blue-700 text-white px-5 py-1.5 rounded-[4px] font-medium flex items-center
+  }
+  .detailed-section{
+    @apply bg-white mb-6 shadow-lg shadow-slate-200 p-4 rounded-[4px];
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  @media(max-width: 1024px){
+    .section-1 h2{
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  }
+
+  .checkout-container header{
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+
+
+  /* search */
+  .grid-view{
+    @apply grid grid-cols-2  md:grid-cols-3 gap-3
+  }
+}

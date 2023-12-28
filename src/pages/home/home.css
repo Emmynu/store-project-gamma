@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Lato:wght@400;700&family=Montserrat:wght@400;500&family=Open+Sans:wght@300;400;500&display=swap');
+/*  */
+
+@layer base{
+  body{
+    /* margin-bottom: 1000px; */
+    transition: all 1s linear;
+  }
+  .nav-header{
+    @apply grid grid-cols-4 items-center mx-3 my-3 align-middle ;
+    /* transition: all .3s  */
+  }
+  .logo-section-container{
+    @apply flex items-center cursor-pointer select-none
+  }
+  .logo{
+    @apply ml-0.5 text-xl font-semibold;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .search-section-container{
+    @apply flex border border-slate-800 items-center px-1 py-1.5 rounded-[4px]
+  }
+  .search-section-container img{
+    @apply w-[20px]
+  }
+  .search-section-container input {
+    @apply outline-none border-none w-full px-3 text-[15px] tracking-wide text-slate-600
+  }
+  .search-section-container h2{
+    @apply tracking-wider pr-1 font-bold text-red-600;
+    
+  }
+  .nav-links-container{
+    @apply flex items-center cursor-pointer ml-2
+  }
+  .nav-links-container h2{
+    @apply ml-1 tracking-wide font-medium;
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .search-btn{
+    @apply ml-3 bg-blue-700 rounded-[4px] text-white px-4 py-1  font-semibold tracking-wider text-[15px];
+    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+  }
+  .cart-container{
+    @apply bg-white shadow-lg z-[230] shadow-slate-200 fixed inset-y-0 left-0 right-[10%] md:right-2/4 lg:right-[70%];
+  }
+ .account-container{
+  @apply  right-[5%] lg:right-[12%] z-[220] top-14 bg-white rounded-[4px] shadow-lg shadow-slate-200  fixed hidden md:block
+ }
+ .account-container button{
+  @apply bg-blue-700 text-white py-1 mb-3 mt-1 rounded-[4px] px-4 font-medium outline-none mx-2 w-[90%];
+ }  
+ .account-container div{
+  @apply my-1 tracking-wide text-slate-800 text-base cursor-pointer transition-colors px-4 py-1.5 flex items-center
+ }
+ .account-container h2{
+  @apply mx-5
+ }
+ .account-container div:hover{
+  @apply bg-blue-100 text-slate-600
+ }
+ .nav-icon div{
+  @apply bg-blue-700 h-[3px] w-[22px] rounded-[4px] my-1 cursor-pointer
+ }
+ .side-bar{
+  @apply block z-[130] lg:hidden p-5 inset-y-0 left-0 right-[4%] ;
+  
+ }
+ .sm-bar{
+  width: 22px;
+  height: 4px;
+  @apply bg-red-600 mt-1 rounded-full cursor-pointer
+}
+.sm-bar-1{
+  transform: rotate(-45deg) translate(0px, 3px);
+}
+.sm-bar-2{
+  transform: rotate(45deg) translate(-2px, -6px);
+}
+.side-bar-container{
+  @apply flex  items-center justify-between  
+}
+.side-nav-links-container{
+  @apply mt-4 ml-2
+}
+.side-nav-links-container h2{
+  @apply my-1.5 tracking-wider text-slate-700 hover:text-blue-700;
+  transition: all .5s linear;
+}
+
+/* HOME PAGE */
+
+.home-container p, .products-container h2{
+  font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
+}
+}

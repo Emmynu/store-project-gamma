@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Lato:wght@400;700&display=swap');
+
+@layer base{
+  .form-container{
+    @apply  text-center  w-10/12 md:w-7/12 lg:w-[40%] select-none outline-none ;
+    margin: 8% auto auto;
+  }
+  .form-header {
+    @apply flex flex-col items-center justify-center;
+    font-family: 'Caveat', cursive;
+    font-family: 'Lato', sans-serif;
+  }
+  .form-header img{
+    @apply w-[50px] mb-1
+  }
+  .form-header h2{
+    @apply text-[25px] font-bold;
+  }
+  .form-header h6,.forgot-password-link{
+    @apply -mt-1 mb-3 hover:underline text-[15px];
+    transition: all 1s  linear;
+  }
+  .form-btn{
+    @apply bg-blue-700 w-full text-white text-base font-medium tracking-wide mt-4 mb-3 px-4 py-1.5 rounded-[4px] outline-none hover:brightness-110 flex justify-center cursor-pointer;
+    transition: all .9s linear;
+  }
+  .form-option{
+    @apply flex justify-center items-center
+  }
+  .form-option div{
+    @apply bg-slate-600 h-[1px] w-full
+  }
+  .form-option h2{
+    @apply text-sm text-slate-600 mx-2
+  }
+  .form-email{
+    @apply bg-blue-100 mt-2 text-slate-800 hover:brightness-100
+  }
+  .form-content {
+    @apply text-left 
+  }
+ 
+  .form-content input{
+    @apply border w-full outline-none border-slate-800 bg-transparent py-1.5 text-[15px] mt-3 text-slate-600 px-2 tracking-wide rounded-[3px]
+  }
+  .forgot-password-link{
+    @apply text-right my-1 
+  }
+  .user-container{
+    @apply flex items-center
+  }
+  .user-container img{
+    @apply w-[35px] h-[35px] rounded-[50%]
+  }
+  .user-content{
+    @apply mt-2 ml-2;
+    font-family: 'Caveat', cursive;
+    font-family: 'Lato', sans-serif;
+  }
+  .user-content h2{
+    @apply text-base tracking-wide text-slate-700
+  }
+  .user-content h3{
+    @apply text-sm text-slate-500
+  }
+
+
+
+  .profile-container{
+    @apply col-span-3 lg:col-span-2  bg-white shadow-md border shadow-slate-200 px-5 py-6
+  }
+  .profile-container header{
+    @apply text-2xl font-medium tracking-wide;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .profile-input-container{
+    @apply grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-3 my-5 items-center
+  }
+  .profile-input-container label{
+    @apply mb-1.5 font-medium tracking-wide;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  .profile-input-container input{
+    @apply w-full px-2 rounded-[4px] py-1.5 lg:py-[3px] tracking-wide border-[1px] bg-slate-100 border-slate-600 text-sm;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  .profile-input-container article{
+    @apply flex flex-col 
+  }
+  
+}
