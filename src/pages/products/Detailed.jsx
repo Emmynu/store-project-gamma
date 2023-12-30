@@ -86,7 +86,8 @@ const Detailed = () => {
       brand,
       images:product?.productImages,
       added: serverTimestamp(),
-      productId: id
+      productId: id,
+      category,
     }).then(toast.success("Added to Collection"))
     
    }      
@@ -178,7 +179,7 @@ const Detailed = () => {
 
       <div className='text-center bg-white shadow-lg p-4 my-5 drop-shadow-md shadow-slate-200  rounded-[4px]'>
           <section className='border border-yellow-300 p-2 rounded-[4px] hover:bg-yellow-50 cursor-pointer'>
-          <h2 className='text-yellow-500 font-medium tracking-wider'><Link>FeedBack(12)</Link></h2>
+          <h2 className='text-yellow-500 font-medium tracking-wider'><Link to={`/product/${id}/${category}/${brand}/feedback`}>FeedBack(12)</Link></h2>
           </section>
       </div>
 

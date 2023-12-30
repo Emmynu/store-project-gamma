@@ -1,22 +1,14 @@
-import { useEffect, useState } from 'react'
-import { getCurrentUser } from '../actions/auth/auth'
 import { Outlet,NavLink } from 'react-router-dom'
+import { auth } from '../firebase-config'
 
-const CustomerSideBar = ({state}) => {
-  const [user, setUser] = useState([])
-  
-
-  useEffect(()=>{
-    getCurrentUser(setUser)
-  },[])
-
-
+const CustomerSideBar = () => {
   return (   
     <aside  className='hidden border lg:block bg-white shadow-lg shadow-slate-200'>
     
       <header className='flex justify-center flex-col items-center p-5 '>
-        <img src={user?.url} className='w-[70px] h-[70px] md:w-[150px] md:h-[150px] rounded-[50%]'/>
-        <h2 className='font-bold text-2xl mt-3 font-["arial"]'>{user?.name}</h2>
+        <img src={ auth?.currentUser?.photoURL} className='w-[70px] h-[70px] md:w-[150px] md:h-[150px] rounded-[50%]'/>
+        <h2 className='font-bold text-2xl mt-3 font-["arial"]'>{auth?.currentUser?.displayName}</h2>
+
       </header>
       <hr className='-mt-1.5 mb-2'/>
       <section className='flex flex-col px-0 mt-1'>

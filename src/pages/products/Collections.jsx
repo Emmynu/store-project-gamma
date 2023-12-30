@@ -32,7 +32,7 @@ const Collections = () => {
         {collections.length > 0  ? collections.map(item=>{
           return <article key={item[0]} className="border border-slate-300 flex gap-2 sm:gap-6 cursor-pointer transition-all hover:shadow-md hover:scale-105">
 
-            <Link to={`/product/${item[1]?.productId}/category/${item[1]?.brand}`}>
+            <Link to={`/product/${item[1]?.productId}/${item[1]?.category}/${item[1]?.brand}`}>
               <section className="flex gap-2 sm:gap-6 cursor-pointer ">
                 <div>
                       <img src={item[1].images} alt={item[1]?.name} className="h-[150px] w-[200px] object-cover" />

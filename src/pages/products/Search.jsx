@@ -11,8 +11,14 @@ const Search = () => {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [showFilters, setShowFilters] = useState(true)
-  const [filterValue, setFilterValue] = useState(null)
   const q = params.get("query")
+  const [category, setCategory] = useState([])
+  const [filterValues, setFilterValues] = useState({
+    min: 0,
+    max: 100000,
+    sortBy: "popularity",
+    category: "All"
+  })
 
   const transition ={
     transition: "all .8s linear",
@@ -22,9 +28,27 @@ const Search = () => {
   getProducts(setIsLoading,setProducts)
  },[])
 
- console.log(filterValue);
+ useEffect(()=>{
+  const categories = ["All",...new Set(products.map(product => product[1]?.category))]
+  setCategory(categories)
+ },[products])
  
+
+ function handleFilterValues(e) {
+  const { name, value } = e.target 
+  setFilterValues((prev)=>{
+    return {...prev, [name]: value}
+  })
+ }
+
+if(isLoading){
+  return <Loading />
+}
+
  const searchedProducts = products.filter(product => product[1]?.name?.toLowerCase().includes(q) || product[1]?.description?.toLowerCase().includes(q) || product[1]?.category?.toLowerCase().includes(q)|| product[1]?.brand?.toLowerCase().includes(q))
+
+
+ const filterProducts =  searchedProducts.filter(product => (filterValues.min !== "" ? product[1]?.price >= parseInt(filterValues.min): product[1]?.price >= 0) && (filterValues.max !== "" ?  product[1]?.price <= parseInt(filterValues.max) : product[1]?.price <=  100000) && (filterValues.category !== "All" ?  product[1]?.category === filterValues.category : searchedProducts))
 
 
  return (
@@ -47,19 +71,27 @@ const Search = () => {
           <article className="px-4 py-2">
             <h2 className="font-medium mb-3 ">All Categories</h2>
             <section className="flex flex-col">
-              <span className="my-1 hover:text-blue-700 tracking-wider text-slate-600"><Link>Beauty</Link></span>
-              <span className="my-1 hover:text-blue-700 tracking-wider text-slate-600"><Link>Electronics</Link></span>
-              <span className="my-1 hover:text-blue-700 tracking-wider text-slate-600"><Link>Fashion</Link></span>
-              <span className="my-1 hover:text-blue-700 tracking-wider text-slate-600"><Link>Food</Link></span>
-              <span className="my-1 hover:text-blue-700 tracking-wider text-slate-600"><Link>Pets</Link></span>
-              <span className="my-1 hover:text-blue-700 tracking-wider text-slate-600"><Link>Vechicles</Link></span>
+              {category.map(cat => {
+                return <div>
+                  <h2 className="my-1 hover:text-blue-700 tracking-wider cursor-pointer text-slate-600" onClick={()=>setFilterValues((prev)=>{return {...prev, category:cat}})}>{cat}</h2>
+                </div>
+              })}
             </section>
+
 
             <hr className="my-3" />
 
             <h2 className="my-1.5 font-medium">Price in Naira(₦)</h2>
-            <p className="text-sm tracking-wider text-slate-600 my-2">{filterValue || 100}</p>
-            <input type="range" name="" id="" onChange={(e)=>setFilterValue(e.target.value)} min={100} max={10000000} className="bg-blue-700 mt-1"/>
+            <div>
+              <article className="my-3 flex flex-row items-center">
+                <label className="tracking-wide">Min: </label>
+                <input type="number" className="border ml-1 w-1/2 px-1 py-1.5 border-slate-700 rounded-[4px]" name="min" id="" onChange={handleFilterValues}/><br />
+              </article>
+              <article className="my-3 flex flex-row items-center">
+                <label className="tracking-wide">Max: </label>
+                <input type="number" className="border w-1/2 ml-1 px-1 py-1.5 border-slate-700 rounded-[4px]" name="max"  id="" onChange={handleFilterValues}/><br />
+              </article>
+            </div>
           </article>
         </section>
 
@@ -67,10 +99,9 @@ const Search = () => {
             <header className="mb-5 block md:flex justify-between">
               <h3 className=" text-[21px] md:text-2xl lg:text-[26px] font-bold text-slate-700" >Search Results for "{q}"</h3>
              <div className="mt-7 md:mt-0 flex justify-between lg:justify-normal items-center">
-              <select name="" id="" placeholder="Relevance" className="border-b outline-none text-slate-600 tracking-wider text-sm cursor-pointer">
+              <select name="sortBy" id="" placeholder="Relevance" className="border-b outline-none text-slate-600 tracking-wider text-sm cursor-pointer"onChange={handleFilterValues} >
                   <option value="popularity">Sort by Popularity</option>
                   <option value="price">Sort by Price: Low to High</option>
-                  <option value="price">Sort by Price: High to Low</option>
               </select>
                 <article onClick={()=>setShowFilters(!showFilters)} className="flex items-center  lg:hidden ml-1.5">
                   <img src={filterIcon} alt="" className="w-5" onClick={()=>setShowFilters(!showFilters)} />
@@ -78,22 +109,26 @@ const Search = () => {
                 </article>
              </div>
             </header>
-            { isLoading ? <Loading/ > : <>
+            { <>
               {searchedProducts.length > 0 ?  <main className={"grid-view"}>
-            {searchedProducts.reverse().map(item =>{
-              return <div>
-                <Link to={`/product/${item[0]}/${item[1]?.category}/${item[1]?.brands}`}>
-                <img src={item[1]?.productImages} className={"rounded-[4px] w-full h-[250px] md:h-[350px] object-cover"}/>
-                <article className="my-1.5">
-                  <div>
-                    <h2 className={"font-bold text-sm md:text-base text-left tracking-wider"} style={{fontFamily: "Arial"}}>{item[1]?.name}</h2>
+            {filterProducts.length > 0 ? 
+              filterProducts.reverse().map(item =>{
+                return <div>
+                  <Link to={`/product/${item[0]}/${item[1]?.category}/${item[1]?.brands}`}>
+                  <img src={item[1]?.productImages} className={"rounded-[4px] w-full h-[250px] md:h-[350px] object-cover"}/>
+                  <article className="my-1.5">
+                    <div>
+                      <h2 className={"font-bold text-sm md:text-base text-left tracking-wider"} style={{fontFamily: "Arial"}}>{item[1]?.name}</h2>
 
-                    <h2 className=" text-xs md:text-sm tracking-wider my-0.5 text-slate-600">₦{item[1]?.price}</h2>
-                  </div>
-                </article>
-                </Link>
-              </div>
-            })}
+                      <h2 className=" text-xs md:text-sm tracking-wider my-0.5 text-slate-600">₦{item[1]?.price}</h2>
+                    </div>
+                  </article>
+                  </Link>
+                </div>
+              })
+            : 
+            <h2>Empty Filters</h2>
+            }
           </main>: <section className="-mt-10 block md:flex flex-col items-center justify-center lg:block">
               <img src={notFoundImage} alt="" />
               <h2 className="text-sm tracking-widest text-center md:text-left text-slate-600">Sorry! "{q}" was not found in our catalogue</h2>

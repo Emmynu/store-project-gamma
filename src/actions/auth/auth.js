@@ -30,16 +30,27 @@ export async function getCurrentUser (user){
   })
 }
 
+export async function getSingleUserFromDb(id,user){
+  onValue(ref(db, `users/${id}`),result =>{
+    result.exists() ? user(Object.entries(result.val())) : user([])
+  })
+}
+
 export const id = localStorage.getItem("id")
 
 
-export async function updateUserProfile(name,url) {
-  updateProfile(auth?.currentUser, {
+export async function updateUserProfile(name,url,uid) {
+ try {
+ await updateProfile(auth?.currentUser, {
     displayName:name,
     photoURL:url
   })
   const updates = {}
-  updates[`/users/${id}/name`] = name
-  updates[`/users/${id}/url`] = url
-  update(getDatabase())
+  updates[`/users/${id}/${uid}/name`] = name
+  updates[`/users/${id}/${uid}/url`] = url
+  update(ref(getDatabase()), updates)
+ } 
+ catch (error) {
+  console.log(error.message);
+ }
 }

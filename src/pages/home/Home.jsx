@@ -9,6 +9,7 @@ import arrowIcon from "../../images/left-arrow.png"
 import quickIcon from "../../images/quick.png"
 import refundIcon from "../../images/refund.png"
 import qualityIcon from "../../images/quality.png"
+import Shop from "../../images/full-cart.png"
 import Loading from "../../components/Loading"
 import AOS from "aos"
 import "aos/dist/aos.css"
@@ -81,20 +82,6 @@ const Home = () => {
 
   return (
    <main className="overflow-hidden">
-      {/* <section className="grid grid-cols-1 lg:grid-cols-2 gap-x-24 gap-y-10 items-center text-left">
-          <div>
-          <h2 className=" text-4xl sm:text-6xl font-bold leading-tight max-w-2xl text-slate-600">
-            We are changing the way people shop
-          </h2>
-          <p className="text-[15px] mt-5 tracking-wider max-w-xl text-slate-600 ">Discover exclusive deals and elevate your style with our curated collection. Shop now for unparalleled quality and unbeatable prices!</p>
-          <button className="mt-2.5 bg-blue-600 tracking-wider hover:bright text-white px-3 py-2 rounded-[4px]" ><Link>Start Exploring &rarr;</Link></button>
-        </div>
-        <div>
-          <img src={test} alt="" className="hidden lg:block " />
-        </div>
-      </section> */}
-
-
       <section className="grid grid-cols-3  lg:grid-cols-4 gap-0 lg:gap-1 overflow-x-hidden">
         <div className="col-span-3 w-full relative">
           <div className="bg-black absolute w-full z-20 inset-0 opacity-60">
@@ -246,7 +233,22 @@ const Home = () => {
       </section>
       
 
-      <div className="px-3" data-aos={"fade-up"} data-aos-duration={"700"}>
+      
+
+      <hr className="my-6 bg-blue-300 h-[1px]"/>
+
+      <section className="flex flex-col text-center sm:text-left sm:flex-row px-2 md:px-7 lg:px-12 gap-8 items-center" data-aos={"fade-up"} data-aos-duration={"700"}>
+        <article className="w-full flex justify-center" data-aos={"zoom-in"} data-aos-duration={"900"}>
+          <img src={Shop} alt="shop-now-image" className="w-[75%] sm:w-10/12" />
+        </article>
+        <article>
+          <h2 className=" text-2xl sm:text-4xl text-blue-700 font-[arial] font-bold mb-2" data-aos={"fade-up"} data-aos-duration={"700"}>Become A Vendor</h2>
+          <p className="text-slate-600 tracking-wider mb-2 text-xs sm:text-sm" data-aos={"fade-up"} data-aos-duration={"900"}>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente reprehenderit sunt dolores velit adipisci odio ex tenetur eligendi voluptatibus quod autem, aperiam cupiditate debitis error fugiat veritatis aliquam sequi. Consectetur?</p>
+          <Link to={"/pricing"}><button className="text-sm sm:text-base mt-1 px-4 py-1.5 bg-blue-700 font-medium tracking-wide rounded-[4px] text-white" data-aos={"zoom-in"} data-aos-duration={"1100"}>Apply Now</button></Link>
+        </article>
+      </section>
+
+      <div className="px-3 mt-8 " data-aos={"fade-up"} data-aos-duration={"700"}>
       <section className="bg-blue-50 py-[4.5rem] md:py-[7rem] px-6 items-center align-middle  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-14 lg:gap-24">
             <div data-aos={"fade-right"} data-aos-offset={"100"} data-aos-easing={"ease-in-sine"}>
             <div className="flex justify-center md:justify-start"> <img src={quickIcon} alt="" className="bg-blue-100 rounded-[50%] p-2 w-12"/></div>
@@ -262,8 +264,6 @@ const Home = () => {
             </div>
       </section>
       </div>
-
-      {/*  */}
    </main>
   )
 }

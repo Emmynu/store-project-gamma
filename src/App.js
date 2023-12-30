@@ -13,9 +13,9 @@ import Checkout from "./pages/products/Checkout"
 import Help from "./pages/home/Help"
 import Pricing from "./pages/sellers/Pricing"
 import NotFound from "./pages/home/notFound"
-import CustomerSideBar from "./components/sideBar"
-import Profile, { updateProfileAction } from "./pages/auth/Profile"
-
+import Profile from "./pages/auth/Profile"
+import Chat from "./pages/chat/Chat"
+import FeedBack from "./pages/products/FeedBack"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -25,6 +25,7 @@ export default function App(){
       
       {/* Products Routes*/}
       <Route path="product/:id/:category/:brand" element={<Detailed />}/>
+      <Route path="product/:id/:category/:brand/feedback" element={<FeedBack />}/>
       <Route path="search" element={<Search />}/>
       <Route path="help" element={<Help />}/>
       <Route path="pricing" element={<Pricing />}/>
@@ -32,11 +33,13 @@ export default function App(){
 
       {/* Protected Routes*/}
       <Route element={<ProtectRoute />}>
-        <Route path="profile" element={<Profile />} action={updateProfileAction}/>
+        <Route path="profile" element={<Profile />}/>
         <Route path="checkout" element={<Checkout />}/>
         <Route path="new-product" element={<NewProduct />}/>
+        <Route path="chat/:id" element={<Chat />}/>
         <Route path="collections" element={<Collections />}/>
       </Route>
+      
 
       <Route path="*" element={<NotFound />}/>
      </Route>
