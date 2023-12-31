@@ -125,17 +125,17 @@ const Profile = () => {
 
           <article>
             <label htmlFor="email">Email</label>
-            <input type="email" name="email" id="email"  disabled value={auth?.currentUser?.email}/>
+            <div className='border bg-slate-100 px-2 rounded-[4px] py-1.5 lg:py-[3px] border-slate-600 text-sm tracking-wider'>{auth?.currentUser?.email}</div>
           </article>
 
           <article>
             <label htmlFor="name">Hash ID</label>
-            <input type="text" name="name" id="name"  disabled value={auth?.currentUser?.uid}/>
+            <div className='border bg-slate-100 px-2 text[12px]  w-full rounded-[4px] py-1.5 lg:py-[3px] border-slate-600 text-sm tracking-wider'>{auth?.currentUser?.uid}</div>
           </article>
 
           <article>
             <label htmlFor="password">Password</label>
-            <input type="password" name="password" id="password"  disabled value={auth?.currentUser?.password || "...."}/>
+           {user && <div className='border bg-slate-100 px-2 rounded-[4px] py-1.5 lg:py-[3px] border-slate-600 text-sm tracking-wider'>{user[0][1]?.password || "null"}</div>}
           </article>
 
           <button className='form-btn shadow-md lg:mt-9' >{isLoading ? "Loading..." :"Save Changes"}</button>

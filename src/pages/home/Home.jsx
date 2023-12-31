@@ -237,9 +237,9 @@ const Home = () => {
 
       <hr className="my-6 bg-blue-300 h-[1px]"/>
 
-      <section className="flex flex-col text-center sm:text-left sm:flex-row px-2 md:px-7 lg:px-12 gap-8 items-center" data-aos={"fade-up"} data-aos-duration={"700"}>
+      <section className="flex flex-col text-center lg:text-left lg:flex-row px-2 md:px-7 lg:px-12 gap-8 items-center" data-aos={"fade-up"} data-aos-duration={"700"}>
         <article className="w-full flex justify-center" data-aos={"zoom-in"} data-aos-duration={"900"}>
-          <img src={Shop} alt="shop-now-image" className="w-[75%] sm:w-10/12" />
+          <img src={Shop} alt="shop-now-image" className="w-[75%] md:w-6/12 lg:w-10/12" />
         </article>
         <article>
           <h2 className=" text-2xl sm:text-4xl text-blue-700 font-[arial] font-bold mb-2" data-aos={"fade-up"} data-aos-duration={"700"}>Become A Vendor</h2>

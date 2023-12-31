@@ -41,6 +41,11 @@ const Search = () => {
   })
  }
 
+ function filterCatgory(cat) {
+  setFilterValues((prev)=>{return {...prev, category:cat}})
+  setShowFilters(!showFilters)
+ }
+
 if(isLoading){
   return <Loading />
 }
@@ -73,7 +78,7 @@ if(isLoading){
             <section className="flex flex-col">
               {category.map(cat => {
                 return <div>
-                  <h2 className="my-1 hover:text-blue-700 tracking-wider cursor-pointer text-slate-600" onClick={()=>setFilterValues((prev)=>{return {...prev, category:cat}})}>{cat}</h2>
+                  <h2 className="my-1 hover:text-blue-700 tracking-wider cursor-pointer text-slate-600" onClick={()=>filterCatgory(cat)}>{cat}</h2>
                 </div>
               })}
             </section>

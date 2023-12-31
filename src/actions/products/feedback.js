@@ -12,6 +12,10 @@ export function getFeedBacks(productId, feedbacks) {
 }
 
 
+export async function removeFeedBack(productId, feedbackId) {
+  remove(ref(db ,`products/${productId}/feedbacks/${feedbackId}`))
+}
+
 export function likeFeedBack(productId, feedbackId, data) {
   push(ref(db, `products/${productId}/feedbacks/${feedbackId}/likes`), data)
 }

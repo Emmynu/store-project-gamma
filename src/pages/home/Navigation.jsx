@@ -139,9 +139,9 @@ const Navigation = () => {
              
         </header>
         {/* sm search bar */}
-        {toggle.isSearchInputOpen && <form onSubmit={searchProduct} className="border  px-2.5 py-0.5 rounded-[4px] border-slate-700 flex items-center  lg:hidden"> 
-          <input type="text" onChange={(e)=> setvalue(e.target.value)} value={value} placeholder="Search" className=" text-sm tracking-wider text-slate-600 outline-none "/> 
-          <span className="text-red-600 text-base font-semibold cursor-pointer" onClick={()=>setToggle(prev => {return {...prev, isSearchInputOpen:false}})}>
+        {toggle.isSearchInputOpen && <form onSubmit={searchProduct} className="border  px-3 py-0.5 rounded-[4px] border-slate-700 flex items-center  lg:hidden"> 
+          <input type="text" onChange={(e)=> setvalue(e.target.value)} value={value} placeholder="Search" className=" text-sm tracking-wider text-slate-600 outline-none w-full "/> 
+          <span className="text-red-600 text-base font-semibold cursor-pointer ml-3" onClick={()=>setToggle(prev => {return {...prev, isSearchInputOpen:false}})}>
             <div className="sm-bar sm-bar-1 w-[15px]"></div>
             <div className="sm-bar sm-bar-2 w-[15px]"></div>
           </span>

@@ -16,6 +16,7 @@ import NotFound from "./pages/home/notFound"
 import Profile from "./pages/auth/Profile"
 import Chat from "./pages/chat/Chat"
 import FeedBack from "./pages/products/FeedBack"
+import Dashboard from "./pages/sellers/Dashboard"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -49,6 +50,8 @@ export default function App(){
     <Route path="/login" element={<Login />} action={loginAction}/>
     <Route path="/find-account" element={<ForgotPassword />} /> 
 
+    // Dashboard
+    <Route path="dashboard" element={<Dashboard />}/>
     </>
   ))
   return <RouterProvider router={router}/>
