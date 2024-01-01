@@ -135,7 +135,9 @@ const Profile = () => {
 
           <article>
             <label htmlFor="password">Password</label>
-           {user && <div className='border bg-slate-100 px-2 rounded-[4px] py-1.5 lg:py-[3px] border-slate-600 text-sm tracking-wider'>{user[0][1]?.password || "null"}</div>}
+           { <div className='border bg-slate-100 px-2 rounded-[4px] py-1.5 lg:py-[3px] border-slate-600 text-sm tracking-wider'>{user?.map(person=>{
+            return <span>{person[1]?.password}</span>
+           })}</div>}
           </article>
 
           <button className='form-btn shadow-md lg:mt-9' >{isLoading ? "Loading..." :"Save Changes"}</button>

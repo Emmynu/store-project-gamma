@@ -1,4 +1,4 @@
-import { onValue, push, ref } from "firebase/database";
+import { onValue, push, ref, remove } from "firebase/database";
 import { db } from "../../firebase-config";
 
 export async function saveProductToDb(data){
@@ -17,4 +17,8 @@ export async function getSingleProduct(id, product) {
   onValue(ref(db, `products/${id}`),res => {
     res.exists() ? product((res.val())) : product([])
   })
+}
+
+export async function deleteProduct(productId) {
+  remove(ref(db, `products/${productId}`))
 }

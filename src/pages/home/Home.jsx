@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import test from "../../images/test.jpg"
 import { Link } from "react-router-dom"
 import { getProducts } from "../../actions/products/products"
 import Slider from "react-slick"

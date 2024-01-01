@@ -5,7 +5,7 @@ import { id } from "../../actions/auth/auth"
 import { db } from "../../firebase-config"
 import { toast } from "sonner"
 import { useEffect, useState } from "react"
-import { getSellers } from "../../actions/sellers/pricing"
+import { getSellers } from "../../actions/sellers/sellers"
 
 const Pricing = () => {
   const [ sellers, setSellers] = useState([])

@@ -17,6 +17,7 @@ const NewProduct = () => {
     name:"",
     description: "",
     price: 0,
+    productQuantity: 1
   })
   const [category, setCategory] = useState("")
   const [brands, setBrands] = useState("")
@@ -122,26 +123,26 @@ const NewProduct = () => {
     e.preventDefault()
     setIsLoading(true)
     const productImages = []
-    const {name,description,price} = productValues
+    const {name,description,price, productQuantity} = productValues
     try {
-      if( name && description && category && price && files.length > 0 && brands){
+      if( name && description && category && price && files.length > 0 && brands && productQuantity > 0 && productQuantity !== "") {
         for (const file of files) {
           const storageRef = ref(storage, `products/${file?.name}`)
           await uploadBytes(storageRef, file)
           const url = await getDownloadURL(storageRef)
           productImages.push(url)
-          const {name,description,price} = productValues
           
             if(productImages.length === files.length) {
               await saveProductToDb({
-                name,
-                description,
+                name:name.trim(),
+                description:description.trim(),
                 category:category?.value,
                 brands:brands?.value,
                 price:parseFloat(price),
                 productImages,
                 createdAt: serverTimestamp(),
-                createdBy:user
+                createdBy:user,
+                quantity: productQuantity
               }).then(()=>{
                 toast.success("Product successfully added")
                 setIsLoading(false)
@@ -160,7 +161,7 @@ const NewProduct = () => {
   
   
   return (
-    <main className="new-product-container">
+    <main className="new-product-container mt-28 border">
       <header className="new-product-header">
         <h2>{productValues.name.length <= 0 ? "[Untitled]": productValues.name}</h2>
         <h3>Creating new product</h3>
@@ -185,11 +186,16 @@ const NewProduct = () => {
           </section>
 
           <section>
+            <label htmlFor="productQuantity">Product Quantity Available*</label><br/>
+            <input  onChange={handleValues} type="number" name="productQuantity" max={25} min={1}/>
+          </section>
+
+          <section>
             <label htmlFor="category">Category*</label>
             <Select defaultValue={category} onChange={setCategory} options={categoryOptions} className="category" />
           </section>
 
-         {category && <section>
+         {category && <section>`  `
             <label htmlFor="category">Brand*</label>
             <Select defaultValue={brands} onChange={setBrands} options={brandOptions[category?.value]} className="category"/>
           </section>
@@ -213,7 +219,8 @@ const NewProduct = () => {
             {isLoading ? <img src={load} className="w-[23px] animate-spin" /> : <span>Add Product</span>}</button>
         </form>
       </section>
-      {/* <Toaster richColors position="bottom-right" closeButton/> */}
+
+      <Toaster richColors position="top-right" closeButton/> 
     </main>
   )
 }

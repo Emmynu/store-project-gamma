@@ -20,7 +20,7 @@ const Navigation = () => {
   const [value, setvalue] = useState("")
   const date = new Date().getFullYear()
 
-    const openSideBar ={
+  const openSideBar ={
       tranform: "translateX(0%)",
       transition: "all .8s linear",
   }

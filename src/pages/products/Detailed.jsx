@@ -105,7 +105,7 @@ const Detailed = () => {
       url: product.productImages,
       name:product.name,
       price:product.price,
-      productQuantityAvailable:product?.quantity || 12,
+      productQuantityAvailable:product?.quantity || 25,
       quantity:1,
       brand,
      })

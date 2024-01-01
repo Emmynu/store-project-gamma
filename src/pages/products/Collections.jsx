@@ -24,7 +24,7 @@ const Collections = () => {
       <section>
         <CustomerSideBar state={showSideBar}></CustomerSideBar>
       </section>
-      <section className="flex flex-col gap-4 bg-white drop-shadow-md rounded-[4px] col-span-3 lg:col-span-2 p-7">
+      <section className="flex flex-col gap-4 bg-white border drop-shadow-md rounded-[4px] col-span-3 lg:col-span-2 p-7">
         <header className="flex justify-between pt-1 pb-3 border-b">
           <h2 className=" text-lg sm:text-xl font-medium">Saved Items</h2>
           <button className="text-blue-600 font-medium text-sm px-2 py-1 rounded-[4px] hover:bg-blue-100" onClick={()=>clearAllCollections(userId)}>Clear All</button>

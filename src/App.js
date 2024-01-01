@@ -17,6 +17,8 @@ import Profile from "./pages/auth/Profile"
 import Chat from "./pages/chat/Chat"
 import FeedBack from "./pages/products/FeedBack"
 import Dashboard from "./pages/sellers/Dashboard"
+import Stats from "./pages/sellers/Stats"
+import Products from "./pages/sellers/Products"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -36,7 +38,6 @@ export default function App(){
       <Route element={<ProtectRoute />}>
         <Route path="profile" element={<Profile />}/>
         <Route path="checkout" element={<Checkout />}/>
-        <Route path="new-product" element={<NewProduct />}/>
         <Route path="chat/:id" element={<Chat />}/>
         <Route path="collections" element={<Collections />}/>
       </Route>
@@ -51,7 +52,11 @@ export default function App(){
     <Route path="/find-account" element={<ForgotPassword />} /> 
 
     // Dashboard
-    <Route path="dashboard" element={<Dashboard />}/>
+    <Route path="dashboard" element={<Dashboard />}>
+       <Route index element={<Stats />}/>
+       <Route path="new-product" element={<NewProduct />}/>
+       <Route path="products" element={<Products />}/>
+    </Route>
     </>
   ))
   return <RouterProvider router={router}/>

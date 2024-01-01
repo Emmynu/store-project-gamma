@@ -86,7 +86,7 @@ const FeedBack = () => {
       <section className=" col-span-2 ">
         <main className="bg-white shadow-lg shadow-slate-300  p-5 border  rounded-[4px]">
           <header className="flex items-center justify-between">
-            <h3 className="text-2xl font-[Arial] font-bold my-1.5">FeedBacks<sub>({feedBacks.length})</sub></h3>
+            <h3 className="text-lg sm:text-xl font-medium">FeedBacks<sub>({feedBacks.length})</sub></h3>
             {/* <button className="bg-blue-100 font-medium tracking-wide text-blue-700 px-5 py-1.5 rounded-[4px]">Add FeedBack</button> */}
           </header>
           <hr className="mb-2 mt-3"/>
@@ -97,10 +97,10 @@ const FeedBack = () => {
                   <article className="bg-blue-100 rounded-[4px] p-4">
                     <div className="flex items-center ">
                       <img src={feed[1]?.addedBy?.url} alt="" className="w-[30px] h-[30px] object-cover rounded-[50%]"/>
-                      <h4 className="text-lg ml-4 font-medium">{feed[1]?.addedBy?.name}</h4>
+                      <h4 className="sm:text-lg ml-4 font-medium">{feed[1]?.addedBy?.name}</h4>
                     </div>
                     {feed[1]?.feed && <h2 className="mt-2 text-sm text-slate-600 ">{feed[1]?.feed}</h2>}
-                    {feed[1]?.url && <img src={feed[1]?.url} alt={feed[0]} className="mt-2 rounded-[4px]  h-[250px] object-cover w-[80%]"/>}
+                    {feed[1]?.url && <img src={feed[1]?.url} alt={feed[0]} className="mt-2 rounded-[4px]  h-[200px] object-cover "/>}
                   </article>
                   <footer className="flex items-center mt-1 mb-3">
                     <Moment fromNow className="font-medium text-sm">{feed[1]?.createdAt}</Moment>
@@ -110,8 +110,8 @@ const FeedBack = () => {
                 </div>
               })
             : 
-            <section className="flex flex-col items-center justify-center">
-              <img src={empty} className="w-1/2"/>
+            <section className="flex flex-col items-center justify-center text-center">
+              <img src={empty} className="w-[300px]" alt="empty collection"/>
               <h2 className="font-medium text-slate-800 -mt-1.5 text-center"
               >Currently No FeedBack Found!</h2>
               <h4 className="my-2 text-xs tracking-wider md:text-sm">Unfortunately! This product has not been rated by anyone. Rate it now!</h4>
