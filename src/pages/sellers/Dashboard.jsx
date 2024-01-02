@@ -21,7 +21,7 @@ const Dashboard = () => {
 
 
   useEffect(()=>{
-    vendors.map(seller => {
+    vendors.find(seller => {
       if(seller[0] === auth?.currentUser?.uid){
         setIsVendor(true)
       }
@@ -30,6 +30,8 @@ const Dashboard = () => {
       }
     })
   },[vendors])
+
+  
 
   const openSideBar ={
     tranform: "translateX(0%)",
