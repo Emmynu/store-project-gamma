@@ -31,13 +31,13 @@ const Products = () => {
 
   console.log(filteredProducts);
   return (
-    <div className="mt-24 overflow-x-hidden">
+    <div className="mt-24 overflow-x-hidden" data-aos={"fade-up"} data-aos-duration={"900"}>
       {products.length > 0 ? 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 md:mx-7 lg:mx-12 mt-4">
           {filteredProducts.reverse().map(product=>{
             return <article className="bg-white shadow-lg hover:shadow-3xl rounded-md transition-[3s] cursor-pointer  border">
               <section>
-                <Slider>
+                <Slider {...settings}>
                   {product[1]?.productImages.map(url => {
                     return <img src={url} alt="" className="w-full h-[200px] object-cover" />
                   })}

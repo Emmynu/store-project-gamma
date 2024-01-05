@@ -7,6 +7,7 @@ import searchIcon from "../../images/search.png"
 import userIcon from "../../images/user.png"
 import loveIcon from "../../images/love.png"
 import orderIcon from "../../images/order.png"
+import load from "../../images/load.png"
 import chatIcon from "../../images/chat.png"
 import empty from "../../images/not-found.gif"
 import { Toaster, toast } from "sonner"
@@ -18,6 +19,7 @@ const Navigation = () => {
   const [cart, setCart] = useState([])
   const [total, setTotal] = useState(0)
   const [value, setvalue] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const date = new Date().getFullYear()
 
   const openSideBar ={
@@ -83,7 +85,10 @@ const Navigation = () => {
 
   function searchProduct(e) {
     e.preventDefault()
-    window.location = `/search/?query=${value.trim().toLowerCase()}`
+    if(value.length > 0){
+      setIsLoading(true)
+      window.location = `/search/?query=${value.trim().toLowerCase()}`
+    }
   }
 
   function removeItem(id){
@@ -110,7 +115,7 @@ const Navigation = () => {
               <input type="text" name="" id="" placeholder="Search products, brands, categories" onChange={(e)=>setvalue(e.target.value)} value={value} className="bg-transparent"/>
               <h2 onClick={()=>setvalue("")} className={value.length > 0 ? "block text-xs text-red-600 cursor-pointer" : "hidden"}>&#10006;</h2>
             </section>
-            <button className="search-btn">Search</button>
+            <button className="search-btn">{isLoading ? <span><img src={load} alt="" className="w-6 animate-spin"/></span>: "Search"}</button>
           </form>
 
           {/* others */}

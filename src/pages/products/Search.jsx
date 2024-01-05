@@ -4,7 +4,11 @@ import { getProducts } from "../../actions/products/products";
 import "./products.css"
 import filterIcon from "../../images/filter.png"
 import notFoundImage from "../../images/not-found.gif"
-import Loading from "../../components/Loading";
+import notFoundImage2 from "../../images/notFound.png"
+import { SearchLoading } from "../../components/Loading";
+import AOS from "aos"
+import "aos/dist/aos.css"
+
 
 const Search = () => {
   const [params] = useSearchParams()
@@ -32,7 +36,16 @@ const Search = () => {
   const categories = ["All",...new Set(products.map(product => product[1]?.category))]
   setCategory(categories)
  },[products])
+
  
+ useEffect(()=>{
+  AOS.init()
+},[])
+ 
+
+ if (isLoading) {
+  return <SearchLoading />
+ }
 
  function handleFilterValues(e) {
   const { name, value } = e.target 
@@ -46,9 +59,6 @@ const Search = () => {
   setShowFilters(!showFilters)
  }
 
-if(isLoading){
-  return <Loading />
-}
 
  const searchedProducts = products.filter(product => product[1]?.name?.toLowerCase().includes(q) || product[1]?.description?.toLowerCase().includes(q) || product[1]?.category?.toLowerCase().includes(q)|| product[1]?.brand?.toLowerCase().includes(q))
 
@@ -57,7 +67,7 @@ if(isLoading){
 
 
  return (
-  <main className="mt-2 mb-5 lg:my-7 ">
+  <main className="mt-2 mb-5 lg:my-7 " data-aos={"fade-up"} data-aos-duration={"900"}>
     <section className="bg-blue-100 p-5 w-full px-5">
         <span className="text-sm tracking-wide text-slate-600 ml-1"><Link to={"/"}>Home &gt; </Link></span >
         <span className="text-sm tracking-wide text-slate-600 ml-1"><Link to={"/"}>Product &gt;</Link></span >
@@ -100,7 +110,7 @@ if(isLoading){
           </article>
         </section>
 
-          <section className="col-span-3">
+       <section className="col-span-3">
             <header className="mb-5 block md:flex justify-between">
               <h3 className=" text-[21px] md:text-2xl lg:text-[26px] font-bold text-slate-700" >Search Results for "{q}"</h3>
              <div className="mt-7 md:mt-0 flex justify-between lg:justify-normal items-center">
@@ -115,9 +125,10 @@ if(isLoading){
              </div>
             </header>
             { <>
-              {searchedProducts.length > 0 ?  <main className={"grid-view"}>
+            {searchedProducts.length > 0 ?  <main>
             {filterProducts.length > 0 ? 
-              filterProducts.reverse().map(item =>{
+              <section className="grid-view">
+                {filterProducts.reverse().map(item =>{
                 return <div>
                   <Link to={`/product/${item[0]}/${item[1]?.category}/${item[1]?.brands}`}>
                   <img src={item[1]?.productImages} className={"rounded-[4px] w-full h-[250px] md:h-[350px] object-cover"}/>
@@ -130,15 +141,19 @@ if(isLoading){
                   </article>
                   </Link>
                 </div>
-              })
+              })}
+              </section>
             : 
-            <h2>Empty Filters</h2>
+            <section className="-mt-10 block md:flex flex-col items-center justify-center lg:block">
+            <img src={notFoundImage2} alt="" className="w-[350px]"/>
+            <h2 className="text-sm tracking-widest text-center md:text-left text-slate-600">Sorry! The filter for "{q}" is empty</h2>
+        </section>
             }
           </main>: <section className="-mt-10 block md:flex flex-col items-center justify-center lg:block">
               <img src={notFoundImage} alt="" />
               <h2 className="text-sm tracking-widest text-center md:text-left text-slate-600">Sorry! "{q}" was not found in our catalogue</h2>
           </section>}</>}
-        </section>
+        </section> 
     </main>
   </main>
   )

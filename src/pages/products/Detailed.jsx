@@ -75,42 +75,51 @@ const Detailed = () => {
   }
 
   function saveCollection() {
-   if (isSaved) {
-    collection.map(item => {
-      if(item[1]?.productId === id){
-        removeProductFromCollection(userId, item[0])
-        toast.error("Removed")
-      }
-    })
+   if (userId) {
+    if (isSaved) {
+      collection.map(item => {
+        if(item[1]?.productId === id){
+          removeProductFromCollection(userId, item[0])
+          toast.error("Removed")
+        }
+      })
+     } else {
+      saveCollectionDb(userId, {
+        name:product?.name,
+        price:product?.price,
+        brand,
+        images:product?.productImages,
+        added: serverTimestamp(),
+        productId: id,
+        category,
+      }).then(toast.success("Added to Collection"))
+      
+     } 
    } else {
-    saveCollectionDb(userId, {
-      name:product?.name,
-      price:product?.price,
-      brand,
-      images:product?.productImages,
-      added: serverTimestamp(),
-      productId: id,
-      category,
-    }).then(toast.success("Added to Collection"))
-    
-   }      
+    window.location = "/login"
+   }     
   }
 
   function addToCart() {
-   if (isProductInCart) {
-     toast.error("Item Already In Cart")
-   }else{
-    addProductToCart({
-      productId: id,
-      url: product.productImages,
-      name:product.name,
-      price:product.price,
-      productQuantityAvailable:product?.quantity || 25,
-      quantity:1,
-      brand,
-     })
-     toast.success("Added To Cart")
-   }
+    if(userId){
+      if (isProductInCart) {
+        toast.error("Item Already In Cart")
+      }else{
+       addProductToCart({
+         productId: id,
+         url: product.productImages,
+         name:product.name,
+         price:product.price,
+         productQuantityAvailable:product?.quantity || 25,
+         quantity:1,
+         brand,
+        })
+        toast.success("Added To Cart")
+      }
+    }
+    else{
+      window.location = "/login"
+    }
   }
 
  {return product !==null && <main>

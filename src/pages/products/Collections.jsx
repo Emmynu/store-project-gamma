@@ -3,11 +3,9 @@ import { Link } from "react-router-dom"
 import { id as userId } from "../../actions/auth/auth"
 import { clearAllCollections, getCollection, removeProductFromCollection } from "../../actions/products/collections"
 import emptyCollection from "../../images/fly.gif"
-import Slider from "react-slick"
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
 import CustomerSideBar from "../../components/sideBar"
-// import slid
+import AOS from "aos"
+import "aos/dist/aos.css"
 
 
 const Collections = () => {
@@ -18,13 +16,17 @@ const Collections = () => {
     getCollection(userId, setCollections)
   },[])
 
+  useEffect(()=>{
+    AOS.init()
+  },[])
+
   return (
     <main className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 max-w-[72rem]  mx-3 md:mx-auto md:px-3 items-start  gap-9  my-3 lg:my-12"}>
 
       <section>
         <CustomerSideBar state={showSideBar}></CustomerSideBar>
       </section>
-      <section className="flex flex-col gap-4 bg-white border drop-shadow-md rounded-[4px] col-span-3 lg:col-span-2 p-7">
+      <section className="flex flex-col gap-4 bg-white border drop-shadow-md rounded-[4px] col-span-3 lg:col-span-2 p-7" data-aos={"fade-up"} data-aos-duration={"900"}>
         <header className="flex justify-between pt-1 pb-3 border-b">
           <h2 className=" text-lg sm:text-xl font-medium">Saved Items</h2>
           <button className="text-blue-600 font-medium text-sm px-2 py-1 rounded-[4px] hover:bg-blue-100" onClick={()=>clearAllCollections(userId)}>Clear All</button>

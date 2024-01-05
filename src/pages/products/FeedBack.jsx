@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { ref as bucketRef, getDownloadURL, uploadBytes} from "firebase/storage";
 import Moment from "react-moment";
 import empty from "../../images/fly.gif"
+import AOS from "aos"
+import "aos/dist/aos.css"
 
 
 const FeedBack = () => {
@@ -20,6 +22,11 @@ const FeedBack = () => {
 
   useEffect(()=>{
     getFeedBacks(id, setFeedBacks)
+  },[])
+
+  
+  useEffect(()=>{
+    AOS.init()
   },[])
 
   function addFeedBack(){
@@ -73,7 +80,7 @@ const FeedBack = () => {
 
 
   return (
-    <main>
+    <main data-aos={"fade-up"} data-aos-duration={"900"}>
       <header className="bg-blue-100 p-5 w-full px-5">
           <span className="text-sm tracking-wide text-slate-600 ml-1"><Link to={"/"}>Home &gt; </Link></span >
           <span className="text-sm tracking-wide text-slate-600 ml-1"><Link to={"/"}>Products &gt; </Link></span >

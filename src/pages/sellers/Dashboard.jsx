@@ -7,6 +7,7 @@ import allProduct from "../../images/all-products.png"
 import addProduct from "../../images/add-product.png"
 import sell from "../../images/sell.gif"
 
+
 const Dashboard = () => {
   const [showSideBar, setShowSideBar] = useState(false)
   const [isVendor, setIsVendor] = useState(false)
@@ -18,6 +19,7 @@ const Dashboard = () => {
     getSingleSeller(auth?.currentUser?.uid, setVendor)
     getSellers(setVendors)
   },[])
+
 
 
   useEffect(()=>{
@@ -44,7 +46,7 @@ const Dashboard = () => {
 
 
   return (
-   <>{isVendor ? 
+   <>{ 
     <main className="">
    <aside className="fixed top-0 left-0 bottom-0 bg-white z-20 border right-[10%] md:right-1/4 lg:right-[70%]" style={showSideBar ? openSideBar : closeSideBar}>
        <header className="side-bar-container p-3">
@@ -100,12 +102,12 @@ const Dashboard = () => {
      </section>
    </nav>
    <Outlet />
-    </main>: 
-    <section  className="flex flex-col  items-center text-center mt-24 ">
-      <img src={sell} alt="sell" className="w-[300px]" />
-      <h4 className="my-3.5 sm:my-2  text-sm tracking-wider md:text-sm px-3">Unfortunately! This page is for sellers only. click the button below to become a vendor</h4>
-     <Link to={"/pricing"}> <button className="bg-blue-700 px-5 py-1.5 rounded-[4px] text-white tracking-wider text-sm my-1.5">Become a seller</button></Link>
-    </section>
+    </main>
+    // <section  className="flex flex-col  items-center text-center mt-24 ">
+    //   <img src={sell} alt="sell" className="w-[300px]" />
+    //   <h4 className="my-3.5 sm:my-2  text-sm tracking-wider md:text-sm px-3">Unfortunately! This page is for sellers only. click the button below to become a vendor</h4>
+    //  <Link to={"/pricing"}> <button className="bg-blue-700 px-5 py-1.5 rounded-[4px] text-white tracking-wider text-sm my-1.5">Become a seller</button></Link>
+    // </section>
  }
   </>
   )

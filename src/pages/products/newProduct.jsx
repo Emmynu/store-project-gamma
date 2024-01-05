@@ -161,7 +161,7 @@ const NewProduct = () => {
   
   
   return (
-    <main className="new-product-container mt-28 border">
+    <main className="new-product-container mt-28 border" data-aos={"fade-up"} data-aos-duration={"900"}>
       <header className="new-product-header">
         <h2>{productValues.name.length <= 0 ? "[Untitled]": productValues.name}</h2>
         <h3>Creating new product</h3>

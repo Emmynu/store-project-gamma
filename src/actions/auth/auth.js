@@ -30,9 +30,11 @@ export async function getCurrentUser (user){
   })
 }
 
-export async function getSingleUserFromDb(id,user){
+export async function getSingleUserFromDb(id,user,loading){
+  loading(true)
   onValue(ref(db, `users/${id}`),result =>{
     result.exists() ? user(Object.entries(result.val())) : user([])
+    loading(false)
   })
 }
 
