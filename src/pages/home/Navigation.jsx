@@ -47,12 +47,11 @@ const Navigation = () => {
   useEffect(()=>{
   cart.reduce((totalPrice, price)=>{
     totalPrice += price[1]?.price * (price[1]?.quantity)
-    setTotal(totalPrice + 100)
+    setTotal(totalPrice + 600)
     return totalPrice
   },0)
   },[cart])
   
-  // console.log(cart);
 
   window.addEventListener("scroll", function(){
    const scrollHeight = this.pageYOffset
@@ -192,7 +191,7 @@ const Navigation = () => {
             <footer>
               <div className="flex justify-between  text-sm tracking-wide text-slate-600 my-1.5">
                 <h2>Shipping</h2>
-                <h4>₦0</h4>
+                <h4>₦500</h4>
               </div> 
                <div className="flex justify-between  text-sm tracking-wide text-slate-600 my-1.5">
                 <h2>Transaction Fee</h2>
@@ -222,7 +221,7 @@ const Navigation = () => {
           </div>
           </Link>
 
-          <Link to={"/new-product"}>
+          <Link to={"/orders"}>
           <div>
           <img src={orderIcon} className="w-[22px]" alt="package"/>
             <h2>Orders</h2>
@@ -278,7 +277,7 @@ const Navigation = () => {
             <section className="side-nav-links-container" >
               <div onClick={toggleSideBar}>
                 <h2><Link to={"/profile"}>My Account</Link></h2>
-                <h2><Link to={"/new-product"}>Orders</Link></h2>
+                <h2><Link to={"/orders"}>Orders</Link></h2>
                 <h2><Link to={"/collections"}>Collections</Link></h2>
               </div>
               <h2 className="flex justify-between items-center" onClick={()=>setToggle(prev => {return{...prev,others:!toggle.others}})}><span><Link>Help Center</Link></span><span><img width="24" height="24" src="https://img.icons8.com/external-thin-kawalan-studio/24/external-up-arrow-arrows-thin-kawalan-studio.png" alt="external-up-arrow-arrows-thin-kawalan-studio" style={toggle.others ? up: down} className="cursor-pointer"/></span></h2>

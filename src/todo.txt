@@ -1,8 +1,4 @@
 TODOS
-1. Add messaging feature
-2. Sellers page and verification of new products
-3. Dashboard and Profile
-4. Help page
-5. Orders and checkout and also refunds
-6. better ux 
-7. better looking home page
+1. Admin Page
+2. messaging feature
+3. styling

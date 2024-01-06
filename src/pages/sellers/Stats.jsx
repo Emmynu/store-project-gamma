@@ -6,25 +6,30 @@ import completed from "../../images/completed.png"
 import product from "../../images/products.png"
 import AOS from "aos"
 import "aos/dist/aos.css"
+import { getVendorOrders } from "../../actions/products/orders"
 
 const Stats = () => {
   const [products, setProducts] = useState([])
+  const [orders, setorders] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(()=>{
     getProducts(setIsLoading, setProducts)
+    getVendorOrders(setorders)
   },[])
 
   useEffect(()=>{
     AOS.init()
   },[])
 
+  console.log(orders);
+
 
   const filteredProducts = products.filter(product=> product[1]?.createdBy?.id === auth?.currentUser?.uid)
   
 
   return (
-    <main className="mt-32 mb-[1000px]"  data-aos={"fade-up"} data-aos-duration={"900"}>
+    <main className="mt-32 mb-[10px]"  data-aos={"fade-up"} data-aos-duration={"900"}>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center gap-7 sm:gap-12 mx-3 md:mx-9">
 
         <div className="bg-white shadow-md shadow-slate-200 border drop-shadow-md rounded-md p-9 border-b-[7px] border-yellow-600"  data-aos={"fade-left"} data-aos-duration={"900"}>
@@ -59,8 +64,19 @@ const Stats = () => {
         </div>
       </section>
 
-      <section className="text-center mt-20 ">
-        <h2 className="text-2xl sm:text-[25px] leading-3 text-slate-700 font-medium font-[arial] tracking-wide">All Orders</h2>
+      <section className="mt-20 ">
+        <h2 className="text-2xl text-center  sm:text-[25px] leading-3 text-slate-700 font-medium font-[arial] tracking-wide">All Orders</h2>
+        <section>
+          {orders.map(order=>{
+            return<article>
+              <h2>{order[1]?.products?.name}</h2>
+              <img src={order[1]?.products.url} alt="" />
+              <h3>{order[1]?.products?.price}</h3>
+              <h3>{order[1]?.products?.brand}</h3>
+              <h3>{order[1]?.products?.productQuantityAvailable}</h3>
+            </article>
+          })}
+        </section>
       </section>
     </main>
   )

@@ -88,7 +88,7 @@ const Checkout = () => {
             <div className=" bg-base-200 p-[2rem] py-[3rem] bg-blue-50 rounded-2xl">
               <p className="flex justify-between text-xs border-b border-base-300 pb-2 my-2.5">
                 <span>Shipping Fee</span>
-                <span>₦0</span>
+                <span>₦500</span>
               </p>
               <p className="flex justify-between text-xs border-b border-base-300 pb-2 my-2.5">
                 <span>Fee</span>
@@ -98,9 +98,9 @@ const Checkout = () => {
                 <span>Subtotal</span>
                 <span>₦{total}</span>
               </p>
-              <h2 className="flex justify-between text-base font-medium"><span>Total</span> <span>₦{total + 100}</span></h2>
+              <h2 className="flex justify-between text-base font-medium"><span>Total</span> <span>₦{total + 600}</span></h2>
             </div>
-          <button className="bg-blue-700 text-white font-bold tracking-wider my-2.5 px-4 py-1.5 rounded-[4px]">{cart.length > 0 ?  <span>Checkout</span> : <Link to={"/"}>Checkout</Link>}</button>
+          <button className="bg-blue-700 text-white font-bold tracking-wider my-2.5 px-4 py-1.5 rounded-[4px]">{cart.length > 0 ?  <span><Link to={"/checkout/delivery-options"}>Checkout</Link></span> : <Link to={"/"}>Checkout</Link>}</button>
           </section>
       </main>
       <Toaster richColors closeButton position="top-right"/>

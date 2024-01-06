@@ -125,7 +125,7 @@ const Search = () => {
              </div>
             </header>
             { <>
-            {searchedProducts.length > 0 ?  <main>
+            {searchedProducts.length > 0 ?  <main >
             {filterProducts.length > 0 ? 
               <section className="grid-view">
                 {filterProducts.reverse().map(item =>{
@@ -142,7 +142,7 @@ const Search = () => {
                   </Link>
                 </div>
               })}
-              </section>
+               </section>
             : 
             <section className="-mt-10 block md:flex flex-col items-center justify-center lg:block">
             <img src={notFoundImage2} alt="" className="w-[350px]"/>

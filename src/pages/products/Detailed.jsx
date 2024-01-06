@@ -113,6 +113,7 @@ const Detailed = () => {
          productQuantityAvailable:product?.quantity || 25,
          quantity:1,
          brand,
+         createdBy: product?.createdBy?.id
         })
         toast.success("Added To Cart")
       }

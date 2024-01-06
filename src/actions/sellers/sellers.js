@@ -3,7 +3,7 @@ import { id } from "../auth/auth"
 import { db } from "../../firebase-config"
 
 
-export const createSeller = (plan) => {
+export const createSeller = async (plan) => {
   push(ref(db, `vendors/${id}`), {
     pricingPlan:plan
   })  

@@ -25,7 +25,7 @@ const CustomerSideBar = () => {
       <hr className='-mt-1.5 mb-2'/>
       <section className='flex flex-col px-0 mt-1'>
         <NavLink to={"/profile"}><h4 className='py-1.5 hover:bg-blue-100  transition-all px-4  tracking-wider'>My Account</h4></NavLink>
-        <NavLink><h4 className='py-1.5 hover:bg-blue-100  transition-all px-4  tracking-wider'>Orders</h4></NavLink>
+        <NavLink to={"/orders"}><h4 className='py-1.5 hover:bg-blue-100  transition-all px-4  tracking-wider'>Orders</h4></NavLink>
         <NavLink><h4 className='py-1.5 hover:bg-blue-100  transition-all px-4  tracking-wider'>Inbox</h4></NavLink>
         <NavLink  to={"/collections"}><h4 className='py-1.5 hover:bg-blue-100  transition-all px-4  tracking-wider'>Saved Items</h4></NavLink> 
         <NavLink><h4 className='py-1.5 hover:bg-blue-100  transition-all px-4  tracking-wider'>Followed sellers</h4></NavLink>

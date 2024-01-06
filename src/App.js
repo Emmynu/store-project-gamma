@@ -19,6 +19,9 @@ import FeedBack from "./pages/products/FeedBack"
 import Dashboard from "./pages/sellers/Dashboard"
 import Stats from "./pages/sellers/Stats"
 import Products from "./pages/sellers/Products"
+import OrderOptions from "./pages/products/OrderOptions"
+import Orders from "./pages/products/Orders"
+import Admin from "./pages/products/Admin"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -38,6 +41,9 @@ export default function App(){
       <Route element={<ProtectRoute />}>
         <Route path="profile" element={<Profile />}/>
         <Route path="checkout" element={<Checkout />}/>
+        <Route path="checkout/delivery-options" element={<OrderOptions />}/>
+        <Route path="orders" element={<Orders />}/>
+        <Route path="admin" element={<Admin />}/>
         <Route path="chat/:id" element={<Chat />}/>
         <Route path="collections" element={<Collections />}/>
       </Route>

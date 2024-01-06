@@ -6,6 +6,7 @@ import stats from "../../images/stats.png"
 import allProduct from "../../images/all-products.png"
 import addProduct from "../../images/add-product.png"
 import sell from "../../images/sell.gif"
+import { id } from "../../actions/auth/auth"
 
 
 const Dashboard = () => {
@@ -16,7 +17,7 @@ const Dashboard = () => {
 
   
   useEffect(()=>{
-    getSingleSeller(auth?.currentUser?.uid, setVendor)
+    getSingleSeller(id, setVendor)
     getSellers(setVendors)
   },[])
 
@@ -43,6 +44,8 @@ const Dashboard = () => {
       transition: "all .8s linear",
       transform: "translate(-200%)"
   }
+
+
 
 
   return (
@@ -96,9 +99,10 @@ const Dashboard = () => {
      <section>
        <h2 className="text-2xl sm:text-[28px] leading-3 text-slate-700 font-medium font-[arial] tracking-wide">Dashboard</h2>
      </section>
-     {/* {console.log(vendor[0][1])} */}
      <section className="bg-blue-700 shadow-lg font-medium tracking-wider px-7 py-1 rounded-[4px] text-white">
-      {vendor.length > 0  ? <h2>{`${vendor[0][1]?.pricingPlan.charAt(0).toUpperCase()}${vendor[0][1]?.pricingPlan.slice(1)}`}</h2>: "No Plan"}
+      {vendor.map(seller=>{
+        return <h2>{seller[1]?.pricingPlan}</h2>
+      })}
      </section>
    </nav>
    <Outlet />

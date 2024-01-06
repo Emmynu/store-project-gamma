@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from "react"
-import { storage } from "../../firebase-config"
+import { auth, storage } from "../../firebase-config"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { Toaster, toast } from "sonner"
 import load from '../../images/load.png'
 import add from '../../images/add.png'
-import { saveProductToDb } from "../../actions/products/products"
+import { getProducts, saveProductToDb } from "../../actions/products/products"
 import { serverTimestamp } from "firebase/database"
 import { getCurrentUser } from "../../actions/auth/auth"
 import "./products.css";
 import Select from "react-select"
+import { getSingleSeller } from "../../actions/sellers/sellers"
 
 const NewProduct = () => {
   const imageRef = useRef()
-  // states
+  const [vendor, setVendor] = useState([])
+  const [allProducts, setAllProducts] = useState([])
+  const [isFetching, setIsFetching] = useState(false)
   const [productValues, setProductValues] = useState({
     name:"",
     description: "",
@@ -33,7 +36,6 @@ const NewProduct = () => {
     {label: "Pets", value: "pets"},
     {label: "Vehicles", value: "vehicles"}
   ]
-
   const brandOptions = {
     beauty:[
       {
@@ -89,6 +91,11 @@ const NewProduct = () => {
     getCurrentUser(setUser)
   },[])
 
+  useEffect(()=>{
+    getSingleSeller(auth?.currentUser?.uid, setVendor)
+    getProducts(setIsFetching, setAllProducts)
+  },[])
+
   function handleValues(e){
     const {name, value} = e.target
     setProductValues(prev=>{
@@ -122,6 +129,17 @@ const NewProduct = () => {
  async function createProduct(e) {
     e.preventDefault()
     setIsLoading(true)
+    vendor.map(seller =>{
+      if((seller[1]?.pricingPlan === "Basic"  && allProducts.length < 20) ||(seller[1]?.pricingPlan === "Premium"  && allProducts.length < 50)){
+        newProductUpload()
+      }else{
+        toast.error("Upload Limit Reached")
+      }
+    })
+    setIsLoading(false)
+  }
+
+  async function newProductUpload(){
     const productImages = []
     const {name,description,price, productQuantity} = productValues
     try {
@@ -156,7 +174,6 @@ const NewProduct = () => {
     } catch (err) {
       toast.error(err.message)
     }
-    setIsLoading(false)
   }
   
   
