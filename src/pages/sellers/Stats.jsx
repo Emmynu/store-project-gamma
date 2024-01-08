@@ -7,6 +7,7 @@ import product from "../../images/products.png"
 import AOS from "aos"
 import "aos/dist/aos.css"
 import { getVendorOrders } from "../../actions/products/orders"
+import { id } from "../../actions/auth/auth"
 
 const Stats = () => {
   const [products, setProducts] = useState([])
@@ -15,7 +16,7 @@ const Stats = () => {
 
   useEffect(()=>{
     getProducts(setIsLoading, setProducts)
-    getVendorOrders(setorders)
+    getVendorOrders(id, setorders)
   },[])
 
   useEffect(()=>{

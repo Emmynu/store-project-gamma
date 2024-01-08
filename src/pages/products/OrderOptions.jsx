@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react"
-import { getSingleUserFromDb, id as userId } from "../../actions/auth/auth"
-import { getDatabase, push, ref, serverTimestamp, update } from "firebase/database"
+import { getSingleUserFromDb, id, id as userId } from "../../actions/auth/auth"
+import { getDatabase, push, ref, remove, serverTimestamp, update } from "firebase/database"
 import { getCart } from "../../actions/products/cart"
 import { createOrder, getAllVendors } from "../../actions/products/orders"
 import { db,auth } from "../../firebase-config"
 import { usePaystackPayment } from "react-paystack"
+import { getProducts, updateQuantity } from "../../actions/products/products"
 
 
 const OrderOptions = () => {
   const [address, setAddress] =  useState([])
   const [cart, setCart] =  useState([])
+  const [products, setProducts] =  useState([])
   const [vendors, setVendors] =  useState([])
   const [states, setStates] =  useState([])
   const [deliveryOption, setDeliveryOption] = useState("")
@@ -30,6 +32,7 @@ const OrderOptions = () => {
 
   useEffect(()=>{
     getSingleUserFromDb(userId, setAddress, setIsFetching)
+    getProducts(setIsFetching, setProducts)
   },[])
 
   useEffect(()=>{
@@ -76,22 +79,31 @@ function handleInput(e){
   })
 }
 
+
 function order() {
-  createOrder({ 
+  const orderId = new Date().getTime().toString()
+  createOrder(orderId, { 
     products: cart,
     status:"pending",
     createdOrder: serverTimestamp(),
     deliveryOption
-  }).then(res=>{
+  }).then(request=>{
     cart.map(item=>{
       vendors.map(vendor=>{
         if(item[1]?.createdBy === vendor){
           push(ref(db, `vendors/${vendor}/orders`),{
-            products:item[1]
-          })
+            products:item[1],
+            orderRef: orderId
+          }).then(products.map(product=>{
+            if(product[0] === item[1]?.productId){
+              updateQuantity(product[0], item[1]?.quantity)
+            }
+          }))
         }
       })
     })
+  }).then(res=>{
+    remove(ref(db, `cart/${id}`))
   })
 }
 

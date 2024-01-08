@@ -1,5 +1,6 @@
-import { onValue, push, ref, remove } from "firebase/database";
+import { getDatabase, increment, onValue, push, ref, remove, update } from "firebase/database";
 import { db } from "../../firebase-config";
+import { id } from "../auth/auth";
 
 export async function saveProductToDb(data){
   push(ref(db, `products/`),data)
@@ -21,4 +22,10 @@ export async function getSingleProduct(id, product) {
 
 export async function deleteProduct(productId) {
   remove(ref(db, `products/${productId}`))
+}
+
+export async function updateQuantity(productId,quantity) {
+  const updates = {}
+  updates[`products/${productId}/quantity`] = increment(-1)
+  return update(ref(getDatabase()),  updates)
 }

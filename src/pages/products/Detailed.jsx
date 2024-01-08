@@ -17,6 +17,8 @@ import { id as userId } from '../../actions/auth/auth'
 import { Toaster,toast } from 'sonner'
 import { addProductToCart, getCart } from '../../actions/products/cart'
 import { getFeedBacks } from '../../actions/products/feedback'
+import { saveChatMembers } from '../../actions/chat/chat'
+import { auth } from '../../firebase-config'
 
 export const slide2 ={
   dots: false,
@@ -123,6 +125,24 @@ const Detailed = () => {
     }
   }
 
+  function createChat(user) {
+    const chatID = new Date().getTime().toString()
+    const {id, email, url, name} = user
+    saveChatMembers(chatID, {
+      sender:{
+        id: auth?.currentUser?.uid,
+        name: auth?.currentUser?.displayName,
+        url: auth?.currentUser?.photoURL,
+      },
+      receiver: {
+        id,
+        email,
+        url,
+        name
+      }
+    })
+  }
+
  {return product !==null && <main>
   <section className='bg-blue-100 p-5 mt-3 text-xl font-medium md:text-2xl'>
     <span className='ml-1 tracking-wide hover:underline transition-all'><Link to={"/"}>Home/</Link></span>
@@ -187,7 +207,7 @@ const Detailed = () => {
             <h2 className='text-sm text-slate-600 tracking-wider'>{product?.createdBy?.id}</h2>
           </div>
         </article>
-        <button className='w-full text-white py-1.5 font-medium my-3 tracking-wide hover:brightness-115 transition-all bg-blue-700 rounded-[4px] flex justify-center items-center'> <img src={chatIcon} alt="chat-icon" className='w-5 mr-1'/> Start Chat</button>
+        <button className='w-full text-white py-1.5 font-medium my-3 tracking-wide hover:brightness-115 transition-all bg-blue-700 rounded-[4px] flex justify-center items-center' onClick={()=>createChat(product?.createdBy)}> <img src={chatIcon} alt="chat-icon" className='w-5 mr-1'/> Start Chat</button>
       </div>
 
       <div className='text-center bg-white shadow-lg p-4 my-5 drop-shadow-md shadow-slate-200  rounded-[4px]'>

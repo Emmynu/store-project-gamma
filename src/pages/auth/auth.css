@@ -6,8 +6,8 @@
 
 @layer base{
   .form-container{
-    @apply  text-center  w-10/12 md:w-7/12 lg:w-[40%] select-none outline-none ;
-    margin: 8% auto auto;
+    @apply  text-center m-[10%_auto_0] w-10/12 md:w-7/12 lg:w-[40%] select-none outline-none ;
+   
   }
   .form-header {
     @apply flex flex-col items-center justify-center;

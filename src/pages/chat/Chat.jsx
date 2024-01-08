@@ -1,26 +1,39 @@
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { getCurrentUser, getSingleUserFromDb } from "../../actions/auth/auth"
+import { getSingleChat, saveChat } from "../../actions/chat/chat"
+import { auth } from "../../firebase-config"
+
+
 
 
 const Chat = () => { 
-  const { id } = useParams()
-  const [receiver, setReceiver] = useState([])
-  const [sender, setSender] = useState([])
-  const [text, setText] =  useState("")
+
+  const [chats, setChats] = useState([])
+  const [text, setText] = useState("")
+  const { chatId } = useParams()
 
   useEffect(()=>{
-    getSingleUserFromDb(id,setReceiver)
-    getCurrentUser(setSender)
+    getSingleChat(chatId, setChats)
   },[])
+
+  console.log(chats);
 
   function sendMessage(e) {
     e.preventDefault()
-    console.log("message sent");
+    saveChat(chatId, {
+      id:auth?.currentUser?.uid,
+      name:auth?.currentUser?.displayName,
+      message: text
+    }).then(setText(""))
   }
 
   return (
     <main>
+      <section>
+        {chats.map(chat=>{
+          return <h3>{chat[1]?.message}</h3>
+        })}
+      </section>
       <form onSubmit={sendMessage}>
         <input type="text" value={text} onChange={(e)=>setText(e.target.value)}/>
         <button>Send</button>
@@ -28,5 +41,6 @@ const Chat = () => {
     </main>
   )
 }
+
 
 export default Chat
