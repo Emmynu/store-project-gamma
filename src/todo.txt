@@ -1,4 +1,2 @@
 TODOS
-1. Admin Page
-2. messaging feature
-3. styling
+1. styling and better ux
