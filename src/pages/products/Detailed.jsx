@@ -17,7 +17,7 @@ import { id as userId } from '../../actions/auth/auth'
 import { Toaster,toast } from 'sonner'
 import { addProductToCart, getCart } from '../../actions/products/cart'
 import { getFeedBacks } from '../../actions/products/feedback'
-import { saveChatMembers } from '../../actions/chat/chat'
+import { getAllChats, saveChatMembers } from '../../actions/chat/chat'
 import { auth } from '../../firebase-config'
 
 export const slide2 ={
@@ -33,17 +33,19 @@ const Detailed = () => {
   const [product, setProduct] = useState(null)
   const [isSaved, setIsSaved] = useState(false)
   const [isProductInCart, setIsProductInCart] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [collection, setCollection] = useState([])
   const [feedBacks, setFeedBacks] = useState([])
   const [cart, setCart] = useState([])
+  const [chats, setChats] = useState([])
   const sliderRef = useRef(null)
-
 
   useEffect(()=>{
     getSingleProduct(id, setProduct)
     getCollection(userId, setCollection)
     getFeedBacks(id, setFeedBacks)
     getCart(setCart)
+    getAllChats(setChats, setIsLoading)
   },[])
 
   useEffect(()=>{
@@ -54,6 +56,7 @@ const Detailed = () => {
       setIsSaved(false)
     }
   })
+
   useEffect(()=>{
     if(cart.find(item=> item[1].productId === id)){
       setIsProductInCart(true)
@@ -61,6 +64,8 @@ const Detailed = () => {
       setIsProductInCart(false)
     }
   })
+
+
 
   const settings ={
     dots: true,
@@ -128,19 +133,25 @@ const Detailed = () => {
   function createChat(user) {
     const chatID = new Date().getTime().toString()
     const {id, email, url, name} = user
-    saveChatMembers(chatID, {
-      sender:{
-        id: auth?.currentUser?.uid,
-        name: auth?.currentUser?.displayName,
-        url: auth?.currentUser?.photoURL,
-      },
-      receiver: {
-        id,
-        email,
-        url,
-        name
-      }
-    })
+    if(chats.find(chat=>  chat[1]?.members?.sender?.id === id || chat[1]?.members?.receiver?.id === id)){
+      window.location = "/chats"
+    }
+    else{
+      saveChatMembers(chatID, {
+        sender:{
+          id: auth?.currentUser?.uid,
+          name: auth?.currentUser?.displayName,
+          url: auth?.currentUser?.photoURL,
+        },
+        receiver: {
+          id,
+          email,
+          url,
+          name
+        }
+      }).then(window.location = "/chats")
+    }
+    
   }
 
  {return product !==null && <main>

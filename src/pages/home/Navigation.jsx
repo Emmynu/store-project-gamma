@@ -254,7 +254,7 @@ const Navigation = () => {
           </Link>
 
           <hr className="bg-slate-500 my-1 h-[2px]"/>
-          <button className="flex justify-center items-center"> <img src={chatIcon} alt="chat" className="w-5 mr-2"/>Live Chat</button>
+          <button className="flex justify-center items-center" > <img src={chatIcon} alt="chat" className="w-5 mr-2"/>Live Chat</button>
           </section>}
 
           {/* side bar */}
@@ -278,6 +278,7 @@ const Navigation = () => {
               <div onClick={toggleSideBar}>
                 <h2><Link to={"/profile"}>My Account</Link></h2>
                 <h2><Link to={"/orders"}>Orders</Link></h2>
+                <h2><Link to={"/chats"}>Inbox</Link></h2>
                 <h2><Link to={"/collections"}>Collections</Link></h2>
               </div>
               <h2 className="flex justify-between items-center" onClick={()=>setToggle(prev => {return{...prev,others:!toggle.others}})}><span><Link>Help Center</Link></span><span><img width="24" height="24" src="https://img.icons8.com/external-thin-kawalan-studio/24/external-up-arrow-arrows-thin-kawalan-studio.png" alt="external-up-arrow-arrows-thin-kawalan-studio" style={toggle.others ? up: down} className="cursor-pointer"/></span></h2>

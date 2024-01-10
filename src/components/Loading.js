@@ -10,7 +10,7 @@ const Loading = () => {
           <span><Skeleton  width={200} highlightColor="#f6f6f6 " duration={1}/></span>
           <span> <Skeleton width={100}  highlightColor="#f6f6f6 " duration={1}/></span>
         </div>
-        <div className=" justify-center items-center flex-col hidden sm:flex ">
+        <div className=" justify-center items-center flex-col hidden md:flex ">
           <span > <Skeleton highlightColor="#f6f6f6 " duration={1} className="my-1 w-[350px] h-[220px] md:h-[200px] md:w-[350px]" borderRadius={`5px`}/></span>
           <span ><Skeleton  width={200} highlightColor="#f6f6f6 " duration={1}/></span>
           <span><Skeleton width={100}  highlightColor="#f6f6f6 " duration={1}/></span>
@@ -87,6 +87,10 @@ export function LoadProfile(){
   )
 }
 
+
+export function LoadAllChatMembers(){
+  return <h2>Loading...</h2>
+}
 
 export default Loading
   

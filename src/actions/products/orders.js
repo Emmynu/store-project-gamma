@@ -18,7 +18,7 @@ export async function getAllVendors(vendors){
 export async function getOrders(orders) {
   onValue(ref(db, `orders/${id}`),res=>{
     res.exists() ? orders(Object.entries(res.val())) : orders([])
-  })
+  }) 
 }
 
 export async function getAllOrders(orders) {

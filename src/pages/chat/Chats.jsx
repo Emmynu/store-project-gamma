@@ -1,38 +1,17 @@
-import { useEffect, useState } from "react"
-import { getAllChats } from "../../actions/chat/chat"
-import { id } from "../../actions/auth/auth"
-import { Link } from "react-router-dom"
+import ChatMembers from "../../components/ChatMembers"
+import chatImage from "../../images/chats.gif"
 
 const Chats = () => {
-  const [chats, setChats] = useState([])
-
-  useEffect(()=>{
-    getAllChats(setChats)
-  },[])
-
-  
-  const newChats = chats.filter(chat=> chat[1]?.members?.sender?.id === id || chat[1]?.members?.receiver?.id === id)
-  console.log(newChats);
-
   return (
-    <main>
-      {newChats.map(chat=>{
-        return <section>
-              {chat[1]?.members?.sender?.id === id ?<Link to={`/chat/${chat[0]}/${chat[1]?.members?.receiver?.id}`}>
-                <article>
-                  <img src={chat[1]?.members?.receiver?.url}/>
-                  <h3>{chat[1]?.members?.receiver?.name}</h3>
-                </article>
-              </Link>
-              
-              : <Link to={`/chat/${chat[0]}/${chat[1]?.members?.sender?.id}`}>
-                  <article>
-                    <img src={chat[1]?.members?.sender?.id}/>
-                    <h3>{chat[1]?.members?.sender?.name}</h3>
-                </article>
-              </Link>}
-        </section>
-      })}
+    <main className="bg-white shadow-md w-[98%] lg:w-9/12 pb-7 grid grid-cols-1 lg:grid-cols-5  border m-[5%_auto_0]">
+      <section className="col-span-2  overflow-y-scroll">
+        <ChatMembers />
+      </section>
+      <section className="col-span-3 select-none cursor-pointer flex justify-center border-l text-center items-center flex-col">
+       <img src={chatImage} alt="chat"/>
+       <h4 className="text-slate-800 tracking-wide ">Select a chat to view conversation</h4>
+      </section>
+
     </main>
   )
 }
