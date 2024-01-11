@@ -133,10 +133,10 @@ const Detailed = () => {
   function createChat(user) {
     const chatID = new Date().getTime().toString()
     const {id, email, url, name} = user
-    if(chats.find(chat=>  chat[1]?.members?.sender?.id === id || chat[1]?.members?.receiver?.id === id)){
-      window.location = "/chats"
-    }
-    else{
+    // if(chats.find(chat=>  chat[1]?.members?.sender?.id === id || chat[1]?.members?.receiver?.id === id)){
+    //   window.location = "/chats"
+    // }
+    // else{
       saveChatMembers(chatID, {
         sender:{
           id: auth?.currentUser?.uid,
@@ -150,7 +150,7 @@ const Detailed = () => {
           name
         }
       }).then(window.location = "/chats")
-    }
+    // }
     
   }
 

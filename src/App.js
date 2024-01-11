@@ -21,6 +21,7 @@ import Stats from "./pages/sellers/Stats"
 import Products from "./pages/sellers/Products"
 import OrderOptions from "./pages/products/OrderOptions"
 import Orders from "./pages/products/Orders"
+import OrderSuccess from "./pages/products/OrderSuccess"
 import Admin from "./pages/admin/Admin"
 import AdminLogin, { adminLoginAction }   from "./pages/admin/AdminLogin"
 import ProtectAdmin from "./pages/admin/ProtectAdmin"
@@ -47,8 +48,7 @@ export default function App(){
         <Route path="checkout" element={<Checkout />}/>
         <Route path="checkout/delivery-options" element={<OrderOptions />}/>
         <Route path="orders" element={<Orders />}/>
-        <Route path="chats" element={<Chats />}/>
-        <Route path="chat/:chatId/:userId" element={<Chat />}/>
+        <Route path="order/success" element={<OrderSuccess />}/>
         <Route path="collections" element={<Collections />}/>
       </Route>
       
@@ -58,15 +58,19 @@ export default function App(){
 
     {/*Authentication Routes*/}
     <Route path="/register" element={<Register />} />
-   
     <Route path="/login" element={<Login />} action={loginAction}/>
     <Route path="/find-account" element={<ForgotPassword />} /> 
 
-    {/* Dashboard */}
-    <Route path="dashboard" element={<Dashboard />}>
-       <Route index element={<Stats />}/>
-       <Route path="new-product" element={<NewProduct />}/>
-       <Route path="products" element={<Products />}/>
+    <Route element={<ProtectRoute />}>
+      <Route path="chats" element={<Chats />}/>
+      <Route path="chat/:chatId/:userId" element={<Chat />}/>
+
+      {/* Dashboard */}
+      <Route path="dashboard" element={<Dashboard />}>
+        <Route index element={<Stats />}/>
+        <Route path="new-product" element={<NewProduct />}/>
+        <Route path="products" element={<Products />}/>
+      </Route>
     </Route>
     
     {/* admin */}

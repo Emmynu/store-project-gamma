@@ -1,4 +1,4 @@
-import { getDatabase, onValue, push, ref, update } from "firebase/database";
+import { getDatabase, onValue, push, ref, remove, update } from "firebase/database";
 import { db } from "../../firebase-config";
 
 export async function saveChatMembers(chatId,data) {
@@ -29,4 +29,8 @@ export async function getSingleChatMembers(id, chats){
 
 export async function saveChat(chatId,data) {
     push(ref(db, `chats/${chatId}/messages`), data)
+}
+
+export async function deleteRoom(id) {
+  remove(ref(db, `chars/${id}`)).then(window.location = "/chats")
 }

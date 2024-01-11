@@ -8,12 +8,14 @@ import AOS from "aos"
 import "aos/dist/aos.css"
 import { getVendorOrders } from "../../actions/products/orders"
 import { id } from "../../actions/auth/auth"
+import test from "../../images/test.jpg"
 
 const Stats = () => {
   const [products, setProducts] = useState([])
   const [orders, setorders] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
+  console.log(orders)
   useEffect(()=>{
     getProducts(setIsLoading, setProducts)
     getVendorOrders(id, setorders)
@@ -27,6 +29,8 @@ const Stats = () => {
 
 
   const filteredProducts = products.filter(product=> product[1]?.createdBy?.id === auth?.currentUser?.uid)
+  const completedOrder = orders.filter(order => order[1]?.products?.status === "Delivered")
+  const pendingOrder = orders.filter(order => order[1]?.products?.status === "Pending")
   
 
   return (
@@ -35,7 +39,7 @@ const Stats = () => {
 
         <div className="bg-white shadow-md shadow-slate-200 border drop-shadow-md rounded-md p-9 border-b-[7px] border-yellow-600"  data-aos={"fade-left"} data-aos-duration={"900"}>
           <header className="flex items-center justify-between">
-            <h2 className="text-3xl text-yellow-600 font-bold">20</h2>
+            <h2 className="text-3xl text-yellow-600 font-bold">{pendingOrder.length}</h2>
             <div className=" p-3 rounded-[4px] bg-orange-100"><img className="w-7" src={pending} alt="pending"/></div>
           </header>
           <footer>
@@ -45,7 +49,7 @@ const Stats = () => {
 
         <div className="bg-white shadow-md shadow-slate-200 border  rounded-md p-9 drop-shadow-md border-b-[7px] border-green-600"  data-aos={"fade-left"} data-aos-duration={"1100"}>
           <header className="flex items-center justify-between">
-            <h2 className="text-3xl text-green-600 font-bold">40</h2>
+            <h2 className="text-3xl text-green-600 font-bold">{completedOrder.length}</h2>
             <div className="bg-green-100 p-3 rounded-[4px]"><img className="w-7" src={completed} alt="pending"/></div>
           </header>
           <footer>
@@ -67,14 +71,23 @@ const Stats = () => {
 
       <section className="mt-20 ">
         <h2 className="text-2xl text-center  sm:text-[25px] leading-3 text-slate-700 font-medium font-[arial] tracking-wide">All Orders</h2>
-        <section>
+        <section className=" grid grid-cols-4 mx-7 my-6 gap-6">
           {orders.map(order=>{
-            return<article>
-              <h2>{order[1]?.products?.name}</h2>
-              <img src={order[1]?.products.url} alt="" />
-              <h3>{order[1]?.products?.price}</h3>
-              <h3>{order[1]?.products?.brand}</h3>
-              <h3>{order[1]?.products?.productQuantityAvailable}</h3>
+            return<article className="bg-white shadow-md hover:shadow-lg rounded-md">
+              <img src={test} alt="" className="w-full h-[200px] object-cover"/>
+              <article className="p-3 pb-1.5  ">
+                  <h2 className="text-slate-700 font-medium my-1 sm:text-lg">{order[1]?.products?.name}</h2>
+                  <h4 className="text-sm text-blue-700 tracking-wider my-1">₦{order[1]?.products?.price}</h4>
+                  <h3>{order[1]?.products?.brand}</h3>
+                  <h3>{order[1]?.products?.productQuantityAvailable}</h3>
+                </article>
+                <article>
+                  <h4 className={order[1]?.products?.status === "Deliverd" ? "bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-green-700 text-xs": "bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-red-700 text-xs"}>{order[1]?.products?.status}</h4>
+                  
+                  {/* <h4 className="mt-3 text-[13px] tracking-wider text-slate-600 flex items-center">
+                    <img src={allProduct} alt="products" className="w-4 mr-1"/>
+                    <span>{product[1]?.quantity}</span></h4> */}
+                </article>
             </article>
           })}
         </section>

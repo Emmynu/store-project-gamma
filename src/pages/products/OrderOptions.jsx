@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react"
-import { getSingleUserFromDb, id, id as userId } from "../../actions/auth/auth"
+import { getSingleUserFromDb, id as userId } from "../../actions/auth/auth"
 import { getDatabase, push, ref, remove, serverTimestamp, update } from "firebase/database"
 import { getCart } from "../../actions/products/cart"
 import { createOrder, getAllVendors } from "../../actions/products/orders"
 import { db,auth } from "../../firebase-config"
 import { usePaystackPayment } from "react-paystack"
 import { getProducts, updateQuantity } from "../../actions/products/products"
-
+import { toast, Toaster } from "sonner"
 
 const OrderOptions = () => {
   const [address, setAddress] =  useState([])
@@ -17,8 +17,10 @@ const OrderOptions = () => {
   const [deliveryOption, setDeliveryOption] = useState("")
   const [isFetching, setIsFetching] =  useState(false)
   const [isError, setIsError] =  useState(false)
+  const [isModalOpen, setIsModalOpen] =  useState(false)
   const [newAddress, setNewAddress] = useState({state: "", address: "", phone: 0})
   const [amount, setAmount] = useState(0)
+  const [id, setid] = useState(0)
 
   const paymentConfig = {
     reference : `${new Date().getFullYear()}${new Date().getTime().toString()}`,
@@ -27,7 +29,6 @@ const OrderOptions = () => {
     publicKey: 'pk_test_c2484e2d160a0c13c7b439e82b1e07f0334fb022',
   }
 
-  console.log(amount)
   const initializePayment = usePaystackPayment(paymentConfig)
 
   useEffect(()=>{
@@ -48,6 +49,10 @@ const OrderOptions = () => {
     },0)
 
   },[cart])
+
+  const border={
+    border: "1px solid #f0f0f0"
+  }
   async function fetchStates() {
     await fetch( 'https://nga-states-lga.onrender.com/fetch')
       .then(res=>res.json())
@@ -64,11 +69,16 @@ const OrderOptions = () => {
 
 
   function updateAddress(id){
-   if(newAddress.address && newAddress.state){
-    const updates = {}
-    updates[`users/${userId}/${id}/address`] = `${newAddress.address} | ${newAddress.state} | ${newAddress.phone}`
-    update(ref(getDatabase()), updates)
-   }
+    setIsModalOpen(!isModalOpen)
+    setid(id)
+  
+  }
+  function updateUserAddress() {
+    if(newAddress.address && newAddress.state){
+      const updates = {}
+      updates[`users/${userId}/${id}/address`] = `${newAddress.address} | ${newAddress.state} | ${newAddress.phone}`
+      update(ref(getDatabase()), updates)
+     }
   }
 
 
@@ -103,7 +113,9 @@ function order() {
       })
     })
   }).then(res=>{
-    remove(ref(db, `cart/${id}`))
+    remove(ref(db, `cart/${id}`)).then(window.location = "/order/success")
+  }).catch(err=>{
+    toast.error(err.message)
   })
 }
 
@@ -113,50 +125,111 @@ function onSuccess(){
 
 
 function finalizeOrder() {
-  if(deliveryOption === "door"){
+  if(deliveryOption === "door" && cart.length > 0){
     order()
   }
-  else{
+  else if(deliveryOption === "online"  && cart.length > 0){
      initializePayment({onSuccess})
+  }
+  else if(cart.length <= 0){
+    window.location = "/"
+  }
+  else{
+    toast.error("Please select a delivery option")
   }
 }
 
 
   return (
-    <main>
-      <header>
-        <h2>{address.map(place =>{
+    <>
+    <main className="grid grid-cols-3 lg:grid-cols-4 gap-10 items-start max-w-[72rem] mx-3 lg:mx-auto mt-8">
+    <section className="col-span-3 ">
+      <header className="bg-white shadow-md border p-4">
+        <>{address.map(place =>{
           return <article>
-            <span>{place[1]?.address}</span>
-             <button onClick={()=>updateAddress(place[0]) || "No Address Found"}>Change Address</button>  
+            <header className="flex justify-between items-center">
+              <div className="flex items-center">
+                <h2 className="text-white bg-green-700 rounded-[50%] px-1 text-sm">✓</h2>
+                <h3 className="ml-1.5 font-medium uppercase text-slate-700">1. Customer Address</h3>
+              </div>
+              <div><button onClick={()=>updateAddress(place[0]) || "No Address Found"} className="text-sm text-blue-700 tracking-wider" >Change</button>  </div>
+            </header>
+            <hr className="my-2"/>
+            <main>
+              <h5 className="text-slate-700 font-medium ">{auth?.currentUser?.displayName}</h5>
+              <h6 className="text-sm tracking-wider text-slate-600">{place[1]?.address}</h6>
+            </main>
           </article>
-        })}</h2>
+        })}</>
       </header>
+      <section className="bg-white shadow-md border p-4 mt-4">
+        <header>
+          <div className="flex items-center">
+            <h2 className="text-white bg-green-700 rounded-[50%] px-1 text-sm">✓</h2>
+            <h3 className="ml-1.5 font-medium uppercase text-slate-700">2. Delivery Option</h3>
+          </div>
+        </header>
+        <hr className="my-2"/>
 
-      <section>
-        <article >
-          <h2>Door Delivery</h2>
-          <p>Delivery is from (3days to 1week)</p>
-          <button onClick={()=>setDeliveryOption("door")}>Select</button>
-        </article>
+       <div>
+        <article className="my-5 flex justify-between  p-2" style={deliveryOption === "door" ? border : null}>
+            <div><h2 className="text-[15px] font-medium tracking-wide">Door Delivery</h2>
+            <p className="text-sm text-slate-600 tracking-wider my-1.5">Delivery of item is between (3days to 1week)</p></div>
+            <div><button onClick={()=>setDeliveryOption("door")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
+          </article>
 
-        <article>
-          <h2>Online Payment</h2>
-          <p>Delivery is from (3days to 1week)</p>
-          <button onClick={()=>setDeliveryOption("online")}>Select</button>
-        </article>
+          <article className="my-5  flex justify-between p-2" style={deliveryOption === "online" ? border : null}>
+            <div><h2 className="text-[15px] font-medium tracking-wide">Online Payment</h2>
+            <p className="text-sm text-slate-600 tracking-wider my-1.5">Delivery of item is between (3days to 1week)</p></div>
+           <div> <button onClick={()=>setDeliveryOption("online")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
+          </article>
+       </div>
 
-        <button onClick={finalizeOrder}>Confirm Order</button>
       </section>
-      {/* Modal */}
-      <section>
-       {(states && !isError) && <select onChange={handleInput} name="state">{states.map(state=>{
+      </section>
+      <section className="col-span-3 border lg:col-span-1 bg-white shadow-md rounded-md p-4">
+       <header>
+          <h3 className="font-medium text-base p-1 text-slate-700">Order Summary</h3>
+        </header>
+        <hr className="my-2"/>
+        <main>
+          <article>
+            <div className="flex items-center justify-between my-2">
+              <h2 className="text-[15px] tracking-wider text-slate-700">item's total ({cart.length})</h2>
+              <h3 className="font-medium text-slate-600 text-sm">₦{amount - 600}</h3>
+            </div>
+            <div className="flex items-center justify-between my-2">
+              <h2 className="text-[15px] tracking-wider text-slate-700">Additional Fees</h2>
+              <h3 className="font-medium text-slate-600 text-sm">₦{600}</h3>
+            </div>
+             <hr className="my-2"/>    
+            <div className="flex items-center justify-between my-2">
+            <h2 className="font-medium">Total</h2>
+            <h4 className="font-medium text-slate-600 text-[15px]">₦{amount}</h4>
+            </div>
+          </article>
+          <hr className="my-2"/>
+          <button onClick={finalizeOrder} className="bg-blue-700 w-full mt-2 px-4 py-1.5 rounded-[4px] text-white font-medium text-center">Confirm Order</button>
+
+        </main>
+      </section>
+       {/* Modal */}
+    { isModalOpen &&  <section  className="w-11/12 md:w-6/12 lg:w-1/3 p-5 absolute top-48 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-blue-600 outline-none rounded-mdx shadow-md ">
+      <h3 className="text-center font-[arial] font-medium text-[22px] text-slate-700">Update Address</h3>
+    {!isError ? <>   <select onChange={handleInput} name="state" className="px-2 py-1 my-1.5 w-full border border-slate-700 text-slate-600  text-sm tracking-wider  rounded-[3px]">{states.map(state=>{
           return <option value={state}>{state}</option>
-        })}</select> || <h2>Failed to Fetch States</h2>}
-        <input type="text" onChange={handleInput} name="address" value={newAddress.address}/>
-        <input type="number" onChange={handleInput} name="phone" value={newAddress.phone}/>
-      </section>
-    </main>
+        })}</select> 
+        <div className="flex items-center justify-center mt-1.5">
+          <input className="px-2 py-1 border border-slate-700 rounded-[3px] outline-none text-slate-600 w-full text-sm tracking-wider" type="text" onChange={handleInput} name="address" value={newAddress.address} placeholder="Address"/>
+          <input className="px-2 py-1 border border-slate-700  ml-2 rounded-[3px]  outline-none text-slate-600 w-full text-sm tracking-wider" type="number" onChange={handleInput} name="phone" value={newAddress.phone} placeholder="Phone Number"/>
+        </div>
+        <button className="bg-blue-700 px-5 py-2 rounded-[4px] w-full mt-3 tracking-wider text-white font-medium" onClick={updateUserAddress}>Update Address</button></>: <section className="text-center my-5 text-slate-600 tracking-wider">
+            <h4>Failed to fetch states</h4>
+          </section>}
+      </section>} 
+    </main> 
+    <Toaster richColors closeButton position="top-right"/>
+    </>
   )
 }
 
