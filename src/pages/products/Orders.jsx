@@ -13,9 +13,11 @@ import emptyCollection from "../../images/fly.gif"
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
-  
+  const [isFetching, setIsFetching] = useState(false)
+
+
   useEffect(()=>{
-    getOrders(setOrders)
+    getOrders(setOrders, setIsFetching)
     AOS.init()
   },[])
 
@@ -46,19 +48,19 @@ const Orders = () => {
                   {order[1]?.products?.map(product=>{
                     return <>
                       <section className="flex  gap-2.5 sm:gap-6 cursor-pointer">
-                        <div className="h-[200px] w-[150px] md:w-[200px] ">
+                        <div className="h-[170px] w-[170px] md:w-[200px] ">
                           <img src={product[1]?.url} alt={product[0]} className="h-full w-full object-cover"/>
                         </div>
 
                         <div className=" my-2.5 ">
                           <h2 className=" font-medium md:text-[18px] my-1 text-slate-700">{product[1]?.name}</h2>
                           <h4 className="text-xs md:text-sm text-slate-600 tracking-wider mb-3 select-text">Order ref: {order[0]}</h4>
-                          <span className={order[1]?.status === "Cancelled" ? "px-2 bg-red-700 uppercase text-[12px] md:text-xs tracking-wider text-white py-1" : "px-2 bg-green-700 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1"}>{order[1]?.status}</span>
+                          <span className={order[1].status === "Delivered" ? "px-2 bg-green-700 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1" : order[1]?.status === "pending" ? "px-2 bg-yellow-600 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1": "bg-red-700 px-2 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1"}>{order[1]?.status}</span>
                           <br />
 
                             <h3 className="mt-2 font-medium text-sm md:text-[15px] text-slate-600">
                               <Moment fromNow  >
-                                <span> {order[1]?.createdOrder}</span>
+                                {order[1]?.createdOrder}
                               </Moment>
                             </h3>
                         </div>

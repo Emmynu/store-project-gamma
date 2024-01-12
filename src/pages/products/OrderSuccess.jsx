@@ -5,12 +5,15 @@ import { getOrders } from "../../actions/products/orders"
 import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import { OrderOptionsLoading } from "../../components/Loading"
 
 const OrderSuccess = () => {
   const [orders, setOrders] = useState([])
+  const [isFetching, setIsFetching] = useState(false)
+
 
   useEffect(()=>{
-    getOrders(setOrders)
+    getOrders(setOrders, setIsFetching)
   },[])
 
   const settings = {
@@ -19,7 +22,10 @@ const OrderSuccess = () => {
     slidesToScroll: 1,
     slidesToShow: 1
   }
-
+  if (isFetching) {
+    return <OrderOptionsLoading />
+  }
+  
   return (
     <main className="grid md:grid-cols-2  justify-center mt-10 mx-5 lg:m-10 gap-10 md:gap-5 lg:gap-12 ">
       <section>
@@ -33,7 +39,7 @@ const OrderSuccess = () => {
         <article className="mt-8">
           {orders.reverse().slice(0,1).map(order=>{
             return <>
-             <section>
+           <section>
               <h2 className="text-sm text-slate-600 tracking-wide">Order Reference:</h2>
               <h3 className="font-medium text-slate-700">{order[0]}</h3>
             </section>
@@ -52,7 +58,7 @@ const OrderSuccess = () => {
                       <h4 className="text-sm tracking-wide text-slate-600">Category: {product[1]?.brand}</h4>
                     </div>
                   </article>
-                < hr className="my-5"/>
+                {/* < hr className="my-5"/> */}
 
                   </>
                 })}

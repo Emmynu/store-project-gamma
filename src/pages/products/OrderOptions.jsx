@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react"
 import { getSingleUserFromDb, id as userId } from "../../actions/auth/auth"
-import { getDatabase, push, ref, remove, serverTimestamp, update } from "firebase/database"
+import { getDatabase, push, ref, remove, serverTimestamp, set, update } from "firebase/database"
 import { getCart } from "../../actions/products/cart"
 import { createOrder, getAllVendors } from "../../actions/products/orders"
 import { db,auth } from "../../firebase-config"
 import { usePaystackPayment } from "react-paystack"
 import { getProducts, updateQuantity } from "../../actions/products/products"
 import { toast, Toaster } from "sonner"
+import { OrderOptionsLoading } from "../../components/Loading"
+import load from "../../images/load.png"
 
 const OrderOptions = () => {
   const [address, setAddress] =  useState([])
@@ -16,6 +18,7 @@ const OrderOptions = () => {
   const [states, setStates] =  useState([])
   const [deliveryOption, setDeliveryOption] = useState("")
   const [isFetching, setIsFetching] =  useState(false)
+  const [isLoading, setIsLoading] =  useState(false)
   const [isError, setIsError] =  useState(false)
   const [isModalOpen, setIsModalOpen] =  useState(false)
   const [newAddress, setNewAddress] = useState({state: "", address: "", phone: 0})
@@ -34,12 +37,10 @@ const OrderOptions = () => {
   useEffect(()=>{
     getSingleUserFromDb(userId, setAddress, setIsFetching)
     getProducts(setIsFetching, setProducts)
-  },[])
-
-  useEffect(()=>{
     getCart(setCart)
     getAllVendors(setVendors)
   },[])
+
 
   useEffect(()=>{
     cart.reduce((total,price)=>{
@@ -67,6 +68,9 @@ const OrderOptions = () => {
     fetchStates(setStates)
   },[])
 
+  if(isFetching){
+    return <OrderOptionsLoading />
+  }
 
   function updateAddress(id){
     setIsModalOpen(!isModalOpen)
@@ -74,10 +78,15 @@ const OrderOptions = () => {
   
   }
   function updateUserAddress() {
+    setIsLoading(true)
     if(newAddress.address && newAddress.state){
       const updates = {}
       updates[`users/${userId}/${id}/address`] = `${newAddress.address} | ${newAddress.state} | ${newAddress.phone}`
-      update(ref(getDatabase()), updates)
+      update(ref(getDatabase()), updates).then(res=>{
+        setIsLoading(false)
+        setIsModalOpen(false)
+        setNewAddress({phone: "", state:"", address:""})
+      })
      }
   }
 
@@ -103,7 +112,8 @@ function order() {
         if(item[1]?.createdBy === vendor){
           push(ref(db, `vendors/${vendor}/orders`),{
             products:item[1],
-            orderRef: orderId
+            orderRef: orderId,
+            createdAt: serverTimestamp()
           }).then(products.map(product=>{
             if(product[0] === item[1]?.productId){
               updateQuantity(product[0], item[1]?.quantity)
@@ -223,7 +233,7 @@ function finalizeOrder() {
           <input className="px-2 py-1 border border-slate-700 rounded-[3px] outline-none text-slate-600 w-full text-sm tracking-wider" type="text" onChange={handleInput} name="address" value={newAddress.address} placeholder="Address"/>
           <input className="px-2 py-1 border border-slate-700  ml-2 rounded-[3px]  outline-none text-slate-600 w-full text-sm tracking-wider" type="number" onChange={handleInput} name="phone" value={newAddress.phone} placeholder="Phone Number"/>
         </div>
-        <button className="bg-blue-700 px-5 py-2 rounded-[4px] w-full mt-3 tracking-wider text-white font-medium" onClick={updateUserAddress}>Update Address</button></>: <section className="text-center my-5 text-slate-600 tracking-wider">
+        <button className="bg-blue-700 px-5 py-2 rounded-[4px] w-full mt-3 tracking-wider  flex justify-center items-center text-white font-medium" onClick={updateUserAddress} disabled={isLoading}>{isLoading ? <img src={load} className="w-5 animate-spin"/> :"Update Address"}</button></>: <section className="text-center my-5 text-slate-600 tracking-wider">
             <h4>Failed to fetch states</h4>
           </section>}
       </section>} 

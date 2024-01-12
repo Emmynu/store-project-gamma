@@ -12,6 +12,6 @@
   }
   .chat-header{
     background: rgba(255, 255, 255, 0.8);
-    @apply p-6 flex items-center justify-between;
+    @apply py-3 px-6 md:p-6 flex items-center justify-between;
   }
 }

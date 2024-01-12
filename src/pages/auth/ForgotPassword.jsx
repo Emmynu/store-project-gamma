@@ -21,7 +21,7 @@ const ForgotPassword = () => {
 
     if (hash.length > 0) {
         setIsLoading(false)
-        const user = users.filter(user => user[1].id === hash)
+        const user = users.filter(user => user[0] === hash.trim())
         if(user.length > 0){
           setNewUser(user)
         }
@@ -34,7 +34,7 @@ const ForgotPassword = () => {
     setHash("")
   }
 
-
+console.log(users, newUser);
   return (
     <main className="form-container">
       <form method="POST" onSubmit={findAccount}>
@@ -61,15 +61,20 @@ const ForgotPassword = () => {
       <section>
         {newUser.length > 0 &&  <section>
           <section  className="bg-blue-100 p-1.5 rounded-[4px]">
-            { newUser.map(user=>{
-              return <main className="user-container">
-                <section>
+            {newUser && newUser.map(person=>{
+              const newestUser = person && Object.entries(person[1])
+              return <main>
+              {newestUser.map(user => {
+                return <main  className="user-container">
+                  <section>
                   <img src={user[1]?.url} alt={user[1]?.id} />
                 </section>
                 <section className="user-content">
                   <h2>{user[1]?.name}</h2>
                   <h3>Password: {user[1]?.password}</h3>
                 </section>
+                </main>
+              })}
             </main> 
             })}
            </section>

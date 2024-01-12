@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
-
+import loading from "../images/special-loading.gif"
 
 const Loading = () => {
   return (
@@ -92,5 +92,75 @@ export function LoadAllChatMembers(){
   return <h2>Loading...</h2>
 }
 
+export function OrderOptionsLoading() {
+  return <main className="h-[80vh] flex justify-center items-center">
+    <img src={loading} className="w-[3.5rem] md:w-[4rem]"/>
+  </main>
+}
+
+export function LoadVendorProducts() {
+  return <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 md:mx-7 lg:mx-12  ">
+      <article className="bg-white shadow-lg hover:shadow-3xl rounded-md transition-[3s] cursor-pointer  border" >
+        <section>
+          <Skeleton  className="w-full h-[200px] object-cover"  highlightColor="#f6f6f6 " duration={1} direction="rtl"/>
+        </section>
+        <section>
+          <article className="p-3 pb-1.5 mt-2 flex items-center justify-between">
+              <div>
+                <span><Skeleton className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/></span>
+                <span><Skeleton className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/></span>
+              </div>
+              <div>
+                <Skeleton  className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/>
+                {/* <Skeleton  className="w-[40px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/> */}
+              </div>
+          </article>
+          <article className="pl-3 pb-3">
+          <Skeleton  className="w-[200px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/>  
+          </article>
+        </section>
+      </article>
+      <article className="bg-white shadow-lg hover:shadow-3xl rounded-md transition-[3s] cursor-pointer  border" >
+        <section>
+          <Skeleton  className="w-full h-[200px] object-cover"  highlightColor="#f6f6f6 " duration={1} direction="rtl"/>
+        </section>
+        <section>
+          <article className="p-3 pb-1.5 mt-2 flex items-center justify-between">
+              <div>
+                <span><Skeleton className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/></span>
+                <span><Skeleton className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/></span>
+              </div>
+              <div>
+                <Skeleton  className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/>
+                {/* <Skeleton  className="w-[40px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/> */}
+              </div>
+          </article>
+          <article className="pl-3 pb-3">
+          <Skeleton  className="w-[200px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/>  
+          </article>
+        </section>
+      </article>
+      <article className="bg-white shadow-lg hover:shadow-3xl rounded-md transition-[3s] cursor-pointer  border" >
+        <section>
+          <Skeleton  className="w-full h-[200px] object-cover"  highlightColor="#f6f6f6 " duration={1} direction="rtl"/>
+        </section>
+        <section>
+          <article className="p-3 pb-1.5 mt-2 flex items-center justify-between">
+              <div>
+                <span><Skeleton className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/></span>
+                <span><Skeleton className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/></span>
+              </div>
+              <div>
+                <Skeleton  className="w-[100px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/>
+                {/* <Skeleton  className="w-[40px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/> */}
+              </div>
+          </article>
+          <article className="pl-3 pb-3">
+          <Skeleton  className="w-[200px]" hlightColor="#f6f6f6 " duration={1} direction="rtl"/>  
+          </article>
+        </section>
+      </article>
+  </main>
+}
 export default Loading
   

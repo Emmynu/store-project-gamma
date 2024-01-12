@@ -10,7 +10,6 @@ const Admin = () => {
   },[])
 
 
-
   return (
     <main>
      {orders && <section>

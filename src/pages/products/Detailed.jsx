@@ -112,17 +112,20 @@ const Detailed = () => {
       if (isProductInCart) {
         toast.error("Item Already In Cart")
       }else{
-       addProductToCart({
-         productId: id,
-         url: product.productImages,
-         name:product.name,
-         price:product.price,
-         productQuantityAvailable:product?.quantity || 25,
-         quantity:1,
-         brand,
-         createdBy: product?.createdBy?.id
-        })
-        toast.success("Added To Cart")
+       if(product?.quantity > 0){
+          addProductToCart({
+            productId: id,
+            url: product.productImages,
+            name:product.name,
+            price:product.price,
+            productQuantityAvailable:product?.quantity || 25,
+            quantity:1,
+            brand,
+            createdBy: product?.createdBy?.id
+          }).then( toast.success("Added To Cart"))
+       }else{
+        toast.error("Product is out of stock")
+       }
       }
     }
     else{
@@ -133,10 +136,6 @@ const Detailed = () => {
   function createChat(user) {
     const chatID = new Date().getTime().toString()
     const {id, email, url, name} = user
-    // if(chats.find(chat=>  chat[1]?.members?.sender?.id === id || chat[1]?.members?.receiver?.id === id)){
-    //   window.location = "/chats"
-    // }
-    // else{
       saveChatMembers(chatID, {
         sender:{
           id: auth?.currentUser?.uid,

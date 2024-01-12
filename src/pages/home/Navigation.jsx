@@ -7,11 +7,13 @@ import searchIcon from "../../images/search.png"
 import userIcon from "../../images/user.png"
 import loveIcon from "../../images/love.png"
 import orderIcon from "../../images/order.png"
+import inboxIcon from "../../images/inbox.png"
 import load from "../../images/load.png"
 import chatIcon from "../../images/chat.png"
 import empty from "../../images/not-found.gif"
 import { Toaster, toast } from "sonner"
 import { getCart, removeItemFromCart } from "../../actions/products/cart"
+import { saveChatMembers } from "../../actions/chat/chat"
 
 
 const Navigation = () => {
@@ -93,6 +95,23 @@ const Navigation = () => {
   function removeItem(id){
     removeItemFromCart(id)
   }
+  
+  function createChatRoom() {
+    const chatID = new Date().getTime().toString()
+    saveChatMembers(chatID, {
+      sender:{
+        id: auth?.currentUser?.uid,
+        name: auth?.currentUser?.displayName,
+        url: auth?.currentUser?.photoURL,
+      },
+      receiver: {
+        id:"12345",
+        email:"oketunbi.olufunke@gmail.com",
+        url: "",
+        name: "BearCart"
+      }
+    }).then(window.location = "/chats")
+  }
   return (
     <main className="z-[50] ">
       <section className={toggle.isNavFixed ? "fixed top-0 bg-white right-0 left-0 shadow-lg shadow-slate-100 flex justify-between items-center lg:block pr-6 pb-1 lg:mr-0 z-[150]" : "flex justify-between items-center lg:block mr-6 mt-3 lg:mt-5 lg:mr-0"} style={{transition:"all .5s ease-in-out"}}>
@@ -168,10 +187,13 @@ const Navigation = () => {
         {/* other navs */}
 
       {/* cart */}
-      <section className="cart-container overflow-y-scroll" style={toggle.isCartOpen ? openSideBar : closeSideBar} onClick={toggleSideBar}>
+      <section className="cart-container overflow-y-scroll scrollbar" style={toggle.isCartOpen ? openSideBar : closeSideBar} onClick={toggleSideBar}>
         <nav className="flex justify-between p-2 border-b mb-4">
           <h2 className="text-[17px] font-medium text-slate-700 tracking-wide">Cart ({cart.length})</h2>
-          <button className="text-base font-medium text-red-700 t tracking-widest" onClick={toggleCart}>&#10006;</button>
+          <button className="text-base font-medium text-red-700 t tracking-widest" onClick={toggleCart}>
+            <div className="sm-bar w-[20px] sm-bar-1"></div>
+            <div className="sm-bar w-[20px] sm-bar-2"></div>
+          </button>
         </nav>
           {cart.length > 0 ? <section  className="mx-3">
             {cart.slice(0,5).map(item=>{
@@ -221,6 +243,13 @@ const Navigation = () => {
           </div>
           </Link>
 
+          <Link to={"/chats"}>
+            <div>
+              <img src={inboxIcon} alt="inbox-icon" className="w-[22px]"/>
+              <h2>Inbox</h2>
+            </div>
+          </Link>
+
           <Link to={"/orders"}>
           <div>
           <img src={orderIcon} className="w-[22px]" alt="package"/>
@@ -254,7 +283,7 @@ const Navigation = () => {
           </Link>
 
           <hr className="bg-slate-500 my-1 h-[2px]"/>
-          <button className="flex justify-center items-center" > <img src={chatIcon} alt="chat" className="w-5 mr-2"/>Live Chat</button>
+          <button className="flex justify-center items-center" onClick={createChatRoom}> <img src={chatIcon} alt="chat" className="w-5 mr-2"/>Live Chat</button>
           </section>}
 
           {/* side bar */}

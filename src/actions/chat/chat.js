@@ -32,5 +32,9 @@ export async function saveChat(chatId,data) {
 }
 
 export async function deleteRoom(id) {
-  remove(ref(db, `chars/${id}`)).then(window.location = "/chats")
+  remove(ref(db, `chats/${id}`)).then(window.location = "/chats")
+}
+
+export async function removeMessage(id, mid) {
+  remove(ref(db, `chats/${id}/messages/${mid}`))
 }

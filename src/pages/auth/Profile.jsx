@@ -11,7 +11,8 @@ import Skeleton from 'react-loading-skeleton'
 import { LoadProfile } from '../../components/Loading'
 import AOS from "aos"
 import "aos/dist/aos.css"
-
+import hide from "../../images/hide.png"
+import show from "../../images/show.png"
 
 
 
@@ -154,7 +155,7 @@ const Profile = () => {
            {!isFetching ? <div className='border bg-slate-100 px-2 rounded-[4px] py-1.5 lg:py-[3px] border-slate-600 text-sm tracking-wider'>{user?.map(person=>{
             return<div className='flex justify-between items-center '>
                <span>{view ? person[1]?.password : <input type='password' value={person[1]?.password} className='border-none p-0 outline-none cursor-pointer'/>}</span>
-               <h2 className='text-sm tracking-wider cursor-pointer' onClick={()=>setView(!view)}>{view ? "hide" : "view"}</h2>
+               <h2 className='text-sm tracking-wider cursor-pointer' onClick={()=>setView(!view)}><img src={view ? hide : show} className='w-4'/></h2>
             </div>
             
            })}</div>: <LoadProfile />}

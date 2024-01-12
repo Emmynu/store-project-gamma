@@ -4,6 +4,8 @@ import { Toaster, toast } from "sonner";
 import { auth, provider } from "../../firebase-config";
 import load from "../../images/load.png"
 import loading from "../../images/loading.png"
+import hide from "../../images/hide.png"
+import show from "../../images/show.png"
 import { useEffect, useState } from "react";
 import { getAllUsersInDb, saveUserToDb } from "../../actions/auth/auth";
 
@@ -36,6 +38,7 @@ export async function loginAction({ request }){
 const Login = () => {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
+  const [view, setView] = useState(false)
   const [users, setUsers] = useState([])
 
   useEffect(()=>{
@@ -79,8 +82,9 @@ const Login = () => {
           <input type="email" name="email"  placeholder="Email"/>
         </section>
 
-        <section className="form-content">
-          <input type="password" name="password" placeholder="Password"/>
+        <section className=" flex items-center justify-between border w-full outline-none border-slate-800 bg-transparent py-1.5 text-[15px] mt-3 text-slate-600 px-2 tracking-wide rounded-[3px] ">
+          <input type={view ? "text": "password"} name="password" placeholder="Password" className="border-none outline-none p-0 w-full"/>
+          <img src={view ? hide : show} className="w-4 cursor-pointer" onClick={()=>setView(!view)}/>
         </section>
 
         <h6 className="forgot-password-link"><Link to="/find-account">Forgot Password?</Link></h6>

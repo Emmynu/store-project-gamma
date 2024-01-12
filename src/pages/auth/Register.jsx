@@ -5,6 +5,8 @@ import { Toaster, toast } from "sonner"
 import { auth, provider } from "../../firebase-config";
 import load from "../../images/load.png"
 import loading from "../../images/loading.png"
+import hide from "../../images/hide.png"
+import show from "../../images/show.png"
 import "./auth.css"
 import { getAllUsersInDb, saveUserToDb } from "../../actions/auth/auth";
 
@@ -13,7 +15,9 @@ import { getAllUsersInDb, saveUserToDb } from "../../actions/auth/auth";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [users, setUsers] = useState(false)
+  const [users, setUsers] = useState([])
+  const [view, setView] = useState(false)
+
 
   useEffect(()=>{
     getAllUsersInDb(setUsers)
@@ -96,9 +100,9 @@ async  function createNewUser(e) {
           <input type="email" name="email"  placeholder="Email"/>
         </section>
 
-        <section className="form-content">
-          <input type={!showPassword ? "password": "text"} name="password" placeholder="Password"/>
-         {/* <button onClick={()=>setShowPassword(!showPassword)}>{!showPassword ? "Show": "Hide"}</button> */}
+        <section className=" flex items-center justify-between border w-full outline-none border-slate-800 bg-transparent py-1.5 text-[15px] mt-3 text-slate-600 px-2 tracking-wide rounded-[3px] ">
+          <input type={view ? "text": "password"} name="password" placeholder="Password" className="border-none outline-none  w-full p-0"/>
+          <img src={view ? hide : show} className="w-4 cursor-pointer" onClick={()=>setView(!view)}/>
         </section>
 
         <button className="form-btn " >

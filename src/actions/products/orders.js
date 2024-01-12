@@ -15,9 +15,11 @@ export async function getAllVendors(vendors){
   })
 }
 
-export async function getOrders(orders) {
+export async function getOrders(orders, isLoading) {
+  isLoading(true)
   onValue(ref(db, `orders/${id}`),res=>{
     res.exists() ? orders(Object.entries(res.val())) : orders([])
+    isLoading(false)
   }) 
 }
 
