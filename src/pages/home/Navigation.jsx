@@ -269,10 +269,10 @@ const Navigation = () => {
 
         {/* help */}
         {toggle.isHelpOpen && <section className="account-container pt-2 right-[5%]">
-          <Link>
+          <Link to={"/help/place-order"}>
             <div>Place an order</div>
           </Link>
-          <Link>
+          <Link to={"/help/payment"}>
             <div>Payment options</div>
           </Link>
           <Link>
@@ -313,8 +313,8 @@ const Navigation = () => {
               <h2 className="flex justify-between items-center" onClick={()=>setToggle(prev => {return{...prev,others:!toggle.others}})}><span><Link>Help Center</Link></span><span><img width="24" height="24" src="https://img.icons8.com/external-thin-kawalan-studio/24/external-up-arrow-arrows-thin-kawalan-studio.png" alt="external-up-arrow-arrows-thin-kawalan-studio" style={toggle.others ? up: down} className="cursor-pointer"/></span></h2>
 
               <div className={toggle.others ? "block mt-3 text-[15px] ml-2" : "hidden"} onClick={toggleSideBar}> 
-                <h2><Link> Place an order</Link></h2>
-                <h2><Link> Payment options</Link></h2>
+                <h2><Link to={"/help/place-order"}> Place an order</Link></h2>
+                <h2><Link to={"/help/payment"}> Payment options</Link></h2>
                 <h2><Link>Cancel an order</Link></h2>
                 <h2><Link> Refund & Returns</Link></h2>
               </div>

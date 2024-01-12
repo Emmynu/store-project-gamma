@@ -9,6 +9,7 @@ import { getProducts, updateQuantity } from "../../actions/products/products"
 import { toast, Toaster } from "sonner"
 import { OrderOptionsLoading } from "../../components/Loading"
 import load from "../../images/load.png"
+import Modal from "react-modal"
 
 const OrderOptions = () => {
   const [address, setAddress] =  useState([])
@@ -24,6 +25,8 @@ const OrderOptions = () => {
   const [newAddress, setNewAddress] = useState({state: "", address: "", phone: 0})
   const [amount, setAmount] = useState(0)
   const [id, setid] = useState(0)
+  let subtitle;
+
 
   const paymentConfig = {
     reference : `${new Date().getFullYear()}${new Date().getTime().toString()}`,
@@ -160,7 +163,7 @@ function finalizeOrder() {
             <header className="flex justify-between items-center">
               <div className="flex items-center">
                 <h2 className="text-white bg-green-700 rounded-[50%] px-1 text-sm">✓</h2>
-                <h3 className="ml-1.5 font-medium uppercase text-slate-700">1. Customer Address</h3>
+                <h3 className="ml-1.5 font-medium uppercase text-sm md:text-base text-slate-700">1. Customer Address</h3>
               </div>
               <div><button onClick={()=>updateAddress(place[0]) || "No Address Found"} className="text-sm text-blue-700 tracking-wider" >Change</button>  </div>
             </header>
@@ -199,7 +202,7 @@ function finalizeOrder() {
       </section>
       <section className="col-span-3 border lg:col-span-1 bg-white shadow-md rounded-md p-4">
        <header>
-          <h3 className="font-medium text-base p-1 text-slate-700">Order Summary</h3>
+          <h3 className="font-medium text-base p-1 text-slate-700 text-sm md:text-base">Order Summary</h3>
         </header>
         <hr className="my-2"/>
         <main>
@@ -224,7 +227,9 @@ function finalizeOrder() {
         </main>
       </section>
        {/* Modal */}
-    { isModalOpen &&  <section  className="w-11/12 md:w-6/12 lg:w-1/3 p-5 absolute top-48 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-blue-600 outline-none rounded-mdx shadow-md ">
+    { isModalOpen &&  <Modal isOpen={isModalOpen}  className="w-11/12 md:w-6/12 lg:w-1/3 p-5 absolute top-48 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-blue-600 outline-none rounded-mdx shadow-md ">
+    <h2 ref={(_subtitle) => (subtitle = _subtitle)}></h2>
+
       <h3 className="text-center font-[arial] font-medium text-[22px] text-slate-700">Update Address</h3>
     {!isError ? <>   <select onChange={handleInput} name="state" className="px-2 py-1 my-1.5 w-full border border-slate-700 text-slate-600  text-sm tracking-wider  rounded-[3px]">{states.map(state=>{
           return <option value={state}>{state}</option>
@@ -236,7 +241,7 @@ function finalizeOrder() {
         <button className="bg-blue-700 px-5 py-2 rounded-[4px] w-full mt-3 tracking-wider  flex justify-center items-center text-white font-medium" onClick={updateUserAddress} disabled={isLoading}>{isLoading ? <img src={load} className="w-5 animate-spin"/> :"Update Address"}</button></>: <section className="text-center my-5 text-slate-600 tracking-wider">
             <h4>Failed to fetch states</h4>
           </section>}
-      </section>} 
+      </Modal>} 
     </main> 
     <Toaster richColors closeButton position="top-right"/>
     </>

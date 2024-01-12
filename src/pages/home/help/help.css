@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+
+@layer base{
+  .h2{
+    @apply font-bold text-slate-700 tracking-wide mb-10 text-[24px] lg:text-[34px] ;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+}

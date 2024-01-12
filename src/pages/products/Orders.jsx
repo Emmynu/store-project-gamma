@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { getOrders } from "../../actions/products/orders"
+import { getOrders, saveRefund, updateOrders } from "../../actions/products/orders"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -9,12 +9,14 @@ import "aos/dist/aos.css"
 import { Link } from "react-router-dom"
 import Moment from "react-moment"
 import emptyCollection from "../../images/fly.gif"
+import { auth } from "../../firebase-config"
+import { toast } from "sonner"
 
 
 const Orders = () => {
   const [orders, setOrders] = useState([])
   const [isFetching, setIsFetching] = useState(false)
-
+  const expiryOrderDate = 24 * 60 * 60 * 1000 * 3
 
   useEffect(()=>{
     getOrders(setOrders, setIsFetching)
@@ -30,7 +32,37 @@ const Orders = () => {
 
   }
 
+  async function requestRefund(id,status, paymentOption, product,time) {
+    if(status === "Delivered"){
+    
+      if (time < expiryOrderDate) {
+        await updateOrders(auth?.currentUser?.uid, id, "Cancelled")
+        await saveRefund(id, {
+          refundStatus: "pending",
+          products:product,
+          refundType:"Payment",
+          createdOrderAt: time
+        })
+      }
+      else{
+        toast.error("Refund date has been exceeded")
+      }
+    }
+    else if(status === "pending"){
+     if(paymentOption === "online"){
+      await updateOrders(auth?.currentUser?.uid, id, "Cancelled")
+      await saveRefund(id, {
+        refundStatus: "pending",
+        products:product,
+        refundType:"Payment",
+        createdOrderAt: time
+      })
+     }
+    }
+  }
+
   
+  console.log(orders);
 
   return (
     <main className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 max-w-[72rem]  mx-3 md:mx-auto md:px-3 items-start  gap-9  my-3 lg:my-12"}>
@@ -56,6 +88,8 @@ const Orders = () => {
                           <h2 className=" font-medium md:text-[18px] my-1 text-slate-700">{product[1]?.name}</h2>
                           <h4 className="text-xs md:text-sm text-slate-600 tracking-wider mb-3 select-text">Order ref: {order[0]}</h4>
                           <span className={order[1].status === "Delivered" ? "px-2 bg-green-700 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1" : order[1]?.status === "pending" ? "px-2 bg-yellow-600 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1": "bg-red-700 px-2 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1"}>{order[1]?.status}</span>
+                          <button className="text-xs text-red-600 bg-red-100 px-2 py-1.5 ml-1.5 tracking-wide rounded-[4px]" onClick={()=>requestRefund(order[0], order[1]?.status,  order[1]?.deliveryOption, product[1], order[1]?.createdOrder)}>Cancel</button>
+
                           <br />
 
                             <h3 className="mt-2 font-medium text-sm md:text-[15px] text-slate-600">

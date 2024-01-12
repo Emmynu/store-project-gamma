@@ -13,6 +13,7 @@ import AOS from "aos"
 import "aos/dist/aos.css"
 import hide from "../../images/hide.png"
 import show from "../../images/show.png"
+import Modal from "react-modal"
 
 
 
@@ -23,6 +24,7 @@ const Profile = () => {
   const [view, setView] = useState(false)
   const [isFetching, setIsFetching] = useState(true)
   const profileRef = useRef(null)
+  let subtitle;
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [url, setUrl] = useState(null)
   const [files, setFiles] = useState(null)
@@ -118,6 +120,8 @@ const Profile = () => {
 
   }
 
+  
+
   return (
     <main className={"grid grid-cols-1 md:grid-cols-3  max-w-[72rem] pb-12   mx-3 md:mx-auto md:px-3 items-start  gap-9  my-3 lg:my-12"}>
      <section className='hidden lg:block '>
@@ -167,7 +171,9 @@ const Profile = () => {
     </section>
    
     {/* modal */}
-    {isModalOpen && <div className="w-11/12 md:w-6/12 lg:w-1/3  absolute top-48 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-blue-600 outline-none rounded-mdx shadow-md ">
+    {isModalOpen && <Modal className="w-11/12 md:w-6/12 lg:w-1/3  absolute top-48 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-blue-600 outline-none rounded-mdx shadow-md " isOpen={isModalOpen}>
+
+    <h2 ref={(_subtitle) => (subtitle = _subtitle)}></h2>
      <header className='flex justify-between items-center bg-blue-200 py-3 px-3'>
       <h2 className='text-lg sm:text-xl text-slate-700 font-medium'>Update Avatar</h2>
         <button onClick={()=>setIsModalOpen(false)}>
@@ -181,7 +187,7 @@ const Profile = () => {
     </section>
 
         
-      </div>}
+      </Modal>}
     </main>
   )
 }

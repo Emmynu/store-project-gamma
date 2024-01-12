@@ -10,7 +10,6 @@ import Detailed from "./pages/products/Detailed"
 import Collections from "./pages/products/Collections"
 import Search from "./pages/products/Search"
 import Checkout from "./pages/products/Checkout"
-import Help from "./pages/home/Help"
 import Pricing from "./pages/sellers/Pricing"
 import NotFound from "./pages/home/notFound"
 import Profile from "./pages/auth/Profile"
@@ -27,6 +26,8 @@ import AdminLogin, { adminLoginAction }   from "./pages/admin/AdminLogin"
 import ProtectAdmin from "./pages/admin/ProtectAdmin"
 import Chats from "./pages/chat/Chats"
 import Refund from "./pages/admin/Refund"
+import Payment from "./pages/home/help/Payment"
+import PlaceOrder from "./pages/home/help/PlaceOrder"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -38,7 +39,8 @@ export default function App(){
       <Route path="product/:id/:category/:brand" element={<Detailed />}/>
       <Route path="product/:id/:category/:brand/feedback" element={<FeedBack />}/>
       <Route path="search" element={<Search />}/>
-      <Route path="help" element={<Help />}/>
+      <Route path="help/payment" element={<Payment />}/>
+      <Route path="help/place-order" element={<PlaceOrder />}/>
       <Route path="pricing" element={<Pricing />}/>
      
 
