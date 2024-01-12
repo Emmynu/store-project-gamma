@@ -3,6 +3,7 @@ import { id } from "../actions/auth/auth"
 import { Link } from "react-router-dom"
 import { getAllChats } from "../actions/chat/chat"
 import "./chat.css"
+import { LoadAllChatMembers } from "./Loading"
 
 const ChatMembers = () => {
   const [chats, setChats] = useState([])
@@ -34,7 +35,8 @@ const ChatMembers = () => {
         <header>
           <h3 className="uppercase my-5 text-slate-600 font-medium tracking-wide text-sm">DIRECT MESSAGES</h3>
         </header>
-      {(!text ? newChats : filteredChats).map(chat=>{
+      {!isLoading ?
+      (!text ? newChats : filteredChats).map(chat=>{
         return <section className="my-2.5">
               {chat[1]?.members?.sender?.id === id ?<Link to={`/chat/${chat[0]}/${chat[1]?.members?.receiver?.id}`}>
                 <article className="flex items-center my-4">
@@ -56,7 +58,8 @@ const ChatMembers = () => {
                 <hr />
               </Link>}
         </section>
-      })} 
+      })
+      : <section><LoadAllChatMembers /></section>} 
       </section>
     </main>
   )

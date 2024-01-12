@@ -11,11 +11,13 @@ const Refund = () => {
   useEffect(()=>{
     getRefunds(setRefunds)
   },[])
+  console.log(refunds)
 
     function getRefundOrder(e) {
       e.preventDefault()
       if(orderRef.length > 0){
-        const newRefund = refunds.filter(refund=> refund[0] === orderRef)
+        const newRefund = refunds.filter(refund=> refund[0] === orderRef.trim())
+        console.log(newRefund);
         setFilteredRefunds(newRefund)
         setOrderRef("")
       }
@@ -24,7 +26,7 @@ const Refund = () => {
       }
     }
 
-    console.log(filteredRefunds);
+    // console.log(filteredRefunds);
   return (
     <main className="form-container">
      <section>

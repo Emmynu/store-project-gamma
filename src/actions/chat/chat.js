@@ -15,9 +15,11 @@ export async function getAllChats(chats, isLoading) {
   })
 }
 
-export async function getSingleChat(id, chats){
+export async function getSingleChat(id, chats, loading){
+  loading(true)
   onValue(ref(db, `chats/${id}/messages`), result =>{
     result.exists() ? chats(Object.entries(result.val())): chats([])
+    loading(false)
   })
 }
 

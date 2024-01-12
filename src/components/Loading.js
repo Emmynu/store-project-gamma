@@ -89,7 +89,23 @@ export function LoadProfile(){
 
 
 export function LoadAllChatMembers(){
-  return <h2>Loading...</h2>
+  return <section>
+    <article className="flex my-4 items-center">
+      <span><Skeleton className="w-[40px] h-[40px] rounded-[50%]"  highlightColor="#f6f6f6 " duration={1}/></span>
+      <span><Skeleton className="w-[130px] ml-3" highlightColor="#f6f6f6 " duration={1}/></span>
+    </article>
+    <hr />
+    <article className="flex my-4 items-center">
+      <span><Skeleton className="w-[40px] h-[40px] rounded-[50%]"  highlightColor="#f6f6f6 " duration={1}/></span>
+      <span><Skeleton className="w-[130px] ml-3" highlightColor="#f6f6f6 " duration={1}/></span>
+    </article>
+    <hr />
+    <article className="flex my-4 items-center">
+      <span><Skeleton className="w-[40px] h-[40px] rounded-[50%]"  highlightColor="#f6f6f6 " duration={1}/></span>
+      <span><Skeleton className="w-[130px] ml-3" highlightColor="#f6f6f6 " duration={1}/></span>
+    </article>
+    <hr />
+  </section>
 }
 
 export function OrderOptionsLoading() {
@@ -162,5 +178,8 @@ export function LoadVendorProducts() {
       </article>
   </main>
 }
+
+
+
 export default Loading
   

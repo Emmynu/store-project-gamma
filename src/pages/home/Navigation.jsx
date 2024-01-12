@@ -275,10 +275,10 @@ const Navigation = () => {
           <Link to={"/help/payment"}>
             <div>Payment options</div>
           </Link>
-          <Link>
+          <Link to={"/help/cancel-order"}>
             <div>Cancel an order</div>
           </Link>
-          <Link>
+          <Link to={"/chats"}>
             <div>Refund & Returns</div>
           </Link>
 
@@ -315,8 +315,8 @@ const Navigation = () => {
               <div className={toggle.others ? "block mt-3 text-[15px] ml-2" : "hidden"} onClick={toggleSideBar}> 
                 <h2><Link to={"/help/place-order"}> Place an order</Link></h2>
                 <h2><Link to={"/help/payment"}> Payment options</Link></h2>
-                <h2><Link>Cancel an order</Link></h2>
-                <h2><Link> Refund & Returns</Link></h2>
+                <h2><Link to={"/help/cancel-order"}>Cancel an order</Link></h2>
+                <h2><Link to={"/chats"}> Refund & Returns</Link></h2>
               </div>
 
               <button className="bg-blue-700 px-5 w-11/12 md:w-1/2 py-2 mt-2.5 cursor-pointer font-medium rounded-[4px]">{auth?.currentUser === null || auth.currentUser === undefined ? <span className="text-white"><Link to="/login">SIGN IN</Link></span>: <h3 onClick={signOutUser} className="text-white">LOG OUT</h3>}</button>

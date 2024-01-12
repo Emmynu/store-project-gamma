@@ -28,6 +28,7 @@ import Chats from "./pages/chat/Chats"
 import Refund from "./pages/admin/Refund"
 import Payment from "./pages/home/help/Payment"
 import PlaceOrder from "./pages/home/help/PlaceOrder"
+import CancelOrder from "./pages/home/help/CancelOrder"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -41,6 +42,7 @@ export default function App(){
       <Route path="search" element={<Search />}/>
       <Route path="help/payment" element={<Payment />}/>
       <Route path="help/place-order" element={<PlaceOrder />}/>
+      <Route path="help/cancel-order" element={<CancelOrder />}/>
       <Route path="pricing" element={<Pricing />}/>
      
 

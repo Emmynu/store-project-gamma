@@ -13,6 +13,7 @@ import loadIcon from "../../images/load.png"
 import uploadIcon from "../../images/upload.png"
 import { Toaster, toast } from "sonner"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { OrderOptionsLoading } from "../../components/Loading"
 
 const Chat = () => { 
   const [chats, setChats] = useState([])
@@ -22,14 +23,19 @@ const Chat = () => {
   const [text, setText] = useState("")
   const { chatId, userId } = useParams()
   const [isUploading, setIsUploading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(()=>{
-    getSingleChat(chatId, setChats)
+    getSingleChat(chatId, setChats, setIsLoading)
     getSingleChatMembers(chatId, setMembers)
   },[chatId])
 
   console.log(chats);
 
+
+  if(isLoading){
+    return <OrderOptionsLoading />
+  }
 
   function sendMessage() {
     // e.preventDefault()
