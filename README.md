@@ -31,6 +31,5 @@ BearCart is an e-commerce application built with React, Firebase, Paystack, and 
 1. Clone the repository: 
    ```bash
    git clone https://github.com/Emmynu/store-project-gamma.git
-2. ```bash
-  cd store-project-gamma
-  npm install
+    cd store-project-gamma
+    npm install
