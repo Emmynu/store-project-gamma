@@ -78,8 +78,8 @@ const Products = () => {
         </section>
       : <section className="mt-6 flex flex-col items-center justify-center">
           <img src={empty} alt="empty" />
-          <h3 className="text-slate-700 tracking-wide font-medium -mt-6">Unfortunately, You havent Uploaded any product</h3>
-          <button className="px-4 py-1 rounded-[4px] bg-blue-700 font-normal my-4 text-sm text-white tracking-wider "><Link to={"/dashboard/new-product"}>Upload Now</Link></button>
+          <h3 className="text-slate-700 text-center tracking-wide font-medium -mt-6">Unfortunately, You havent Uploaded any product</h3>
+          <button className="px-4 py-1.5 rounded-[4px] bg-blue-700 font-normal my-4 text-sm text-white tracking-wider "><Link to={"/dashboard/new-product"}>Upload Now</Link></button>
         </section>}
     </div>
   )

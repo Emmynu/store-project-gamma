@@ -113,11 +113,11 @@ const Stats = () => {
               
             </article>
           })}
-          </section>: <section className="mt-6 flex flex-col items-center justify-center">
+          </section>: <section className="mt-6 flex flex-col items-center justify-center text-center">
           <img src={empty} alt="empty" />
           <h3 className="text-slate-700 tracking-wide font-medium -mt-7">Unfortunately, Your Orders is empty</h3>
 
-          <p className="text-sm text-slate-600 tracking-widest my-1.5">Sorry to inform you {auth?.currentUser?.displayName}, But nobody has ordered your product yet!</p>
+          <p className="text-sm text-slate-600 tracking-widest my-1.5 text-center">Sorry to inform you {auth?.currentUser?.displayName}, But nobody has ordered your product yet!</p>
         </section>}
         </section>}
       </section>

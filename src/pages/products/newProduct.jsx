@@ -130,7 +130,7 @@ const NewProduct = () => {
     e.preventDefault()
     setIsLoading(true)
     vendor.map(seller =>{
-      if((seller[1]?.pricingPlan === "Basic"  && allProducts.length < 20) ||(seller[1]?.pricingPlan === "Premium"  && allProducts.length < 50)){
+      if((seller[1]?.pricingPlan === "basic"  && allProducts.length < 20) ||(seller[1]?.pricingPlan === "Premium"  && allProducts.length < 50)){
         newProductUpload()
       }else{
         toast.error("Upload Limit Reached")
