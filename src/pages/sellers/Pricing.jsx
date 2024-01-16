@@ -45,7 +45,7 @@ const Pricing = () => {
       }, 1500);
     }
     else{
-      createSeller("Basic").then(toast.success("Sucessfully a vendor")).then(window.location= "/dashboard")
+      createSeller("basic").then(toast.success("Sucessfully a vendor")).then(window.location= "/dashboard")
     }
   }
 

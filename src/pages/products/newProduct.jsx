@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { auth, storage } from "../../firebase-config"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { Toaster, toast } from "sonner"
+import { toast } from "sonner"
 import load from '../../images/load.png'
 import add from '../../images/add.png'
 import { getProducts, saveProductToDb } from "../../actions/products/products"
@@ -87,6 +87,7 @@ const NewProduct = () => {
   }
 
 
+
   useEffect(()=>{
     getCurrentUser(setUser)
   },[])
@@ -128,24 +129,31 @@ const NewProduct = () => {
 
  async function createProduct(e) {
     e.preventDefault()
-    setIsLoading(true)
-    vendor.map(seller =>{
-      if((seller[1]?.pricingPlan === "basic"  && allProducts.length < 20) ||(seller[1]?.pricingPlan === "Premium"  && allProducts.length < 50)){
+    
+    if (vendor) {
+      if (vendor[0][1]?.pricingPlan === "Premium" && allProducts.length < 50) {
         newProductUpload()
-      }else{
-        toast.error("Upload Limit Reached")
+
+      }  
+      else if(vendor[0][1]?.pricingPlan === "basic" && allProducts.length < 20){
+        newProductUpload()
       }
-    })
-    setIsLoading(false)
+      else{
+        toast.error("Upload Limit Exceeded")
+      }
+    } 
   }
+
 
   async function newProductUpload(){
     const productImages = []
     const {name,description,price, productQuantity} = productValues
+    setIsLoading(true)
     try {
       if( name && description && category && price && files.length > 0 && brands && productQuantity > 0 && productQuantity !== "") {
         for (const file of files) {
           const storageRef = ref(storage, `products/${file?.name}`)
+          toast.success("Uploading...")
           await uploadBytes(storageRef, file)
           const url = await getDownloadURL(storageRef)
           productImages.push(url)
@@ -163,11 +171,10 @@ const NewProduct = () => {
                 quantity: productQuantity
               }).then(()=>{
                 toast.success("Product successfully added")
-                setIsLoading(false)
+              setProductValues({name: "", description: "", price: 0, productQuatity: ''})
               })
-              
             }
-        }
+        }        
        }else{
         toast.error(`Please fill out all field`)
        }
@@ -185,7 +192,7 @@ const NewProduct = () => {
       </header>
 
       <section>
-        <form action="">
+        <form action="" onSubmit={createProduct}>
 
           <section>
             <label htmlFor="name">Name*</label><br/>
@@ -212,7 +219,7 @@ const NewProduct = () => {
             <Select defaultValue={category} onChange={setCategory} options={categoryOptions} className="category" />
           </section>
 
-         {category && <section>`  `
+         {category && <section>
             <label htmlFor="category">Brand*</label>
             <Select defaultValue={brands} onChange={setBrands} options={brandOptions[category?.value]} className="category"/>
           </section>
@@ -232,12 +239,12 @@ const NewProduct = () => {
           </section>
 
             {/* <span>File format must in .jpg or .png</span> */}
-          <button onClick={createProduct} disabled={isLoading} className="form-btn">
-            {isLoading ? <img src={load} className="w-[23px] animate-spin" /> : <span>Add Product</span>}</button>
+          <button  className="form-btn">
+           <span>Add Product</span></button>
         </form>
       </section>
 
-      <Toaster richColors position="top-right" closeButton/> 
+      {/* <Toaster richColors position="top-right" closeButton/>  */}
     </main>
   )
 }

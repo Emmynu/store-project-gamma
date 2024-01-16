@@ -7,6 +7,9 @@ import allProduct from "../../images/all-products.png"
 import addProduct from "../../images/add-product.png"
 import sell from "../../images/sell.gif"
 import { id } from "../../actions/auth/auth"
+import { Toaster } from "sonner"
+
+
 
 
 const Dashboard = () => {
@@ -105,6 +108,7 @@ const Dashboard = () => {
       })}
      </section>
    </nav>
+   <Toaster richColors position="top-right" closeButton/> 
    <Outlet />
     </main>
     // <section  className="flex flex-col  items-center text-center mt-24 ">
