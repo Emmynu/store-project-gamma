@@ -24,8 +24,14 @@ export async function deleteProduct(productId) {
   remove(ref(db, `products/${productId}`))
 }
 
-export async function updateQuantity(productId,quantity) {
+export async function updateQuantity(productId) {
   const updates = {}
   updates[`products/${productId}/quantity`] = increment(-1)
+  return update(ref(getDatabase()),  updates)
+}
+
+export async function updateProduct(productId,data) {
+  const updates = {}
+  updates[`products/${productId}`] = data
   return update(ref(getDatabase()),  updates)
 }

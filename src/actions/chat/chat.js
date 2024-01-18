@@ -40,3 +40,16 @@ export async function deleteRoom(id) {
 export async function removeMessage(id, mid) {
   remove(ref(db, `chats/${id}/messages/${mid}`))
 }
+
+
+export async function addFavorite(id, data) {
+ const updates = {}
+ updates[`chats/${id}/favourite`] = data
+ update(ref(getDatabase()), updates)
+}
+
+export async function getFavourite(chatId, fav) {
+  onValue(ref(db, `chats/${chatId}/favourite`), res =>{
+    res.exists() ? fav(res.val()) : fav(false)
+  })
+}

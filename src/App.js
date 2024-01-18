@@ -29,6 +29,7 @@ import Refund from "./pages/admin/Refund"
 import Payment from "./pages/home/help/Payment"
 import PlaceOrder from "./pages/home/help/PlaceOrder"
 import CancelOrder from "./pages/home/help/CancelOrder"
+import OrderDetailed from "./pages/products/OrderDetailed"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -52,6 +53,7 @@ export default function App(){
         <Route path="checkout" element={<Checkout />}/>
         <Route path="checkout/delivery-options" element={<OrderOptions />}/>
         <Route path="orders" element={<Orders />}/>
+        <Route path="orders/:id/:createdOrderAt" element={<OrderDetailed />}/>
         <Route path="order/success" element={<OrderSuccess />}/>
         <Route path="collections" element={<Collections />}/>
       </Route>

@@ -56,12 +56,13 @@ const Orders = () => {
         refundType:"Payment",
         createdOrderAt: time
       })
+     }else{
+      await updateOrders(auth?.currentUser?.uid, id, "Cancelled")
      }
     }
   }
 
-  
-  console.log(orders);
+
 
   return (
     <main className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 max-w-[72rem]  mx-3 md:mx-auto md:px-3 items-start  gap-9  my-3 lg:my-12"}>
@@ -73,8 +74,9 @@ const Orders = () => {
           <h2 className=" text-xl font-medium">Orders</h2>
         </header>
         {orders.length > 0 ? orders.map(order=>{
-          console.log(order)
-          return <article className="border border-slate-300 flex gap-2 sm:gap-6 cursor-pointer transition-all hover:shadow-md hover:scale-[1.02] ">
+         
+          return <Link to={`/orders/${order[0]}/${order[1]?.createdOrder}`}>
+               <article className="border border-slate-300 flex gap-2 sm:gap-6 cursor-pointer transition-all hover:shadow-md hover:scale-[1.02] ">
                 <Slider {...settings} className=" overflow-x-hidden">
                   {order[1]?.products?.map(product=>{
                     return <>
@@ -102,6 +104,7 @@ const Orders = () => {
                   })}
                 </Slider>
               </article>
+          </Link>
         }) : 
         <article className="flex flex-col  items-center text-center">
           <img src={emptyCollection} alt="collection-image" className="w-[300px]"/>

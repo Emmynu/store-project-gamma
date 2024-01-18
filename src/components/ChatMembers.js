@@ -17,7 +17,7 @@ const ChatMembers = () => {
   },[])
 
   const newChats = chats.filter(chat=> chat[1]?.members?.sender?.id === id || chat[1]?.members?.receiver?.id === id)
-
+  
   function handleSearch() {
     setFilteredChats(text.length > 0 ? (newChats.filter(chat=>chat[1]?.members?.sender?.name.toLowerCase().includes(text.toLowerCase()) ||  chat[1]?.members?.receiver?.name.toLowerCase().includes(text.toLowerCase()))) : newChats)
   }

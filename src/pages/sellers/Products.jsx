@@ -32,11 +32,16 @@ const Products = () => {
   const filteredProducts = products.filter(product=>product[1]?.createdBy?.id === auth?.currentUser?.uid)
 
 
-
-  console.log(filteredProducts);
-
   if (isLoading) {
     return <h2 className="mt-24"><LoadVendorProducts /></h2>
+  }
+
+  function editProduct(id) {
+    localStorage.setItem("editInfo",JSON.stringify( {
+      isEdit:true,
+      productId:id 
+    }))
+    window.location = "/dashboard/new-product";
   }
   return (
     <div className="mt-24 overflow-x-hidden" >
@@ -71,6 +76,9 @@ const Products = () => {
                 </article>
               </section>
               <footer>
+                
+              <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={() => editProduct((product[0]))}>Edit</button>
+
                 <button onClick={()=>deleteProduct(product[0])} className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Delete</button>
               </footer>
             </article>

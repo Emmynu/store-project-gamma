@@ -9,6 +9,7 @@ import loveIcon from "../../images/love.png"
 import orderIcon from "../../images/order.png"
 import inboxIcon from "../../images/inbox.png"
 import load from "../../images/load.png"
+import test from "../../images/test.jpg"
 import chatIcon from "../../images/chat.png"
 import empty from "../../images/not-found.gif"
 import { Toaster, toast } from "sonner"
@@ -107,11 +108,12 @@ const Navigation = () => {
       receiver: {
         id:"12345",
         email:"oketunbi.olufunke@gmail.com",
-        url: "",
+        url: test,
         name: "BearCart"
       }
     }).then(window.location = "/chats")
   }
+  
   return (
     <main className="z-[50] ">
       <section className={toggle.isNavFixed ? "fixed top-0 bg-white right-0 left-0 shadow-lg shadow-slate-100 flex justify-between items-center lg:block pr-6 pb-1 lg:mr-0 z-[150]" : "flex justify-between items-center lg:block mr-6 mt-3 lg:mt-5 lg:mr-0"} style={{transition:"all .5s ease-in-out"}}>
@@ -278,7 +280,7 @@ const Navigation = () => {
           <Link to={"/help/cancel-order"}>
             <div>Cancel an order</div>
           </Link>
-          <Link to={"/chats"}>
+          <Link to={"/help/cancel-order"}>
             <div>Refund & Returns</div>
           </Link>
 
@@ -316,7 +318,7 @@ const Navigation = () => {
                 <h2><Link to={"/help/place-order"}> Place an order</Link></h2>
                 <h2><Link to={"/help/payment"}> Payment options</Link></h2>
                 <h2><Link to={"/help/cancel-order"}>Cancel an order</Link></h2>
-                <h2><Link to={"/chats"}> Refund & Returns</Link></h2>
+                <h2><Link to={"/help/cancel-order"}> Refund & Returns</Link></h2>
               </div>
 
               <button className="bg-blue-700 px-5 w-11/12 md:w-1/2 py-2 mt-2.5 cursor-pointer font-medium rounded-[4px]">{auth?.currentUser === null || auth.currentUser === undefined ? <span className="text-white"><Link to="/login">SIGN IN</Link></span>: <h3 onClick={signOutUser} className="text-white">LOG OUT</h3>}</button>

@@ -37,8 +37,8 @@ const Stats = () => {
   console.log(orders);
 
   const filteredProducts = products.filter(product=> product[1]?.createdBy?.id === auth?.currentUser?.uid)
-  const completedOrder = orders.filter(order => order[1]?.products?.status === "Delivered")
-  const pendingOrder = orders.filter(order => order[1]?.products?.status === "Pending")
+  const completedOrder = orders.filter(order => order[1]?.status === "Delivered")
+  const pendingOrder = orders.filter(order => order[1]?.status === "pending")
 
 
 
@@ -103,7 +103,7 @@ const Stats = () => {
                  </div>
                 </article>
                 <article>
-                  <h4 className="bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-blue-700 text-xs">{order[1]?.products?.status}</h4>
+                  <h4 className="bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-blue-700 text-xs">{order[1]?.status}</h4>
                   
                   <h4 className="mt-3 text-[13px] tracking-wider text-slate-600 flex items-center">
                     <img src={allProduct} alt="products" className="w-4 mr-1"/>

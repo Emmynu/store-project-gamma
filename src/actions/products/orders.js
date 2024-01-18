@@ -23,6 +23,12 @@ export async function getOrders(orders, isLoading) {
   }) 
 }
 
+export default function getSingleOrder(orders, orderId){
+  onValue(ref(db, `orders/${id}/${orderId}`), res =>{
+    res.exists() ? orders((res.val())) :  orders([])
+  })
+}
+
 export async function getAllOrders(orders) {
   onValue(ref(db, `orders/`),res=>{
     res.exists() ? orders(Object.entries(res.val())) : orders([])
@@ -44,7 +50,7 @@ export async function updateOrders(userId,orderId, status){
 
 export async function updateVendorOrders(vendorId, orderId, status){
   const updates = {}
-  updates[`vendors/${vendorId}/orders/${orderId}/products/status`] = status
+  updates[`vendors/${vendorId}/orders/${orderId}/status`] = status
   update(ref(getDatabase()), updates)
 }
 

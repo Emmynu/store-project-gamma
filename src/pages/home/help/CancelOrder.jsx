@@ -32,9 +32,9 @@ const CancelOrder = () => {
         <header>
           <div className="flex items-center">
             <h2 className="font-medium md:text-lg ">Step 2:</h2>
-            <h3 className="ml-2 font-medium tracking-wide">Request a Refund and cancel the order</h3>
+            <h3 className="ml-3 md:ml-2 font-medium tracking-wide">Request a Refund and cancel the order</h3>
           </div>
-          <p className="text-sm my-1.5 text-slate-600">Click on the "cancel" button to request a refund and also cancel the order</p>
+          <p className="text-sm my-1.5 text-slate-600">Click on the "cancel" button to request a refund  or  cancel a pending order and after that you'll be contacted for refund</p>
         </header>
           <main className="flex flex-col md:flex-row mt-6">
             <div className="border ">

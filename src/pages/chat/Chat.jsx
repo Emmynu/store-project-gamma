@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
-import { deleteRoom, getSingleChat, getSingleChatMembers, removeMessage, saveChat } from "../../actions/chat/chat"
-import { auth, storage } from "../../firebase-config"
+import { addFavorite, deleteRoom, getFavourite, getSingleChat, getSingleChatMembers, removeMessage, saveChat } from "../../actions/chat/chat"
+import { auth, db, storage } from "../../firebase-config"
 import ChatMembers from "../../components/ChatMembers"
 import  "../../components/chat.css"
 import { id } from "../../actions/auth/auth"
@@ -9,6 +9,7 @@ import { serverTimestamp } from "firebase/database"
 import Moment from "react-moment"
 import deleteIcon from "../../images/delete.png"
 import sendIcon from "../../images/send.png"
+import loveIcon from "../../images/love.png"
 import loadIcon from "../../images/load.png"
 import uploadIcon from "../../images/upload.png"
 import { Toaster, toast } from "sonner"
@@ -24,13 +25,19 @@ const Chat = () => {
   const { chatId, userId } = useParams()
   const [isUploading, setIsUploading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isFavourite, setIsFavourite] = useState(false)
 
   useEffect(()=>{
     getSingleChat(chatId, setChats, setIsLoading)
     getSingleChatMembers(chatId, setMembers)
+    getFavourite(chatId, setIsFavourite)
   },[chatId])
 
-  console.log(chats);
+
+  useEffect(()=>{
+    getFavourite(chatId, setIsFavourite)
+  },[isFavourite, chatId])
+
 
 
   if(isLoading){
@@ -74,6 +81,13 @@ const Chat = () => {
     setIsUploading(false)
   }
 
+  async function createFavorites() {
+    if(isFavourite === "true"){
+      addFavorite(chatId, "false")
+    }else if(isFavourite === "false"){
+      addFavorite(chatId, "true")
+    }
+  }
 
   return (
    <>
@@ -85,10 +99,10 @@ const Chat = () => {
         <header className="chat-header">
         <div className="flex items-center">
           <h2 className="mr-3">
-              <Link to={-1}>
+              <Link to={"/chats"}>
               <img width="21" height="21" src="https://img.icons8.com/ios-glyphs/30/back.png" alt="back" />
               </Link>
-            </h2>
+          </h2>
           <section>
           {members?.receiver?.id === id ? 
               <article className="flex items-center">
@@ -103,7 +117,10 @@ const Chat = () => {
           }
           </section>
         </div>
-        <button onClick={()=>deleteRoom(chatId)}><img src={deleteIcon} alt="delete-icon" className="w-5"/></button>
+          <div className="flex items-center">
+             <button onClick={createFavorites}><img src={isFavourite === "true" ? "https://img.icons8.com/ios-glyphs/30/000000/novel--v1.png": loveIcon} alt="delete-icon" className="w-5 mr-1"/></button>
+            <button onClick={()=>deleteRoom(chatId)}><img src={deleteIcon} alt="delete-icon" className="w-5"/></button>
+          </div>
         </header>
 
         <article className="overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-400  h-[70vh] mb-10 md:mb-20">

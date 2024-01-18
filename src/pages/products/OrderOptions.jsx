@@ -116,17 +116,19 @@ function order() {
           push(ref(db, `vendors/${vendor}/orders`),{
             products:item[1],
             orderRef: orderId,
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            status: "pending"
           }).then(products.map(product=>{
             if(product[0] === item[1]?.productId){
-              updateQuantity(product[0], item[1]?.quantity)
+              updateQuantity(product[0])
             }
           }))
         }
       })
     })
   }).then(res=>{
-    remove(ref(db, `cart/${id}`)).then(window.location = "/order/success")
+    remove(ref(db, `cart/${userId}`))
+    .then(window.location = "/order/success")
   }).catch(err=>{
     toast.error(err.message)
   })
