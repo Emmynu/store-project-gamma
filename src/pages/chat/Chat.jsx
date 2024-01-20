@@ -25,18 +25,13 @@ const Chat = () => {
   const { chatId, userId } = useParams()
   const [isUploading, setIsUploading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [isFavourite, setIsFavourite] = useState(false)
 
   useEffect(()=>{
     getSingleChat(chatId, setChats, setIsLoading)
     getSingleChatMembers(chatId, setMembers)
-    getFavourite(chatId, setIsFavourite)
   },[chatId])
 
 
-  useEffect(()=>{
-    getFavourite(chatId, setIsFavourite)
-  },[isFavourite, chatId])
 
 
 
@@ -81,13 +76,7 @@ const Chat = () => {
     setIsUploading(false)
   }
 
-  async function createFavorites() {
-    if(isFavourite === "true"){
-      addFavorite(chatId, "false")
-    }else if(isFavourite === "false"){
-      addFavorite(chatId, "true")
-    }
-  }
+
 
   return (
    <>
@@ -118,7 +107,6 @@ const Chat = () => {
           </section>
         </div>
           <div className="flex items-center">
-             <button onClick={createFavorites}><img src={isFavourite === "true" ? "https://img.icons8.com/ios-glyphs/30/000000/novel--v1.png": loveIcon} alt="delete-icon" className="w-5 mr-1"/></button>
             <button onClick={()=>deleteRoom(chatId)}><img src={deleteIcon} alt="delete-icon" className="w-5"/></button>
           </div>
         </header>

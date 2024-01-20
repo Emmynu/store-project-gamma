@@ -22,7 +22,8 @@ const OrderOptions = () => {
   const [isLoading, setIsLoading] =  useState(false)
   const [isError, setIsError] =  useState(false)
   const [isModalOpen, setIsModalOpen] =  useState(false)
-  const [newAddress, setNewAddress] = useState({state: "", address: "", phone: 0})
+  const [newAddress, setNewAddress] = useState({state: "", address: "", phone: 0, city: ''})
+  const [lga, setLga] = useState([])
   const [amount, setAmount] = useState(0)
   const [id, setid] = useState(0)
   let subtitle;
@@ -57,19 +58,43 @@ const OrderOptions = () => {
   const border={
     border: "1px solid #f0f0f0"
   }
+
   async function fetchStates() {
-    await fetch( 'https://nga-states-lga.onrender.com/fetch')
-      .then(res=>res.json())
-      .then(res=>setStates(res))
-      .then(setIsError(false))
-      .catch(err=>{
-        setIsError(true)
-      })
+    try{
+      const data = await fetch("https://nga-states-lga.onrender.com/fetch")
+      const states = await data.json()
+      setStates(states)
+    }
+    catch(err){
+      setIsError(true)
+    }
   }
+
+  async function fetchLocalGovernments(state) {
+      try{
+      const data = await fetch(`https://nga-states-lga.onrender.com/?state=${state}`)
+      const states = await data.json()
+      setLga(states)
+    }
+    catch(err){
+      setIsError(true)
+    }
+  }
+
 
   useEffect(()=>{
     fetchStates(setStates)
   },[])
+
+  useEffect(()=>{
+     if(newAddress.state){
+      fetchLocalGovernments(newAddress.state)
+    }
+  },[newAddress.state])
+
+
+
+
 
   if(isFetching){
     return <OrderOptionsLoading />
@@ -78,17 +103,28 @@ const OrderOptions = () => {
   function updateAddress(id){
     setIsModalOpen(!isModalOpen)
     setid(id)
-  
   }
+
+  function closeModal(){
+    setIsModalOpen(false)
+    setIsLoading(false)
+    setNewAddress({address:"",city:"", state:"",phone:""})
+  }
+
   function updateUserAddress() {
     setIsLoading(true)
-    if(newAddress.address && newAddress.state){
+    if(newAddress.address && newAddress.state && newAddress.city && newAddress.phone){
       const updates = {}
-      updates[`users/${userId}/${id}/address`] = `${newAddress.address} | ${newAddress.state} | ${newAddress.phone}`
+      updates[`users/${userId}/${id}/address`] = {
+        phone: newAddress.phone,
+        address: newAddress.address,
+        states: newAddress.state,
+        city: newAddress.city
+      }
       update(ref(getDatabase()), updates).then(res=>{
         setIsLoading(false)
         setIsModalOpen(false)
-        setNewAddress({phone: "", state:"", address:""})
+        setNewAddress({phone: "", state:"", address:"", city : ""})
       })
      }
   }
@@ -108,7 +144,8 @@ function order() {
     products: cart,
     status:"pending",
     createdOrder: serverTimestamp(),
-    deliveryOption
+    deliveryOption,
+    address: address && address[0][1]
   }).then(request=>{
     cart.map(item=>{
       vendors.map(vendor=>{
@@ -167,12 +204,12 @@ function finalizeOrder() {
                 <h2 className="text-white bg-green-700 rounded-[50%] px-1 text-sm">✓</h2>
                 <h3 className="ml-1.5 font-medium uppercase text-sm md:text-base text-slate-700">1. Customer Address</h3>
               </div>
-              <div><button onClick={()=>updateAddress(place[0]) || "No Address Found"} className="text-sm text-blue-700 tracking-wider" >Change</button>  </div>
+              <div><button onClick={()=>updateAddress(place[0])} className="text-sm text-blue-700 tracking-wider" >Change</button>  </div>
             </header>
             <hr className="my-2"/>
             <main>
               <h5 className="text-slate-700 font-medium ">{auth?.currentUser?.displayName}</h5>
-              <h6 className="text-sm tracking-wider text-slate-600">{place[1]?.address}</h6>
+              <h6 className="text-sm tracking-wider text-slate-600">{`${place[1]?.address?.states} | ${place[1]?.address?.city} | ${place[1]?.address?.address} | ${place[1]?.address?.phone}`}</h6>
             </main>
           </article>
         })}</>
@@ -231,18 +268,45 @@ function finalizeOrder() {
        {/* Modal */}
     { isModalOpen &&  <Modal isOpen={isModalOpen}  className="w-11/12 md:w-6/12 lg:w-1/3 p-5 absolute top-48 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-blue-600 outline-none rounded-mdx shadow-md ">
     <h2 ref={(_subtitle) => (subtitle = _subtitle)}></h2>
+      {/* close btn */}
+      {!isError ? <article>
+        <button className="text-base font-medium text-red-700  tracking-widest " onClick={closeModal}>
+          <div className="sm-bar w-[20px] sm-bar-1"></div>
+          <div className="sm-bar w-[20px] sm-bar-2"></div>
+        </button>
+        <section>
+          <h3 className="text-[27px] font-medium text-slate-800 my-2.5">Update Address</h3>
+          <article>
+            <div className="flex items-center ">
+              <select className="border w-full py-1 border-slate-700 rounded-[4px] px-3 text-sm text-slate-600" onChange={handleInput} name="state" >{states.map(state=>{
+                return <option value={state}>{state}</option>
+              })}</select>
+            
+              {newAddress.state && <select className="border w-full py-1 ml-2 border-slate-700 rounded-[4px] px-3 text-sm text-slate-600" onChange={handleInput} name="city">
+                    {lga.map(lg=>{
+                      return <option value={lg}>{lg}</option>
+                    })}
+                    </select>}
+              </div>
+              <div className="flex items-center my-2">
+                <input className="border w-full border-slate-700 py-1 rounded-[4px] px-2 my-1.5 ml-1" type="text" name="address" onChange={handleInput} value={newAddress.address} placeholder="Address"/>
+                  <input className="border w-full border-slate-700 py-1 rounded-[4px] px-2 my-1.5 ml-1" type="number" name="phone" onChange={handleInput} value={newAddress.phone} placeholder="Phone Number"/>
+              </div>
+                <button onClick={updateUserAddress} className="bg-blue-700 py-1.5 w-full px-3 rounded-[4px] text-white flex justify-center items-center text-sm ">{isLoading ? <div>
+                  <img src={load} className="w-5 animate-spin"/>
+                  <h2>Loading...</h2>
+                </div> :"Update Address"}</button>
+          </article>
+        </section>
+      </article>
+      :
+      
+      <section>
+        <h3>Failed to Fectch states</h3>  
+      </section>}
 
-      <h3 className="text-center font-[arial] font-medium text-[22px] text-slate-700">Update Address</h3>
-    {!isError ? <>   <select onChange={handleInput} name="state" className="px-2 py-1 my-1.5 w-full border border-slate-700 text-slate-600  text-sm tracking-wider  rounded-[3px]">{states.map(state=>{
-          return <option value={state}>{state}</option>
-        })}</select> 
-        <div className="flex items-center justify-center mt-1.5">
-          <input className="px-2 py-1 border border-slate-700 rounded-[3px] outline-none text-slate-600 w-full text-sm tracking-wider" type="text" onChange={handleInput} name="address" value={newAddress.address} placeholder="Address"/>
-          <input className="px-2 py-1 border border-slate-700  ml-2 rounded-[3px]  outline-none text-slate-600 w-full text-sm tracking-wider" type="number" onChange={handleInput} name="phone" value={newAddress.phone} placeholder="Phone Number"/>
-        </div>
-        <button className="bg-blue-700 px-5 py-2 rounded-[4px] w-full mt-3 tracking-wider  flex justify-center items-center text-white font-medium" onClick={updateUserAddress} disabled={isLoading}>{isLoading ? <img src={load} className="w-5 animate-spin"/> :"Update Address"}</button></>: <section className="text-center my-5 text-slate-600 tracking-wider">
-            <h4>Failed to fetch states</h4>
-          </section>}
+
+
       </Modal>} 
     </main> 
     <Toaster richColors closeButton position="top-right"/>

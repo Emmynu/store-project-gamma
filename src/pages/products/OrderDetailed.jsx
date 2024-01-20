@@ -7,6 +7,7 @@ import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { settings } from "../sellers/Products";
+import { auth } from "../../firebase-config";
 
 const OrderDetailed = () => {
   const { id } = useParams()
@@ -16,13 +17,8 @@ const OrderDetailed = () => {
     getSingleOrder(setOrders, id)
   },[])
 
-  useEffect(()=>{
-    // orders?.products.reduce((total, price) => {
-    //   console.log(price);
-    //   return total
-    // })
-  },[])
-  console.log(orders);
+  // console.log(orders)
+  console.log(orders?.address?.address);
     {return orders !== null  && <main className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 max-w-[72rem]  mx-3 md:mx-auto md:px-3 items-start  gap-9  my-3 lg:my-12"}>
       <section>
          <CustomerSideBar />
@@ -55,15 +51,36 @@ const OrderDetailed = () => {
                     </section>
                     <section className="md:col-span-2 ml-5 my-2.5">                   
                       <h3 className="text-lg font-medium text-slate-700">{product[1]?.name}</h3>
-                      <h3 className="text-slate-600 tracking-wider my-1">{product[1]?.quantity}</h3>
+                      <h3 className="text-slate-600 tracking-wider my-1">QTY: {product[1]?.quantity}</h3>
                       <h3 className="text-slate-600 tracking-widest text-sm my-1" >₦{product[1]?.price}</h3>
                     </section>
+
+                   
                   </main>
                   
                 </article>
               })}
             </Slider>
           </section>
+
+          <section className="border border-slate-300 rounded-[4px] mt-4 w-full">
+            <h3 className="font-medium border-b border-slate-200  p-4 uppercase text-slate-700">Delivery Information</h3>
+            <article className=" p-4  ">
+              <div className="my-3">
+                <h3 className="font-medium text-slate-700">Delivery Method</h3>
+                <p className="text-sm text-slate-600 tracking-wider">{orders?.deliveryOption}</p>
+              </div>
+              <div className="my-3">
+                <h3 className="font-medium text-slate-700">Shipping Address</h3>
+                <p className="text-sm text-slate-600 tracking-wider flex flex-col mt-1">
+                  <span className="my-1">{auth?.currentUser?.displayName}</span>
+                  <span className="my-1">{orders?.address?.address?.address}</span> 
+                  <span className="my-1">{`${orders?.address?.address.city}(${orders.address?.address.states}) ${orders?.address?.address?.phone}`}</span>
+                </p>
+              </div>
+            </article>
+          </section>
+
         </main>
       </section>
       </main> }

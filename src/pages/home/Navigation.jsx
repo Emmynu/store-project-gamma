@@ -47,6 +47,7 @@ const Navigation = () => {
     getCart(setCart)
   },[])
 
+  console.log(`url: ${process.env.TEST_URL}`)
   useEffect(()=>{
   cart.reduce((totalPrice, price)=>{
     totalPrice += price[1]?.price * (price[1]?.quantity)
