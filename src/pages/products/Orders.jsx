@@ -89,7 +89,8 @@ const Orders = () => {
                           <h2 className=" font-medium md:text-[18px] my-1 text-slate-700">{product[1]?.name}</h2>
                           <h4 className="text-xs md:text-sm text-slate-600 tracking-wider mb-3 select-text">Order ref: {order[0]}</h4>
                           <span className={order[1].status === "Delivered" ? "px-2 bg-green-700 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1" : order[1]?.status === "pending" ? "px-2 bg-yellow-600 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1": "bg-red-700 px-2 uppercase text-[12px]  md:text-xs tracking-wider text-white py-1"}>{order[1]?.status}</span>
-                         {order[1]?.status !== "Cancelled" &&  <button className="text-xs text-red-600 bg-red-100 px-2 py-1.5 ml-1.5 tracking-wide rounded-[4px]" onClick={()=>requestRefund(order[0], order[1]?.status,  order[1]?.deliveryOption, product[1], order[1]?.createdOrder)}>Cancel</button>}
+                         {(order[1]?.status !== "Cancelled") && 
+                          <button className="text-xs text-red-600 bg-red-100 px-2 py-1.5 ml-1.5 tracking-wide rounded-[4px]" onClick={()=>requestRefund(order[0], order[1]?.status,  order[1]?.deliveryOption, product[1], order[1]?.createdOrder)}>Cancel</button>}
 
                           <br />
 

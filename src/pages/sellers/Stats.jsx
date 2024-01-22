@@ -37,7 +37,7 @@ const Stats = () => {
 
  
 
-  console.log(orders);
+
 
   const filteredProducts = products.filter(product=> product[1]?.createdBy?.id === auth?.currentUser?.uid)
   const completedOrder = orders.filter(order => order[1]?.status === "Delivered")
@@ -45,6 +45,7 @@ const Stats = () => {
 
   const newOrders =  status ? orders.filter(order => order[1]?.status.toLowerCase() === status.toLowerCase()) : orders
 
+  
   return (
     <main className="mt-32 mb-[10px]"  >
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center gap-7 sm:gap-12 mx-3 md:mx-9">
@@ -81,12 +82,14 @@ const Stats = () => {
         </div>
       </section>
  
-    <section className="mt-20 ">
+    <section className="mt-20   ">
         <h2 className="text-2xl text-center  sm:text-[25px] leading-3 text-slate-700 font-medium font-[arial] tracking-wide">All Orders</h2>
-        <header className="flex items-center justify-center mt-5">
+        <header className="flex items-center justify-center mt-5 overflow-x-scroll scrollbar-thin">
           <h2 className="px-4 py-1 rounded-[4px] shadow-lg ml-2 bg-blue-700 text-white text-sm tracking-wider"><Link to={``}>All</Link></h2>
           <h2 className="px-4 py-1 rounded-[4px] shadow-lg ml-2 bg-blue-700 text-white text-sm tracking-wider"><Link to={`?status=pending`}>Pending</Link></h2>
-          <h2 className="px-4 py-1 rounded-[4px] shadow-lg ml-2 bg-blue-700 text-white text-sm tracking-wider"><Link to={`?status=completed`}>Completed</Link></h2>
+          
+          <h2 className="px-4 py-1 rounded-[4px] shadow-lg ml-2 bg-blue-700 text-white text-sm tracking-wider"><Link to={`?status=Delivered`}>Completed</Link></h2>
+          <h2 className="px-4 py-1 rounded-[4px] shadow-lg ml-2 bg-blue-700 text-white text-sm tracking-wider"><Link to={`?status=Cancelled`}>Cancelled</Link></h2>
         </header>
        {isLoading ?<section className="mt-8"> <LoadVendorProducts /></section> : <section >
           {orders.length > 0 ? <section  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 mt-8 md:mx-7 lg:mx-12">

@@ -17,7 +17,16 @@ const OrderDetailed = () => {
     getSingleOrder(setOrders, id)
   },[])
 
-  // console.log(orders)
+  const orderSlider = {
+    dots: false,
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay:true,
+    autoplaySpeed:3000
+  }
+
   console.log(orders?.address?.address);
     {return orders !== null  && <main className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 max-w-[72rem]  mx-3 md:mx-auto md:px-3 items-start  gap-9  my-3 lg:my-12"}>
       <section>
@@ -31,11 +40,11 @@ const OrderDetailed = () => {
           <article>
             <h3 className="text-[15px]  my-1.5 tracking-wider text-slate-700">Order hash: {id}</h3>
             <h4 className="text-sm  tracking-wider text-slate-600 mb-1">{orders !== null && `${orders?.products.length } Items`} </h4>
-            <h5 className="text-slate-600 tracking-wider text-sm my-1">Delivery Option: {orders?.deliveryOption}</h5>
+            <h5 className="text-slate-600 tracking-wider text-sm my-1">Payment Option: {orders?.deliveryOption}</h5>
           </article>
           <hr className= "my-4" />
           <section className="border p-4 rounded-[4px]"> 
-            <Slider>
+            <Slider {...orderSlider}>
               {orders?.products.map(product =>{
                 return <article>
                   <header className="flex items-center mb-3">
@@ -49,7 +58,7 @@ const OrderDetailed = () => {
                         return <img src={img} alt={product[0]} className="h-[150px] w-full object-cover"/>
                       })}</Slider>
                     </section>
-                    <section className="md:col-span-2 ml-5 my-2.5">                   
+                    <section className="md:col-span-2 ml-2.5 md:ml-5 my-2.5">                   
                       <h3 className="text-lg font-medium text-slate-700">{product[1]?.name}</h3>
                       <h3 className="text-slate-600 tracking-wider my-1">QTY: {product[1]?.quantity}</h3>
                       <h3 className="text-slate-600 tracking-widest text-sm my-1" >₦{product[1]?.price}</h3>
@@ -68,7 +77,7 @@ const OrderDetailed = () => {
             <article className=" p-4  ">
               <div className="my-3">
                 <h3 className="font-medium text-slate-700">Delivery Method</h3>
-                <p className="text-sm text-slate-600 tracking-wider">{orders?.deliveryOption}</p>
+                <p className="text-sm text-slate-600 tracking-wider">Door Delivery</p>
               </div>
               <div className="my-3">
                 <h3 className="font-medium text-slate-700">Shipping Address</h3>

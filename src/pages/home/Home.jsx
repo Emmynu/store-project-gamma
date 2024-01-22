@@ -54,12 +54,38 @@ const Home = () => {
     ]
   }
 
+  const collectionSlider = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay:true,
+    autoplaySpeed:3000,
+    responsive:[
+      {
+        breakpoint:1024,
+        settings:{
+          slidesToShow:2,
+          slidesToScroll: 2,
+        }
+      },
+      {
+        breakpoint:768,
+        settings:{
+          slidesToShow:1,
+          slidesToScroll:1,
+        }
+      },
+    ]
+  }
+
+
   const homeImageSlider = {
     dots:false,
     autoplay:true,
     speed:1000,
     autoplaySpeed:3000,
-
   }
 
 
@@ -177,7 +203,7 @@ const Home = () => {
       {/* collections */}
       <section className="my-[4rem] mb-[2rem] px-4 md:px-7 lg:px-12 relative" data-aos={"fade-up"} data-aos-duration={"700"}>
         <h2 className="text-2xl md:text-[29px] text-center md:leading-7 text-slate-700 tracking-normal font-bold mb-7" style={{fontFamily:"Arial"}}>Trending Categories</h2>
-        <Slider {...settings} className=" mx-1 sm:mx-3 " ref={categoryRef}>
+        <Slider {...collectionSlider} className=" mx-1 sm:mx-3 " ref={categoryRef}>
           <Link>
             <article className="px-2 sm:px-4">
               <img src="https://images.pexels.com/photos/234220/pexels-photo-234220.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" alt=""  className="w-full sm:w-[95%] outline-none h-[250px] rounded-[4px] object-cover"/>

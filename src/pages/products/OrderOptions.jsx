@@ -177,10 +177,10 @@ function onSuccess(){
 
 
 function finalizeOrder() {
-  if(deliveryOption === "door" && cart.length > 0){
+  if(deliveryOption === "On-Delivery" && cart.length > 0){
     order()
   }
-  else if(deliveryOption === "online"  && cart.length > 0){
+  else if(deliveryOption === "Online-Payment"  && cart.length > 0){
      initializePayment({onSuccess})
   }
   else if(cart.length <= 0){
@@ -227,13 +227,13 @@ function finalizeOrder() {
         <article className="my-5 flex justify-between  p-2" style={deliveryOption === "door" ? border : null}>
             <div><h2 className="text-[15px] font-medium tracking-wide">Door Delivery</h2>
             <p className="text-sm text-slate-600 tracking-wider my-1.5">Delivery of item is between (3days to 1week)</p></div>
-            <div><button onClick={()=>setDeliveryOption("door")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
+            <div><button onClick={()=>setDeliveryOption("On-Delivery")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
           </article>
 
           <article className="my-5  flex justify-between p-2" style={deliveryOption === "online" ? border : null}>
             <div><h2 className="text-[15px] font-medium tracking-wide">Online Payment</h2>
             <p className="text-sm text-slate-600 tracking-wider my-1.5">Delivery of item is between (3days to 1week)</p></div>
-           <div> <button onClick={()=>setDeliveryOption("online")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
+           <div> <button onClick={()=>setDeliveryOption("Online-Payment")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
           </article>
        </div>
 
@@ -241,7 +241,7 @@ function finalizeOrder() {
       </section>
       <section className="col-span-3 border lg:col-span-1 bg-white shadow-md rounded-md p-4">
        <header>
-          <h3 className="font-medium text-base p-1 text-slate-700 text-sm md:text-base">Order Summary</h3>
+          <h3 className="font-medium  p-1 text-slate-700 text-sm md:text-base">Order Summary</h3>
         </header>
         <hr className="my-2"/>
         <main>
@@ -292,8 +292,8 @@ function finalizeOrder() {
                 <input className="border w-full border-slate-700 py-1 rounded-[4px] px-2 my-1.5 ml-1" type="text" name="address" onChange={handleInput} value={newAddress.address} placeholder="Address"/>
                   <input className="border w-full border-slate-700 py-1 rounded-[4px] px-2 my-1.5 ml-1" type="number" name="phone" onChange={handleInput} value={newAddress.phone} placeholder="Phone Number"/>
               </div>
-                <button onClick={updateUserAddress} className="bg-blue-700 py-1.5 w-full px-3 rounded-[4px] text-white flex justify-center items-center text-sm ">{isLoading ? <div>
-                  <img src={load} className="w-5 animate-spin"/>
+                <button onClick={updateUserAddress} className="bg-blue-700 py-1.5 w-full px-3 rounded-[4px] text-white flex justify-center items-center text-sm ">{isLoading ? <div className="flex items-center justify-center">
+                  <img src={load} className="w-5 animate-spin ml-1"/>
                   <h2>Loading...</h2>
                 </div> :"Update Address"}</button>
           </article>
