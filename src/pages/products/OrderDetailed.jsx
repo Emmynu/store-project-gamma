@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import getSingleOrder from "../../actions/products/orders";
 import CustomerSideBar from "../../components/sideBar";
+import { updateOrders } from "../../actions/products/orders";
 import Moment from "react-moment"
 import Slider from 'react-slick'
 import "slick-carousel/slick/slick.css"
@@ -10,7 +11,7 @@ import { settings } from "../sellers/Products";
 import { auth } from "../../firebase-config";
 
 const OrderDetailed = () => {
-  const { id } = useParams()
+  const { id, createdOrderAt } = useParams()
   const [orders, setOrders] = useState(null)
 
   useEffect(()=>{
@@ -27,7 +28,23 @@ const OrderDetailed = () => {
     autoplaySpeed:3000
   }
 
-  console.log(orders?.address?.address);
+  async function updateOrderStatus(){
+    await updateOrders(auth?.currentUser?.uid, id , "Cancelled").then(res =>{
+    
+   })
+  }
+
+    function changeOrderStatus() {
+      const expiryOrderDate =  Date.now() - new Date(orders.createdOrderAt).getTime() * 1000 * 60 * 60 * 24 * 2
+      if(orders?.status === "pending" && expiryOrderDate){
+        if(orders?.paymentOption === "On-Delivery"){
+         updateOrderStatus()
+        }else{
+         updateOrderStatus()
+        }
+      }
+    }
+
     {return orders !== null  && <main className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 max-w-[72rem]  mx-3 md:mx-auto md:px-3 items-start  gap-9  my-3 lg:my-12"}>
       <section>
          <CustomerSideBar />
@@ -40,7 +57,7 @@ const OrderDetailed = () => {
           <article>
             <h3 className="text-[15px]  my-1.5 tracking-wider text-slate-700">Order hash: {id}</h3>
             <h4 className="text-sm  tracking-wider text-slate-600 mb-1">{orders !== null && `${orders?.products.length } Items`} </h4>
-            <h5 className="text-slate-600 tracking-wider text-sm my-1">Payment Option: {orders?.deliveryOption}</h5>
+            <h5 className="text-slate-600 tracking-wider text-sm my-1">Payment Option: {orders?.paymentOption}</h5>
           </article>
           <hr className= "my-4" />
           <section className="border p-4 rounded-[4px]"> 
@@ -49,27 +66,27 @@ const OrderDetailed = () => {
                 return <article>
                   <header className="flex items-center mb-3">
                     <h2 className="px-2 py-1 bg-green-600 text-white uppercase text-xs tracking-wideest rounded-[4px] mr-2">{orders.status}</h2>
-                    <h4 className="text-sm tracking-wider"><Moment fromNow>{orders?.createdOrder}</Moment></h4>
+                    {orders.status !== "Cancelled" &&<button  className="text-xs text-red-600 bg-red-100 px-2 py-1.5 mr-1.5 tracking-wide rounded-[4px]" onClick={changeOrderStatus}>{orders.status=== "Delivered"? "Refund" : "Cancel"}</button>}
+                    <h4 className="text-sm tracking-wider"><Moment fromNow>{orders?.createdOrderAt}</Moment></h4>
                   </header>
                   <main className="grid grid-cols-2 md:grid-cols-3 ">
                     <section>
                       <Slider {...settings}>
-                        {product[1]?.url?.map(img=>{
+                        {product?.url?.map(img=>{
                         return <img src={img} alt={product[0]} className="h-[150px] w-full object-cover"/>
                       })}</Slider>
                     </section>
                     <section className="md:col-span-2 ml-2.5 md:ml-5 my-2.5">                   
-                      <h3 className="text-lg font-medium text-slate-700">{product[1]?.name}</h3>
-                      <h3 className="text-slate-600 tracking-wider my-1">QTY: {product[1]?.quantity}</h3>
-                      <h3 className="text-slate-600 tracking-widest text-sm my-1" >₦{product[1]?.price}</h3>
-                    </section>
-
-                   
+                      <h3 className="text-lg font-medium text-slate-700">{product?.name}</h3>
+                      <h3 className="text-slate-600 tracking-wider my-1">QTY: {product?.quantity}</h3>
+                      <h3 className="text-slate-600 tracking-widest text-sm my-1" >₦{product?.price}</h3>
+                    </section> 
                   </main>
-                  
+                  <h2 className="text-right text-blue-700 font-medium tracking-wider text-[15px]  rounded-[4px]"><Link to={`/orders/track/${id}/${createdOrderAt}`}><span className="hover:bg-blue-100 px-4 pt-1.5 pb-2.5">Track Order</span></Link></h2>
                 </article>
               })}
             </Slider>
+            
           </section>
 
           <section className="border border-slate-300 rounded-[4px] mt-4 w-full">

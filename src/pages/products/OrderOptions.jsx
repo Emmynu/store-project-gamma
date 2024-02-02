@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 import { getSingleUserFromDb, id as userId } from "../../actions/auth/auth"
-import { getDatabase, push, ref, remove, serverTimestamp, set, update } from "firebase/database"
+import { getDatabase, push, ref, remove, serverTimestamp,  update } from "firebase/database"
 import { getCart } from "../../actions/products/cart"
-import { createOrder, getAllVendors } from "../../actions/products/orders"
+import { createOrder, getAllVendors, saveVendorOrder } from "../../actions/products/orders"
 import { db,auth } from "../../firebase-config"
 import { usePaystackPayment } from "react-paystack"
 import { getProducts, updateQuantity } from "../../actions/products/products"
@@ -44,6 +44,7 @@ const OrderOptions = () => {
     getCart(setCart)
     getAllVendors(setVendors)
   },[])
+
 
 
   useEffect(()=>{
@@ -140,35 +141,37 @@ function handleInput(e){
 
 function order() {
   const orderId = new Date().getTime().toString()
-  createOrder(orderId, { 
-    products: cart,
-    status:"pending",
-    createdOrder: serverTimestamp(),
-    deliveryOption,
-    address: address && address[0][1]
-  }).then(request=>{
+  const orderProduct = cart.map(item=> item[1])
+
+  
+  createOrder(orderId, {
+    products:orderProduct,
+    status: "pending", // for the whole order
+    createdOrderAt: serverTimestamp(),
+    paymentOption: deliveryOption,
+    address: address[0][1],
+  })
+  .then(res =>{
     cart.map(item=>{
       vendors.map(vendor=>{
         if(item[1]?.createdBy === vendor){
-          push(ref(db, `vendors/${vendor}/orders`),{
+          saveVendorOrder(vendor, orderId, {
             products:item[1],
-            orderRef: orderId,
-            createdAt: serverTimestamp(),
-            status: "pending"
+            createdAt:serverTimestamp(), 
+            orderedBy: auth?.currentUser?.uid
           }).then(products.map(product=>{
-            if(product[0] === item[1]?.productId){
-              updateQuantity(product[0])
+            if(product[0]===item[1]?.productId){
+                updateQuantity(product[0])
             }
           }))
         }
       })
     })
-  }).then(res=>{
+  })
+  .then(res =>{
     remove(ref(db, `cart/${userId}`))
     .then(window.location = "/order/success")
-  }).catch(err=>{
-    toast.error(err.message)
-  })
+  }).catch(err=>toast.error(err.message))
 }
 
 function onSuccess(){
@@ -177,14 +180,17 @@ function onSuccess(){
 
 
 function finalizeOrder() {
-  if(deliveryOption === "On-Delivery" && cart.length > 0){
+  if(deliveryOption === "On-Delivery" && cart.length > 0 && address[0][1]?.address){
     order()
   }
-  else if(deliveryOption === "Online-Payment"  && cart.length > 0){
+  else if(deliveryOption === "Online-Payment"  && cart.length > 0 && address[0][1]?.address){
      initializePayment({onSuccess})
   }
-  else if(cart.length <= 0){
+  else if(cart.length <= 0 && address[0][1]?.address){
     window.location = "/"
+  }
+  else if(!address[0][1]?.address){
+    toast.info("No Address Found! Click 'change' button to add address")
   }
   else{
     toast.error("Please select a delivery option")
@@ -209,7 +215,7 @@ function finalizeOrder() {
             <hr className="my-2"/>
             <main>
               <h5 className="text-slate-700 font-medium ">{auth?.currentUser?.displayName}</h5>
-              <h6 className="text-sm tracking-wider text-slate-600">{`${place[1]?.address?.states} | ${place[1]?.address?.city} | ${place[1]?.address?.address} | ${place[1]?.address?.phone}`}</h6>
+             {address[0][1]?.address ?  <h6 className="text-sm tracking-wider text-slate-600">{`${place[1]?.address?.states} | ${place[1]?.address?.city} | ${place[1]?.address?.address} | ${place[1]?.address?.phone}`}</h6>: <h3 className="text-sm tracking-wider text-slate-600">No Address Found </h3>}
             </main>
           </article>
         })}</>
@@ -224,13 +230,13 @@ function finalizeOrder() {
         <hr className="my-2"/>
 
        <div>
-        <article className="my-5 flex justify-between  p-2" style={deliveryOption === "door" ? border : null}>
+        <article className="my-5 flex justify-between  p-2" style={deliveryOption === "On-Delivery" ? border:null}>
             <div><h2 className="text-[15px] font-medium tracking-wide">Door Delivery</h2>
             <p className="text-sm text-slate-600 tracking-wider my-1.5">Delivery of item is between (3days to 1week)</p></div>
             <div><button onClick={()=>setDeliveryOption("On-Delivery")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
           </article>
 
-          <article className="my-5  flex justify-between p-2" style={deliveryOption === "online" ? border : null}>
+          <article className="my-5  flex justify-between p-2" style={deliveryOption === "Online-Payment" ? border:null }>
             <div><h2 className="text-[15px] font-medium tracking-wide">Online Payment</h2>
             <p className="text-sm text-slate-600 tracking-wider my-1.5">Delivery of item is between (3days to 1week)</p></div>
            <div> <button onClick={()=>setDeliveryOption("Online-Payment")} className="text-blue-700 text-sm tracking-wider">Select</button></div>
@@ -241,7 +247,7 @@ function finalizeOrder() {
       </section>
       <section className="col-span-3 border lg:col-span-1 bg-white shadow-md rounded-md p-4">
        <header>
-          <h3 className="font-medium  p-1 text-slate-700 text-sm md:text-base">Order Summary</h3>
+          <h3 className="font-medium  p-1 text-slate-700 text-base">Order Summary</h3>
         </header>
         <hr className="my-2"/>
         <main>

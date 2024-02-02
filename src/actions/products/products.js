@@ -1,6 +1,6 @@
 import { getDatabase, increment, onValue, push, ref, remove, update } from "firebase/database";
 import { db } from "../../firebase-config";
-import { id } from "../auth/auth";
+
 
 export async function saveProductToDb(data){
   push(ref(db, `products/`),data)

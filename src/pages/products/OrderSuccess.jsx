@@ -46,22 +46,23 @@ const OrderSuccess = () => {
             <hr className="my-5"/>
             <section className="w-[96vw] md:w-full -ml-4 overflow-x-hidden">
               <Slider  {...settings} className="ml-4 w-full p-2">
+                
                 {order[1]?.products.map(product=>{
-                  return <>
-                  <article  className="mt-2 grid grid-cols-2 lg:grid-cols-3 gap-5">
-                    <div>
-                      <img src={product[1]?.url} alt="" className="rounded-md h-[150px] object-cover w-full"/>
-                    </div>
-                    <div className="my-2.5">
-                      <h2 className="font-medium text-[18px] text-slate-700">{product[1]?.name}</h2>
-                      <h3 className="text-sm text-blue-700 font-medium my-0.5">₦{product[1]?.price}</h3>
-                      <h4 className="text-sm tracking-wide text-slate-600">Category: {product[1]?.brand}</h4>
-                    </div>
-                  </article>
-                {/* < hr className="my-5"/> */}
-
-                  </>
+                    return <>
+                    <article  className="mt-2 grid grid-cols-2 lg:grid-cols-3 gap-5">
+                      <div>
+                        <img src={product?.url} alt="" className="rounded-md h-[150px] object-cover w-full"/>
+                      </div>
+                      <div className="my-2.5">
+                        <h2 className="font-medium text-[18px] text-slate-700">{product?.name}</h2>
+                        <h3 className="text-sm text-blue-700 font-medium my-0.5">₦{product?.price}</h3>
+                        <h4 className="text-sm tracking-wide text-slate-600">Category: {product?.brand}</h4>
+                      </div>
+                    </article>
+                  < hr className="my-5"/>
+                 </>
                 })}
+ 
                 </Slider>
               < hr className="my-5"/>
             </section>

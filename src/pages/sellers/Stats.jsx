@@ -4,18 +4,21 @@ import { auth } from "../../firebase-config"
 import pending from "../../images/pending.png"
 import completed from "../../images/completed.png"
 import product from "../../images/products.png"
+import load from "../../images/loading.png"
 import AOS from "aos"
 import empty from "../../images/notFound.png"
 import clock from "../../images/clock.png"
 import allProduct from "../../images/all-products.png"
 import "aos/dist/aos.css"
-import { getVendorOrders, updateOrders, updateVendorOrders } from "../../actions/products/orders"
+import {  getUserOrderProduct, getVendorOrders, updateVendorOrders } from "../../actions/products/orders"
 import { id } from "../../actions/auth/auth"
-import { LoadVendorProducts } from "../../components/Loading"
+import {LoadVendorProducts } from "../../components/Loading"
 import Slider from "react-slick"
 import { settings } from "./Products"
 import Moment from "react-moment"
 import { useSearchParams, Link } from "react-router-dom"
+import { update,ref, getDatabase } from "firebase/database"
+
 
 
 const Stats = () => {
@@ -35,15 +38,13 @@ const Stats = () => {
     AOS.init()
   },[])
 
- 
-
 
 
   const filteredProducts = products.filter(product=> product[1]?.createdBy?.id === auth?.currentUser?.uid)
-  const completedOrder = orders.filter(order => order[1]?.status === "Delivered")
-  const pendingOrder = orders.filter(order => order[1]?.status === "pending")
+  const completedOrder = orders.filter(order => order[1]?.products ?.status === "Delivered")
+  const pendingOrder = orders.filter(order => order[1]?.products?.status === "pending")
 
-  const newOrders =  status ? orders.filter(order => order[1]?.status.toLowerCase() === status.toLowerCase()) : orders
+  const newOrders =  status ? orders.filter(order => order[1]?.products?.status.toLowerCase() === status.toLowerCase()) : orders
 
   
   return (
@@ -94,35 +95,38 @@ const Stats = () => {
        {isLoading ?<section className="mt-8"> <LoadVendorProducts /></section> : <section >
           {orders.length > 0 ? <section  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 mt-8 md:mx-7 lg:mx-12">
             { newOrders.reverse().map(order=>{
-            return<article className="bg-white shadow-md hover:shadow-lg rounded-md">
-                <section>
-                  <Slider {...settings}>
-                    {order[1]?.products?.url?.map(image=>{
-                      return <img src={image} className="w-full h-[200px] object-cover"/>
-                    })}
-                  </Slider>
+            return <Link to={`?orderedBy=${order[1]?.orderedBy}&orderId=${order[0]}&productId=${order[1]?.products?.productId}`}>
+              <article className="bg-white shadow-md hover:shadow-lg transition-[2s_all_linear] rounded-md" >
+                  <section>
+                    <Slider {...settings}>
+                      {order[1]?.products?.url?.map(image=>{
+                        return <img src={image} className="w-full h-[200px] object-cover"/>
+                      })}
+                    </Slider>
+                  </section>
+                  <section className="p-3 pb-1.5 mt-2 flex items-center justify-between">
+                  <article>
+                    <h2 className="text-slate-700 font-medium my-1 sm:text-lg">{order[1]?.products?.name}</h2>
+                    <h4 className="text-sm text-blue-700 tracking-wider my-1">₦{order[1]?.products?.price}</h4>
+                  <div className="flex items-center my-1.5">
+                    <img src={clock} alt="clock" className="w-4 mr-1"/> 
+                      <Moment fromNow className="text-sm  text-slate-600 tracking-wider ">
+                        {order[1]?.createdAt}
+                      </Moment>
+                  </div>
+                  </article>  
+                  <article>
+                    <h4 className="bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-blue-700 text-xs">{order[1]?.products?.status}</h4>
+                    
+                    <h4 className="mt-3 text-[13px] tracking-wider text-slate-600 flex items-center">
+                      <img src={allProduct} alt="products" className="w-4 mr-1"/>
+                      <span>{order[1]?.products?.quantity}</span></h4>
+                  </article>
                 </section>
-                <section className="p-3 pb-1.5 mt-2 flex items-center justify-between">
-                <article>
-                  <h2 className="text-slate-700 font-medium my-1 sm:text-lg">{order[1]?.products?.name}</h2>
-                  <h4 className="text-sm text-blue-700 tracking-wider my-1">₦{order[1]?.products?.price}</h4>
-                 <div className="flex items-center my-1.5">
-                  <img src={clock} alt="clock" className="w-4 mr-1"/> 
-                    <Moment fromNow className="text-sm  text-slate-600 tracking-wider ">
-                      {order[1]?.createdAt}
-                    </Moment>
-                 </div>
-                </article>
-                <article>
-                  <h4 className="bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-blue-700 text-xs">{order[1]?.status}</h4>
-                  
-                  <h4 className="mt-3 text-[13px] tracking-wider text-slate-600 flex items-center">
-                    <img src={allProduct} alt="products" className="w-4 mr-1"/>
-                    <span>{order[1]?.products?.quantity}</span></h4>
-                </article>
-              </section>
-              
-            </article>
+
+                <UpdateOrderStatus  status={order[1]?.products?.status}/>                
+              </article>
+            </Link>
           })}
           </section>: <section className="mt-6 flex flex-col items-center justify-center text-center">
           <img src={empty} alt="empty" />
@@ -134,6 +138,55 @@ const Stats = () => {
       </section>
     </main>
   )
+}
+
+
+function UpdateOrderStatus({ status }){
+
+  const [params, setParams] = useSearchParams()
+  const orderedBy = params.get("orderedBy")
+  const orderId = params.get("orderId")
+  const productId = params.get("productId")
+  const [isLoading, setIsLoading] = useState(false)
+  const [products, setProducts] = useState(false)
+
+ 
+  useEffect(()=>{
+    getUserOrderProduct(orderedBy,orderId, setProducts, setIsLoading)
+  },[orderId, orderedBy, productId])
+
+
+  function changeOrderStatus(status){
+    const newProduct = products.filter(product => product[1]?.productId === productId)
+    newProduct.map(product=>{
+      updateVendorOrders(auth?.currentUser?.uid, orderId, status).then(res=>{
+        const updates = {}
+        updates[`orders/${orderedBy}/${orderId}/products/${product[0]}/status`] = status
+        update(ref(getDatabase()), updates)
+      }).then(res=>{
+        params.delete("orderedBy")
+        params.delete("productId")
+        params.delete("orderId");
+        setIsLoading(false)
+      })
+    })
+  }
+
+  function deliveredOrder() {
+    changeOrderStatus("Delivered")
+  }
+
+  function cancelledOrder() {
+    changeOrderStatus("Cancelled")
+  }
+
+  return <footer>                
+     {status === "pending" && <section>
+        <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={deliveredOrder} disabled={isLoading}>{isLoading ? <span><img src={load} alt=""className="w-5 animate-spin" /></span>: "Delivered"}</button>
+
+      <button  className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={cancelledOrder} disabled={isLoading}>{isLoading ? <span><img src={load} alt=""className="w-5 animate-spin" /></span>: "Cancel"}</button>
+      </section>}
+  </footer>  
 }
 
 export default Stats

@@ -121,7 +121,8 @@ const Detailed = () => {
             productQuantityAvailable:product?.quantity || 25,
             quantity:1,
             brand,
-            createdBy: product?.createdBy?.id
+            createdBy: product?.createdBy?.id,
+            status:"pending"
           }).then( toast.success("Added To Cart"))
        }else{
         toast.error("Product is out of stock")

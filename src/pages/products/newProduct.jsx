@@ -10,6 +10,7 @@ import { getCurrentUser } from "../../actions/auth/auth"
 import "./products.css";
 import Select from "react-select"
 import { getSingleSeller } from "../../actions/sellers/sellers"
+import { useSearchParams } from "react-router-dom"
 
 const NewProduct = () => {
   const imageRef = useRef()
@@ -85,7 +86,9 @@ const NewProduct = () => {
     ]
 
   }
-  const { productId, isEdit } = JSON.parse(localStorage.getItem("editInfo"))
+  const [params, setParams] = useSearchParams()
+  const isEdit = params.get("edit")
+  const productId = params.get("productId") 
 
 
 
@@ -100,7 +103,6 @@ const NewProduct = () => {
 
   const newProduct = allProducts.filter(product=> product[0] === productId )
 
-  console.log(newProduct);
 
   function handleValues(e){
     const {name, value} = e.target
@@ -189,12 +191,7 @@ const NewProduct = () => {
   }
 
   function quitEdit() {
-    localStorage.setItem("editInfo", JSON.stringify({
-      isEdit: false,
-      productId: "null"
-    }))
-
-    window.location = "/dashboard"
+    window.location = "/dashboard/products"
   }
 
   async function newProductUpload(){

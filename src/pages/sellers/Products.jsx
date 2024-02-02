@@ -37,11 +37,7 @@ const Products = () => {
   }
 
   function editProduct(id) {
-    localStorage.setItem("editInfo",JSON.stringify( {
-      isEdit:true,
-      productId:id 
-    }))
-    window.location = "/dashboard/new-product";
+    window.location = `/dashboard/new-product?edit=true&productId=${id}`;
   }
   return (
     <div className="mt-24 overflow-x-hidden" >

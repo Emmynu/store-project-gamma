@@ -44,13 +44,30 @@ export async function getVendorOrders(id,orders) {
 
 export async function updateOrders(userId,orderId, status){
   const updates = {}
-  updates[`orders/${userId}/${orderId}/status`] = status
+  updates[`orders/${userId}/${orderId}/status/`] = status
   update(ref(getDatabase()), updates)
 }
 
+export async function getUserOrderProduct(userId,orderId, products,isLoading){
+  isLoading(true)
+  onValue(ref(db, `orders/${userId}/${orderId}/products`),res =>{
+    res.exists() ? products(Object.entries(res.val())) : products([])
+    isLoading(false)
+  })
+}
+
+
+
+export async function saveVendorOrder(vendorId,orderId, data) {
+  const updates = {}
+  updates[`vendors/${vendorId}/orders/${orderId}`] = data
+  update(ref(getDatabase()), updates)
+}
+
+
 export async function updateVendorOrders(vendorId, orderId, status){
   const updates = {}
-  updates[`vendors/${vendorId}/orders/${orderId}/status`] = status
+  updates[`vendors/${vendorId}/orders/${orderId}/products/status`] = status
   update(ref(getDatabase()), updates)
 }
 

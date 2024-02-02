@@ -30,6 +30,8 @@ import Payment from "./pages/home/help/Payment"
 import PlaceOrder from "./pages/home/help/PlaceOrder"
 import CancelOrder from "./pages/home/help/CancelOrder"
 import OrderDetailed from "./pages/products/OrderDetailed"
+import TrackOrder from "./pages/products/TrackOrder"
+import Header from "./pages/admin/Header"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -53,6 +55,7 @@ export default function App(){
         <Route path="checkout" element={<Checkout />}/>
         <Route path="checkout/delivery-options" element={<OrderOptions />}/>
         <Route path="orders" element={<Orders />}/>
+        <Route path="orders/track/:id/:createdOrderAt" element={<TrackOrder />}/>
         <Route path="orders/:id/:createdOrderAt" element={<OrderDetailed />}/>
         <Route path="order/success" element={<OrderSuccess />}/>
         <Route path="collections" element={<Collections />}/>
@@ -81,7 +84,9 @@ export default function App(){
     
     {/* admin */}
     <Route element={<ProtectAdmin />}>
-       <Route path="admin" element={<Admin />}/>
+       <Route path="admin" element={<Header />}>
+        <Route index element={<Admin />}/>
+       </Route>
     </Route>
     <Route path="refund" element={<Refund />}/>
     <Route path="/admin/login" element={<AdminLogin />} action={adminLoginAction}/>
