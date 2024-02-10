@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom"
-import getSingleOrder from "../../actions/products/orders";
+import getSingleOrder, { getUserOrderProduct, updateVendorOrders } from "../../actions/products/orders";
 import CustomerSideBar from "../../components/sideBar";
 import { updateOrders } from "../../actions/products/orders";
 import Moment from "react-moment"
@@ -9,13 +9,18 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { settings } from "../sellers/Products";
 import { auth } from "../../firebase-config";
+import { id as  userId } from "../../actions/auth/auth";
+import { getDatabase, update, ref } from "firebase/database";
 
 const OrderDetailed = () => {
   const { id, createdOrderAt } = useParams()
   const [orders, setOrders] = useState(null)
+  const [userProduct, setUserProduct] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(()=>{
     getSingleOrder(setOrders, id)
+    getUserOrderProduct(userId, id, setUserProduct, setIsLoading)
   },[])
 
   const orderSlider = {
@@ -28,9 +33,18 @@ const OrderDetailed = () => {
     autoplaySpeed:3000
   }
 
+  console.log(orders)
+
   async function updateOrderStatus(){
     await updateOrders(auth?.currentUser?.uid, id , "Cancelled").then(res =>{
-    
+    // change the status of rach product to cancelled when the user cancels the order
+    userProduct.map(product=>{
+      const updates = {}
+      updates[`orders/${userId}/${id}/products/${product[0]}/status`] = "Cancelled"
+      update(ref(getDatabase()), updates).then(res=>{
+        updateVendorOrders(product[1]?.createdBy,id, "Cancelled")
+      })
+    })
    })
   }
 

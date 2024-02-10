@@ -39,7 +39,7 @@ const Header = () => {
             </header>
             <article className="pl-5  mt-4" onClick={()=>setShowSideBar(!showSideBar)}>
   
-            <Link to={"/dashboard"}> <h2 className="my-4 font-normal flex items-center text-slate-600 tracking-wide logo text-base">
+            <Link to={"/admin"}> <h2 className="my-4 font-normal flex items-center text-slate-600 tracking-wide logo text-base">
               <img src={orders} alt="stat" className="mr-2 w-6"/>
                 <span>Orders</span>
               </h2></Link>
@@ -62,7 +62,7 @@ const Header = () => {
   
             </article>
       </aside>
-      <nav className="fixed top-0 z-10 left-0 right-0 bg-white shadow-md shadow-slate-100 border-b p-7 flex justify-between  sm:justify-around items-center">
+      <nav className="fixed top-0 z-10 left-0 right-0 bg-white shadow-md shadow-slate-100 border-b py-7 px-3 md:p-7 flex justify-between  sm:justify-around items-center">
         {/* nav-bar */}
         <section onClick={()=>setShowSideBar(!showSideBar)}>
           <div className="bg-blue-700 cursor-pointer h-[4px] rounded-full w-[20px] my-[3px]"></div>
@@ -74,7 +74,7 @@ const Header = () => {
         <section>
           <h2 className="text-[20px] sm:text-[28px] leading-3 text-slate-700 font-medium font-[arial] tracking-wide">Admin Dashboard</h2>
         </section>
-        <section className="bg-blue-700 text-sm md:text-base shadow-lg font-medium tracking-wider px-7 py-1 rounded-[4px] text-white">
+        <section className="bg-blue-700 text-xs md:text-base shadow-lg font-medium tracking-wider px-7 py-1 rounded-[4px] text-white">
           Emmanuel
         </section>
       </nav>

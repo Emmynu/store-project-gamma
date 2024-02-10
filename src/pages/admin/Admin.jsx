@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import { getAllOrders, getVendorOrders, saveRefund, updateOrders, updateVendorOrders } from "../../actions/products/orders"
+import { getAllOrders, getUserOrderProduct, getVendorOrders, saveRefund, updateOrders, updateVendorOrders } from "../../actions/products/orders"
 import pending from "../../images/pending-2.png"
 import completed from "../../images/completed.png"
 import cancel from "../../images/cancel.png"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import { settings } from "../sellers/Products"
+import { update, ref, getDatabase } from "firebase/database"
+
 
 
 const Admin = () => {
@@ -75,24 +78,29 @@ const Admin = () => {
         <main>
           {orders.map(order=>{
           const orderRef = Object.entries(order[1])
-          console.log(orderRef);
-          return <article  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 mt-8 md:mx-7 lg:mx-12">
-            {orderRef.map(ref=>{
-              return <section className="bg-white shadow-md hover:shadow-xl transition-all cursor-pointer ">
-                <article>{ref[1].products.map(product=>{
-                  return <>
-                    <Product product={product} orderId={ref[0]} userId={order[0]} order={orderRef}/>
-                    </>
-                })}</article>
-              
-
-                <h2>{ref[1]?.deliveryOption}</h2>
-                <h2>{ref[1]?.status}</h2>
-                <h2>{ref[0]}</h2>
+        
+          return <article  className="max-w-[72rem] mx-6 lg:mx-auto my-1.5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
                 
-            </section>
-          })}
-        </article>
+                {orderRef.map(ref=>{
+                  return <section className=" bg-white shadow-md hover:shadow-xl my-4 transition-all cursor-pointer ">
+                    <article> 
+                     
+                     <Slider {...settings}>{ref[1]?.products.map(product=>{
+                      return <>
+                        <Product product={product} orderId={ref[0]} userId={order[0]} orders={orderRef}/>
+                        </>
+                    })} </Slider>
+                    </article>
+                  
+
+                    <h2>{ref[1]?.deliveryOption}</h2>
+                    <h2>{ref[1]?.status}</h2>
+                    <h2>{ref[0]}</h2>
+                    
+                </section>
+              })}
+            </article>
+        
           })}
       </main>
       </section>
@@ -102,61 +110,66 @@ const Admin = () => {
 }
 
 
-function Product({ product, orderId, userId, order }) {
-  const [vendorOrders, setVendorOrders] = useState([])
+function Product({ product, orderId, userId, orders }) {
+  // const [vendorOrders, setVendorOrders] = useState([])
+  const [userProducts, setUserProducts] =  useState([])
+  // const [totals, setTotal] =  useState(product?.price)
+  const [isLoading, setIsLoading] =  useState(false)
   
-  // console.log(product)
   useEffect(()=>{
-    getVendorOrders(product?.createdBy, setVendorOrders) 
+    // getVendorOrders(product?.createdBy, setVendorOrders) 
+    getUserOrderProduct(userId, orderId, setUserProducts, setIsLoading)
   },[])
 
 
 
-  // function updateCustomerOrder(userId, orderId, vendorId) {
-  //   updateOrders(userId,orderId, "Delivered").then(res=>{
-  //     vendorOrders.map(order=>{
-  //       if(order[1]?.orderRef === orderId){
-  //         updateVendorOrders(vendorId, order[0], "Delivered")
-  //       }
-  //     })
-  //   })
-  // }
 
-  // function cancelOrder(userId, orderId, vendorId) {
-  //   updateOrders(userId,orderId, "Cancelled").then(res=>{
-  //     vendorOrders.map(order=>{
-  //       if(order[1]?.orderRef === orderId){
-  //         updateVendorOrders(vendorId, order[0], "Cancelled")
-  //       }
-  //     })
-  //   })
-  //   .then(res=>{
-  //     order.map(item=>{
-  //       saveRefund(item[0],{
-  //         refundStatus: "pending",
-  //         products:item[1]?.products,
-  //         refundType:"Payment",
-  //         createdOrderAt: item[1]?.createdOrder 
-  //       })
-  //     })
-  //   })
-  // }
+  function cancelOrder() {
+    const newOrder  = orders.filter(item=>item[0]=== orderId)
+    // console.log(newOrder, userId);
+    newOrder.map(order =>{
+      updateOrders(userId,order[0], "Cancelled" )
+      // refund
+      .then(res=>{
+        if(order[1]?.paymentOption === "Online-Payment"){
+          let newTotal = 0
+         order[1]?.products.reduce((total,price)=>{
+           total += parseInt( price?.price) * parseInt(price?.quantity )
+            newTotal =  total
+            return total
+         },0)
+         console.log(newTotal);
+         
+          saveRefund(orderId, {
+            type: "payment",
+            amount: newTotal,
+            products:order[1]?.products,
+            status:"pending"
+          })
+        }
+      })
+      .then(res=>{
+        // cancel each product in the order
+       userProducts.map(product=>{
+         const updates = {}
+          updates[`orders/${userId}/${orderId}/products/${product[0]}/status`] = "Cancelled"
+          update(ref(getDatabase()), updates)
+       })
+      }).then(res=>{
+        updateVendorOrders(product?.createdBy, orderId, "Cancelled")
+      })
+    })
+  }
 
 
-  console.log(product);
 
 
   return (
    <main>
-    <div>{product.url.map(img =>{
-      return <img src={img} alt={product?.productId} className="w-12 h-12 object-cover"/>
-    })}</div>
+     <img src={product.url[0]} alt={product?.productId} className="w-full h-[150px] rounded-md object-cover"/>
      <h2>{product?.name}</h2>
-     {/* <img src={product?.url} alt={product?.productId}/> */}
-
-      <button>Delivered</button>
-      <button>Cancel</button>
-      <button >Order</button>
+    <button >Delivered</button>
+    <button onClick={cancelOrder}>Cancel</button>
   </main>
   )
   
