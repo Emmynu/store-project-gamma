@@ -86,9 +86,9 @@ export default function App(){
     <Route element={<ProtectAdmin />}>
        <Route path="admin" element={<Header />}>
         <Route index element={<Admin />}/>
+         <Route path="refund" element={<Refund />}/>
        </Route>
     </Route>
-    <Route path="refund" element={<Refund />}/>
     <Route path="/admin/login" element={<AdminLogin />} action={adminLoginAction}/>
     </>
   ))

@@ -92,7 +92,7 @@ const Stats = () => {
           <h2 className="px-4 py-1 rounded-[4px] shadow-lg ml-2 bg-blue-700 text-white text-sm tracking-wider"><Link to={`?status=Delivered`}>Completed</Link></h2>
           <h2 className="px-4 py-1 rounded-[4px] shadow-lg ml-2 bg-blue-700 text-white text-sm tracking-wider"><Link to={`?status=Cancelled`}>Cancelled</Link></h2>
         </header>
-       {isLoading ?<section className="mt-8"> <LoadVendorProducts /></section> : <section >
+       {isLoading ? <section className="mt-8"> <LoadVendorProducts /></section> : <section >
           {orders.length > 0 ? <section  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 mt-8 md:mx-7 lg:mx-12">
             { newOrders.reverse().map(order=>{
             return <Link to={`?orderedBy=${order[1]?.orderedBy}&orderId=${order[0]}&productId=${order[1]?.products?.productId}`}>

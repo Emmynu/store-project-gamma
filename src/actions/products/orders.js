@@ -29,9 +29,11 @@ export default function getSingleOrder(orders, orderId){
   })
 }
 
-export async function getAllOrders(orders) {
+export async function getAllOrders(orders, isLoading) {
+  isLoading(true)
   onValue(ref(db, `orders/`),res=>{
     res.exists() ? orders(Object.entries(res.val())) : orders([])
+    isLoading(false)
   })
 }
 

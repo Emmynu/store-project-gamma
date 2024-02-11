@@ -8,15 +8,20 @@ import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { settings } from "../sellers/Products"
 import { update, ref, getDatabase } from "firebase/database"
+import { LoadVendorProducts } from "../../components/Loading"
+import Moment from "react-moment"
+import clock from "../../images/clock.png"
+import allProduct from "../../images/all-products.png"
 
 
 
 const Admin = () => {
   const [orders, setOrders] = useState([])
   const [newOrders, setNewOrders] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(()=>{
-    getAllOrders(setOrders)
+    getAllOrders(setOrders, setIsLoading)
   },[])
 
   useEffect(()=>{
@@ -75,34 +80,29 @@ const Admin = () => {
 
       <section className="my-10">
         <header className="text-2xl font-[arial] font-medium tracking-wide  text-center">All Orders</header>
-        <main>
+        
+       <> { isLoading ? <LoadVendorProducts/> : <main>
           {orders.map(order=>{
           const orderRef = Object.entries(order[1])
         
-          return <article  className="max-w-[72rem] mx-6 lg:mx-auto my-1.5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+          return <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 mt-8 md:mx-7 lg:mx-12">
                 
                 {orderRef.map(ref=>{
-                  return <section className=" bg-white shadow-md hover:shadow-xl my-4 transition-all cursor-pointer ">
+                  return <section className="bg-white shadow-md hover:shadow-lg transition-[2s_all_linear] rounded-md cursor-pointer">
                     <article> 
                      
                      <Slider {...settings}>{ref[1]?.products.map(product=>{
                       return <>
-                        <Product product={product} orderId={ref[0]} userId={order[0]} orders={orderRef}/>
+                        <Product product={product} orderId={ref[0]} userId={order[0]} orders={orderRef} at={ref[1]?.createdOrderAt}/>
                         </>
                     })} </Slider>
-                    </article>
-                  
-
-                    <h2>{ref[1]?.deliveryOption}</h2>
-                    <h2>{ref[1]?.status}</h2>
-                    <h2>{ref[0]}</h2>
-                    
+                    </article>          
                 </section>
               })}
             </article>
         
           })}
-      </main>
+      </main>}</>
       </section>
       </main>}
     </main>
@@ -110,14 +110,11 @@ const Admin = () => {
 }
 
 
-function Product({ product, orderId, userId, orders }) {
-  // const [vendorOrders, setVendorOrders] = useState([])
+function Product({ product, orderId, userId, orders, at }) {
   const [userProducts, setUserProducts] =  useState([])
-  // const [totals, setTotal] =  useState(product?.price)
   const [isLoading, setIsLoading] =  useState(false)
   
   useEffect(()=>{
-    // getVendorOrders(product?.createdBy, setVendorOrders) 
     getUserOrderProduct(userId, orderId, setUserProducts, setIsLoading)
   },[])
 
@@ -163,13 +160,33 @@ function Product({ product, orderId, userId, orders }) {
 
 
 
-
   return (
    <main>
-     <img src={product.url[0]} alt={product?.productId} className="w-full h-[150px] rounded-md object-cover"/>
-     <h2>{product?.name}</h2>
-    <button >Delivered</button>
-    <button onClick={cancelOrder}>Cancel</button>
+     <img src={product.url[0]} alt={product?.productId}  className="w-full h-[200px] object-cover"/>
+      <section  className="p-3 pb-1.5 mt-2 flex items-center justify-between">
+        <article>
+          <h2  className="text-slate-700 font-medium my-1 sm:text-lg">{product?.name}</h2>
+          <h2 className="text-sm text-blue-700 tracking-wider my-1">₦{product?.price}</h2>
+
+          <div className="flex items-center my-1.5">
+            <img src={clock} alt="clock" className="w-4 mr-1"/> 
+            <Moment fromNow className="text-sm  text-slate-600 tracking-wider ">
+              {at}
+            </Moment>
+        </div>
+        </article>
+       
+        <article>
+          <h4 className="bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-blue-700 text-xs">{product?.status}</h4>
+          
+          <h4 className="mt-3 text-[13px] tracking-wider text-slate-600 flex items-center">
+            <img src={allProduct} alt="products" className="w-4 mr-1"/>
+            <span>{product?.quantity}</span></h4>
+        </article>
+      </section>
+  {product?.status !== "pending" && <> <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Delivered</button>
+    <button onClick={cancelOrder} className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Cancel</button>
+    </>}
   </main>
   )
   

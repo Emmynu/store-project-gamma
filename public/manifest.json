@@ -3,18 +3,18 @@
   "name": "BearCart",
   "icons": [
     {
-      "src": "logo2.jpeg",
+      "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/jpeg"
+      "type": "image/x-icon"
     },
     {
-      "src": "logo.jpeg",
-      "type": "image/jpeg",
+      "src": "logo.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo2.jpeg",
-      "type": "image/jpeg",
+      "src": "logo.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],

@@ -45,7 +45,7 @@ const Header = () => {
               </h2></Link>
   
 
-              <Link to={`/dashboard/new-product`}><h2 className="my-4 font-normal flex items-center text-slate-600 tracking-wide logo text-base">
+              <Link to={`/admin/refund`}><h2 className="my-4 font-normal flex items-center text-slate-600 tracking-wide logo text-base">
                 <img src={refund} alt="stat" className="mr-2 w-6"/>
                 <span>Refunds</span>
               </h2></Link>
