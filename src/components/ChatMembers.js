@@ -4,6 +4,7 @@ import { Link } from "react-router-dom"
 import { getAllChats } from "../actions/chat/chat"
 import "./chat.css"
 import { LoadAllChatMembers } from "./Loading"
+import notFound from "../images/not-found.gif"
 
 const ChatMembers = () => {
   const [chats, setChats] = useState([])
@@ -21,8 +22,6 @@ const ChatMembers = () => {
   function handleSearch() {
     setFilteredChats(text.length > 0 ? (newChats.filter(chat=>chat[1]?.members?.sender?.name.toLowerCase().includes(text.toLowerCase()) ||  chat[1]?.members?.receiver?.name.toLowerCase().includes(text.toLowerCase()))) : newChats)
   }
-
-  console.log(filteredChats);
   return (
     <main className="p-4">
       <header >
@@ -39,7 +38,7 @@ const ChatMembers = () => {
           <h3 className="uppercase my-5 text-slate-600 font-medium tracking-wide text-sm">DIRECT MESSAGES</h3>
         </header>
       {!isLoading ?
-      (!text ? newChats : filteredChats).map(chat=>{
+      <>{(newChats.length>0 || filteredChats.length > 0 )? (!text ? newChats : filteredChats).map(chat=>{
         return <section className="my-2.5">
               {chat[1]?.members?.sender?.id === id ?<Link to={`/chat/${chat[0]}/${chat[1]?.members?.receiver?.id}`}>
                 <article className="flex items-center my-4">
@@ -61,7 +60,10 @@ const ChatMembers = () => {
                 <hr />
               </Link>}
         </section>
-      })
+      }) : <section className=" text-center">
+          <div className="flex justify-center">  <img src={notFound} alt="" className="w-[300px]"/></div>
+          <h2 className="text-[13px] lg:text-sm text-slate-600 tracking-wider">No Chat history found. Please  initiate a conversation to begin chatting</h2>
+        </section>}</>
       : <section><LoadAllChatMembers /></section>} 
       </section>
     </main>

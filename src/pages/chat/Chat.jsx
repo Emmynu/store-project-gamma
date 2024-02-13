@@ -9,7 +9,7 @@ import { serverTimestamp } from "firebase/database"
 import Moment from "react-moment"
 import deleteIcon from "../../images/delete.png"
 import sendIcon from "../../images/send.png"
-import loveIcon from "../../images/love.png"
+import empty from "../../images/chats.gif"
 import loadIcon from "../../images/load.png"
 import uploadIcon from "../../images/upload.png"
 import { Toaster, toast } from "sonner"
@@ -81,7 +81,7 @@ const Chat = () => {
   return (
    <>
     <main className="grid grid-cols-3 lg:grid-cols-4 h-[95vh]">
-      <section className="col-span-1 hidden md:block overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-400">
+      <section className="col-span-1 hidden md:block overflow-y-scroll scrollbar-thin ">
         <ChatMembers />
       </section>
       <section className="col-span-3 md:col-span-2 lg:col-span-3 bg-slate-100 relative">
@@ -97,11 +97,15 @@ const Chat = () => {
               <article className="flex items-center">
                 <img className="w-[35px] h-[35px] object-cover rounded-[50%]" src={members?.sender?.url} alt={`${members?.sender?.name} avatar`}/>
                 <h3 className="ml-2 font-medium text-[18px] text-slate-700">{members?.sender?.name}</h3>
+                <h3 className="text-xs text-slate-600">active</h3>
               </article>
             : 
             <article className="flex items-center">
             <img className="w-[35px] h-[35px] object-cover rounded-[50%]" src={members?.receiver?.url} alt={`${members?.receiver?.name} avatar`}/>
-            <h3 className="ml-2 font-medium text-[18px] text-slate-700">{members?.receiver?.name}</h3>
+           <div>
+             <h3 className="ml-2 mt-1 font-medium text-[18px] text-slate-700">{members?.receiver?.name}</h3>
+             <h3 className="text-xs text-blue-600 ml-2 tracking-wider -mt-1">Active user</h3>
+           </div>
           </article>
           }
           </section>
@@ -111,8 +115,8 @@ const Chat = () => {
           </div>
         </header>
 
-        <article className="overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-400  h-[70vh] mb-10 md:mb-20">
-          {chats.map(chat=>{
+        <article className="overflow-y-scroll scrollbar-thin   h-[70vh] mb-10 md:mb-20">
+          {chats.length > 0 ? chats.map(chat=>{
             return <section ref={scrollMessage}>
             {chat[1]?.id === id ? <main className=" flex flex-col items-end justify-end my-2 mr-3" >
                {chat[1]?.message && <h3 className= "bg-blue-600 text-slate-50 text-sm  max-w-[20rem] lg:max-w-[30rem] tracking-wider  leading-relaxed shadow-sm rounded-md p-4">{chat[1]?.message}</h3>}
@@ -136,18 +140,21 @@ const Chat = () => {
               </main>}
             
             </section>
-          })}
+          }) :  <section className="flex justify-center h-[50vh] flex-col items-center mx-3 mt-12 md:mt-6">
+              <img src={empty} alt="empty" className="w-8/12 md:w-fit" />
+              <h4 className="text-sm text-slate-600 tracking-wider text-center">Oops! it seems like there's no chat history. Start a conversation and get things rolling</h4>
+            </section>}
         </article>
    
 
 
-        <footer className="absolute bottom-4 right-0 left-0 flex justify-around mx-2 md:mx-20">
+        <footer className="absolute -bottom-4 md:bottom-0 border-t  bg-white p-2 right-0 left-0  flex items-center">
 
-          <input type="text" value={text} onChange={(e)=>setText(e.target.value)} placeholder=" Type your message..." className="bg-white text-sm tracking-wide text-slate-700 px-2 rounded-md w-full py-2.5 outline-none shadow-md "/>
+          <input type="text" value={text} onChange={(e)=>setText(e.target.value)} placeholder=" Type your message..." className="bg-transparent text-sm tracking-wider  outline-none w-full"/>
           
-          <button onClick={sendMessage} className="ml-2 bg-blue-700 px-5 py-1 rounded-[4px] text-white font-medium"><img src={sendIcon} alt="send" className="w-6 md:w-7" /></button>
+          <button onClick={sendMessage} className="bg-gray-700 px-2 py-1.5 rounded-md"><img src={sendIcon} alt="send" className="w-5" /></button>
 
-          <button className="ml-2 bg-blue-700 px-5 py-1 flex justify-center items-center rounded-[4px] text-white font-medium" onClick={()=>uploadRef.current.click()}>{ isUploading ? <img src={loadIcon} className="w-5 animate-spin"/> : <img src={uploadIcon} className="w-9 md:w-7"/>}</button>
+          <button className="ml-2 bg-blue-700 px-3 py-1.5  flex justify-center items-center rounded-md text-white font-medium" onClick={()=>uploadRef.current.click()}>{ isUploading ? <img src={loadIcon} className="w-5 animate-spin"/> : <img src={uploadIcon} className="w-6 md:w-6"/>}</button>
           <input type="file" name="" ref={uploadRef} hidden multiple={false} accept="image/" id="" onChange={handleFileUpload}/>
 
         </footer>

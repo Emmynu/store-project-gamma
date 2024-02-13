@@ -19,6 +19,7 @@ const Admin = () => {
   const [orders, setOrders] = useState([])
   const [newOrders, setNewOrders] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [status, setStatus] = useState("")
 
   useEffect(()=>{
     getAllOrders(setOrders, setIsLoading)
@@ -31,8 +32,10 @@ const Admin = () => {
     })
   },[orders])
 
-  // console.log(orders);
 
+
+
+  
   const pendingOrders = newOrders.filter(order => order[1]?.status === "pending")
   const completedOrders = newOrders.filter(order => order[1]?.status === "Delivered")
   const cancelledOrders = newOrders.filter(order => order[1]?.status === "Cancelled")
@@ -80,9 +83,9 @@ const Admin = () => {
 
       <section className="my-10">
         <header className="text-2xl font-[arial] font-medium tracking-wide  text-center">All Orders</header>
-        
+
        <> { isLoading ? <LoadVendorProducts/> : <main>
-          {orders.map(order=>{
+          {orders.reverse().map(order=>{
           const orderRef = Object.entries(order[1])
         
           return <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 mt-8 md:mx-7 lg:mx-12">
