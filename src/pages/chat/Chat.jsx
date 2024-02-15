@@ -96,8 +96,10 @@ const Chat = () => {
           {members?.receiver?.id === id ? 
               <article className="flex items-center">
                 <img className="w-[35px] h-[35px] object-cover rounded-[50%]" src={members?.sender?.url} alt={`${members?.sender?.name} avatar`}/>
-                <h3 className="ml-2 font-medium text-[18px] text-slate-700">{members?.sender?.name}</h3>
-                <h3 className="text-xs text-slate-600">active</h3>
+                <div>
+                  <h3 className="ml-2 font-medium text-[18px] text-slate-700">{members?.sender?.name}</h3>
+                  <h3 className="text-xs text-blue-600 ml-2 tracking-wider -mt-1">Active user</h3>
+                </div>
               </article>
             : 
             <article className="flex items-center">
@@ -115,7 +117,7 @@ const Chat = () => {
           </div>
         </header>
 
-        <article className="overflow-y-scroll scrollbar-thin   h-[70vh] mb-10 md:mb-20">
+        <article className="overflow-y-scroll scrollbar-thin   h-[100vh] mb-10 md:mb-20">
           {chats.length > 0 ? chats.map(chat=>{
             return <section ref={scrollMessage}>
             {chat[1]?.id === id ? <main className=" flex flex-col items-end justify-end my-2 mr-3" >
@@ -140,7 +142,7 @@ const Chat = () => {
               </main>}
             
             </section>
-          }) :  <section className="flex justify-center h-[50vh] flex-col items-center mx-3 mt-12 md:mt-6">
+          }) :  <section className="flex justify-center h-[70vh] flex-col items-center mx-3 mt-12 md:mt-6">
               <img src={empty} alt="empty" className="w-8/12 md:w-fit" />
               <h4 className="text-sm text-slate-600 tracking-wider text-center">Oops! it seems like there's no chat history. Start a conversation and get things rolling</h4>
             </section>}

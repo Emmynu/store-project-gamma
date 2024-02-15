@@ -32,6 +32,7 @@ import CancelOrder from "./pages/home/help/CancelOrder"
 import OrderDetailed from "./pages/products/OrderDetailed"
 import TrackOrder from "./pages/products/TrackOrder"
 import Header from "./pages/admin/Header"
+import AdminProduct from "./pages/admin/Products"
 
 export default function App(){
   const router = createBrowserRouter(createRoutesFromElements(
@@ -86,6 +87,7 @@ export default function App(){
     <Route element={<ProtectAdmin />}>
        <Route path="admin" element={<Header />}>
         <Route index element={<Admin />}/>
+        <Route path="products" element={<AdminProduct />}/>
          <Route path="refund" element={<Refund />}/>
        </Route>
     </Route>

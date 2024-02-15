@@ -1,9 +1,9 @@
-import { toast, Toaster } from "sonner"
+import {  Toaster } from "sonner"
 import { Outlet, Link } from "react-router-dom"
 import orders from "../../images/orders-2.png"
 import refund from "../../images/refund-2.png"
 import allProduct from "../../images/all-products.png"
-// import addProduct from "../../images/add-product.png"
+import chat from "../../images/chat-2.png"
 import { useState } from "react"
 
 const Header = () => {
@@ -44,6 +44,11 @@ const Header = () => {
                 <span>Orders</span>
               </h2></Link>
   
+              <Link to={"/chats"}> <h2 className="my-4 font-normal flex items-center text-slate-600 tracking-wide logo text-base">
+              <img src={chat} alt="stat" className="mr-2 w-6"/>
+                <span>Chats</span>
+              </h2></Link>
+
 
               <Link to={`/admin/refund`}><h2 className="my-4 font-normal flex items-center text-slate-600 tracking-wide logo text-base">
                 <img src={refund} alt="stat" className="mr-2 w-6"/>
@@ -51,7 +56,7 @@ const Header = () => {
               </h2></Link>
 
 
-            <Link to="/dashboard/products">
+            <Link to="/admin/products">
               <h2 className="my-4 font-normal flex items-center  text-slate-600 tracking-wide logo text-base">
                 <img src={allProduct} alt="stat" className="mr-2 w-6"/>
                   <span>All Products</span>
