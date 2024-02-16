@@ -29,28 +29,47 @@ const TrackOrder = () => {
         </header>
 
         <main>
-          <section className="flex items-center ">
-            <div>
-              <h3>&#x2713;</h3>
+          <section className="flex ">
+            <div className="flex flex-col items-center">
+              <h3 className="text-white bg-blue-700 py-0.5 px-2 rounded-[50%]">&#x2713;</h3>
+              <div className="bg-blue-700 w-[5px] h-[45px]"></div>
             </div>
-            <div className="ml-3 mt-2">
-              <h3>Placed Order</h3>
-              <Moment>{orders?.createdOrderAt}</Moment>
+            <div className="ml-3 mt-1">
+              <h3 className="bg-blue-700 text-white uppercase text-xs w-fit p-1 tracking-wide">Placed Order</h3>
+              <Moment className="text-[12px] text-slate-600 tracking-wider">{orders?.createdOrderAt}</Moment>
             </div>
           </section>
-          <section>
-            <h3>{pendingOrder.length} Product Pending</h3>
-            <Moment>{orders?.createdOrderAt}</Moment>
+          <section className="flex ">
+            <div className="flex flex-col items-center">
+                <h3 className="text-white bg-yellow-500 py-0.5 px-2   rounded-[50%]">&#x2713;</h3>
+                <div className="bg-yellow-500 w-[5px] h-[45px]"></div>
+              </div>
+              <div className="ml-3 mt-1">
+                <h3  className="bg-yellow-500 text-white uppercase text-xs w-fit p-1 tracking-wide">{pendingOrder.length} Product Pending</h3>
+                <Moment className="text-[12px] text-slate-600 tracking-wider">{orders?.createdOrderAt}</Moment>
+              </div>
           </section>
 
-          <section>
-            <h3>{cancelledOrder.length} Product Cancelled</h3>
-            <Moment>{orders?.createdOrderAt}</Moment>
+          <section  className="flex">
+            <div className="flex flex-col items-center">
+              <h3 className="text-white bg-red-600 py-0.5 px-2  rounded-[50%]">&#x2713;</h3>
+              <div className="bg-red-600 w-[5px] h-[45px]"></div>
+            </div>
+            <div className="ml-3 mt-1">
+              <h3 className="bg-red-600 text-white uppercase text-xs w-fit p-1 tracking-wide">{cancelledOrder.length} Product Cancelled</h3>
+              <Moment className="text-[12px] text-slate-600 tracking-wider">{orders?.createdOrderAt}</Moment>
+            </div>
           </section>
 
-          <section>
-            <h3>{deliveredOrder.length} Product Delivered</h3>
-            <Moment>{orders?.createdOrderAt}</Moment>
+          <section className="flex">
+            <div className="flex flex-col items-center">
+              <h3 className="text-white bg-green-600 py-0.5 px-2  rounded-[50%]">&#x2713;</h3>
+              <div className="bg-green-600 w-[5px] h-[30px]"></div>
+            </div>
+            <div className="ml-3 mt-1">
+              <h3 className="bg-green-600 text-white uppercase text-xs w-fit p-1 tracking-wide">{deliveredOrder.length} Product Delivered</h3>
+              <Moment className="text-[12px] text-slate-600 tracking-wider">{orders?.createdOrderAt}</Moment>
+            </div>
           </section>
          
         </main>

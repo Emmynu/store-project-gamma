@@ -80,8 +80,10 @@ export async function saveRefund(orderId, data) {
 }
 
 
-export async function getRefunds(refunds) {
+export async function getRefunds(refunds, isLoading) {
+  isLoading(true)
   onValue(ref(db, `refunds/`),res=>{
+    isLoading(false)
     res.exists()? refunds(Object.entries(res.val())) : refunds([])
   })
 }

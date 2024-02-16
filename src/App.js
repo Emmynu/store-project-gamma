@@ -4,7 +4,7 @@ import Login, { loginAction } from "./pages/auth/Login"
 import ForgotPassword from "./pages/auth/ForgotPassword"
 import NewProduct from "./pages/products/newProduct"
 import Navigation from "./pages/home/Navigation"
-import ProtectRoute from "./pages/home/ProtectRoute"
+import ProtectRoute, { ChatProtectedRoute } from "./pages/home/ProtectRoute"
 import Home from "./pages/home/Home"
 import Detailed from "./pages/products/Detailed"
 import Collections from "./pages/products/Collections"
@@ -71,17 +71,19 @@ export default function App(){
     <Route path="/login" element={<Login />} action={loginAction}/>
     <Route path="/find-account" element={<ForgotPassword />} /> 
 
-    <Route element={<ProtectRoute />}>
+    <Route element={<ChatProtectedRoute />}>
       <Route path="chats" element={<Chats />}/>
       <Route path="chat/:chatId/:userId" element={<Chat />}/>
+    </Route>
 
+    <Route element={<ProtectRoute />}>
       {/* Dashboard */}
       <Route path="dashboard" element={<Dashboard />}>
         <Route index element={<Stats />}/>
         <Route path="new-product" element={<NewProduct />}/>
         <Route path="products" element={<Products />}/>
       </Route>
-    </Route>
+  </Route>
     
     {/* admin */}
     <Route element={<ProtectAdmin />}>

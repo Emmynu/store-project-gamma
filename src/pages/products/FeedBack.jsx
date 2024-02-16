@@ -9,6 +9,8 @@ import Moment from "react-moment";
 import empty from "../../images/fly.gif"
 import AOS from "aos"
 import "aos/dist/aos.css"
+import { id as userId } from "../../actions/auth/auth";
+import { AdminHash } from "../admin/AdminLogin";
 
 
 const FeedBack = () => {
@@ -165,19 +167,21 @@ function  LikeFeedBack({ feedId,productId }) {
 
 
   function likeFeedback() {
-    if(IsLiked){
-      likes.map(like => {
-        if(like[1]?.id === auth?.currentUser?.uid){
-          removeLike(productId, feedId, like[0])
-          setIsLiked(false)
-        }
-      })
-    }
-    else{
-      likeFeedBack(productId, feedId, {
-        id:auth?.currentUser?.uid,
-        name:auth?.currentUser?.displayName
-      })
+    if(userId && userId !== AdminHash){
+      if(IsLiked){
+        likes.map(like => {
+          if(like[1]?.id === auth?.currentUser?.uid){
+            removeLike(productId, feedId, like[0])
+            setIsLiked(false)
+          }
+        })
+      }
+      else{
+        likeFeedBack(productId, feedId, {
+          id:auth?.currentUser?.uid,
+          name:auth?.currentUser?.displayName
+        })
+      }
     }
   }
 

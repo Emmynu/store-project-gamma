@@ -19,6 +19,7 @@ import { addProductToCart, getCart } from '../../actions/products/cart'
 import { getFeedBacks } from '../../actions/products/feedback'
 import { getAllChats, saveChatMembers } from '../../actions/chat/chat'
 import { auth } from '../../firebase-config'
+import { AdminHash } from '../admin/AdminLogin'
 
 export const slide2 ={
   dots: false,
@@ -82,7 +83,7 @@ const Detailed = () => {
   }
 
   function saveCollection() {
-   if (userId) {
+   if (userId && userId !== AdminHash) {
     if (isSaved) {
       collection.map(item => {
         if(item[1]?.productId === id){
@@ -108,7 +109,7 @@ const Detailed = () => {
   }
 
   function addToCart() {
-    if(userId){
+    if(userId && userId !== AdminHash){
       if (isProductInCart) {
         toast.error("Item Already In Cart")
       }else{
@@ -135,21 +136,26 @@ const Detailed = () => {
   }
 
   function createChat(user) {
-    const chatID = new Date().getTime().toString()
-    const {id, email, url, name} = user
-      saveChatMembers(chatID, {
-        sender:{
-          id: auth?.currentUser?.uid,
-          name: auth?.currentUser?.displayName,
-          url: auth?.currentUser?.photoURL,
-        },
-        receiver: {
-          id,
-          email,
-          url,
-          name
-        }
-      }).then(window.location = "/chats")
+    if(userId && userId !== AdminHash){
+      const chatID = new Date().getTime().toString()
+        const {id, email, url, name} = user
+        saveChatMembers(chatID, {
+          sender:{
+            id: auth?.currentUser?.uid,
+            name: auth?.currentUser?.displayName,
+            url: auth?.currentUser?.photoURL,
+          },
+          receiver: {
+            id,
+            email,
+            url,
+            name
+          }
+        }).then(window.location = "/chats")
+    }
+    else{
+      window.location = "/login"
+    }
     // }
     
   }

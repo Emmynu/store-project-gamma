@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { auth } from "../../firebase-config"
 import { Link } from "react-router-dom"
 import Slider from "react-slick"
 import Moment from "react-moment"

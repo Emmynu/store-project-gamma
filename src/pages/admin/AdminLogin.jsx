@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth"
 import { auth } from "../../firebase-config"
 
 
+export const AdminHash = "12345"
 export async function adminLoginAction({ request }) {
   const data = await request.formData()
   const { email, password, hash} = Object.fromEntries(data)
@@ -13,14 +14,17 @@ export async function adminLoginAction({ request }) {
   if (values.includes("")) {
     toast.error("Invalid form input")
   } else {
-    if(email === "oketunbi.olufunke@gmail.com" && password === "PriN35s*" && hash === "12345"){
+    if(email === "oketunbi.olufunke@gmail.com" && password === "PriN35s*" && hash === AdminHash){
       toast.success(`Welcome Back Emmanuel`)
       localStorage.setItem("id", hash)
-      signOut(auth).then( 
+      signOut(auth)
+      .then( 
         setTimeout(() => {
         window.location = "/admin"
       }, 1500))
-     
+     .catch(err=>{
+      toast.error(err.message)
+     })
     }else{
       toast.error("Invalid Credentials")
     }
@@ -31,7 +35,7 @@ export async function adminLoginAction({ request }) {
 const AdminLogin = () => {
   const navigation = useNavigation()
   return (
-    <main className="bg-white shadow-md border-t-[5px] w-[95%] h-[50vh] md:w-7/12 md:h-fit lg:w-1/3  rounded-[5px] m-[6%_auto_0]  md:m-[10%_auto_0] p-5 border-blue-700">
+    <main className="bg-white shadow-md border-t-[5px] w-[95%] h-[50vh] md:w-7/12 md:h-fit lg:w-1/3  rounded-[5px] m-[8%_auto_0]  md:m-[10%_auto_0] p-5 border-blue-700">
         <header className="text-center">
           <h2 className="text-2xl font-[arial] my-1.5 tracking-wider text-slate-700">Admin Login</h2>
         </header>
