@@ -127,6 +127,11 @@ const OrderOptions = () => {
         setIsModalOpen(false)
         setNewAddress({phone: "", state:"", address:"", city : ""})
       })
+      setIsLoading(false)
+     }
+     else{
+      toast.error("Fill out all field")
+      setIsLoading(false)
      }
   }
 
@@ -275,11 +280,12 @@ function finalizeOrder() {
     { isModalOpen &&  <Modal isOpen={isModalOpen}  className="w-11/12 md:w-6/12 lg:w-1/3 p-5 absolute top-48 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-blue-600 outline-none rounded-mdx shadow-md ">
     <h2 ref={(_subtitle) => (subtitle = _subtitle)}></h2>
       {/* close btn */}
-      {!isError ? <article>
-        <button className="text-base font-medium text-red-700  tracking-widest " onClick={closeModal}>
+      <button className="text-base font-medium text-red-700  tracking-widest " onClick={closeModal}>
           <div className="sm-bar w-[20px] sm-bar-1"></div>
           <div className="sm-bar w-[20px] sm-bar-2"></div>
         </button>
+      {!isError ? <article>
+      
         <section>
           <h3 className="text-[27px] font-medium text-slate-800 my-2.5">Update Address</h3>
           <article>
@@ -308,7 +314,7 @@ function finalizeOrder() {
       :
       
       <section>
-        <h3>Failed to Fectch states</h3>  
+        <h3 className="text-center font-bold font-[arial]">Failed to Fetch states</h3>  
       </section>}
 
 

@@ -9,8 +9,6 @@ import "aos/dist/aos.css"
 import { Link } from "react-router-dom"
 import Moment from "react-moment"
 import emptyCollection from "../../images/fly.gif"
-import { auth } from "../../firebase-config"
-import { toast } from "sonner"
 
 
 const Orders = () => {

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import { getRefunds } from '../../actions/products/orders'
+import { Link } from "react-router-dom"
+import { getRefunds, updateRefundStatus } from '../../actions/products/orders'
 import { LoadVendorProducts } from '../../components/Loading'
 import Slider from 'react-slick'
 import { settings } from './Products'
 import refundIcon from "../../images/refund-2.png"
 import allProduct from "../../images/all-products.png"
+import empty from "../../images/notFound.png"
+
  
 
 const Refund = () => {
@@ -27,6 +30,7 @@ const Refund = () => {
             {refunds.length > 0 ? 
             <section  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 md:mx-7 lg:mx-12 mt-4">
               {refunds.map(refund=>{
+                console.log(refund[0])
                 return <article className="bg-white shadow-lg hover:shadow-3xl rounded-md transition-[3s] cursor-pointer " >
                 <Slider {...settings}>
                   {refund[1]?.products?.map(product=>{
@@ -61,9 +65,9 @@ const Refund = () => {
                           </article>
 
                           <footer>
-                            <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Refund</button>
+                            <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={()=>updateRefundStatus(refund[0], "Refunded")}>Refund</button>
 
-                            <button className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Remove</button>
+                            <button className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={()=>updateRefundStatus(refund[0], "Cancelled")}>Cancel</button>
                             </footer>
                       </section>
                     })}
@@ -74,7 +78,11 @@ const Refund = () => {
             
             : 
             
-            <section></section>}
+            <section className="mt-6 flex flex-col items-center justify-center">
+            <img src={empty} alt="empty" />
+            <h3 className="text-slate-700 text-center tracking-wide font-medium -mt-6">Fortunately, No Refund Found</h3>
+            <button className="px-4 py-1.5 rounded-[4px] bg-blue-700 font-normal my-4 text-sm text-white tracking-wider "><Link to={"/admin"}>View Orders</Link></button>
+          </section>}
             </main>}
       </section>
     </main>

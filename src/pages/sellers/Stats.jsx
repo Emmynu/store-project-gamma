@@ -124,7 +124,7 @@ const Stats = () => {
                   </article>
                 </section>
 
-                <UpdateOrderStatus  status={order[1]?.products?.status}/>                
+                <UpdateOrderStatus  status={order[1]?.products?.status} time={order[1]?.createdAt}/>                
               </article>
             </Link>
           })}
@@ -141,7 +141,7 @@ const Stats = () => {
 }
 
 
-function UpdateOrderStatus({ status }){
+function UpdateOrderStatus({ status, time }){
 
   const [params, setParams] = useSearchParams()
   const orderedBy = params.get("orderedBy")
@@ -149,11 +149,20 @@ function UpdateOrderStatus({ status }){
   const productId = params.get("productId")
   const [isLoading, setIsLoading] = useState(false)
   const [products, setProducts] = useState(false)
+  const expiryOrderDate =  Date.now() - new Date(time).getTime() < 1000 * 60 * 60 * 24 * 2
+
+
 
  
   useEffect(()=>{
     getUserOrderProduct(orderedBy,orderId, setProducts, setIsLoading)
   },[orderId, orderedBy, productId])
+
+  useEffect(()=>{
+    if(expiryOrderDate && products.length > 0){
+      changeOrderStatus("Cancelled")
+    }
+  },[expiryOrderDate])
 
 
   function changeOrderStatus(status){

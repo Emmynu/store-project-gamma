@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom"
 import { useEffect, useRef, useState } from "react"
-import { addFavorite, deleteRoom, getFavourite, getSingleChat, getSingleChatMembers, removeMessage, saveChat } from "../../actions/chat/chat"
-import { auth, db, storage } from "../../firebase-config"
+import { deleteRoom, getSingleChat, getSingleChatMembers, removeMessage, saveChat } from "../../actions/chat/chat"
+import { auth, storage } from "../../firebase-config"
 import ChatMembers from "../../components/ChatMembers"
 import  "../../components/chat.css"
 import { id } from "../../actions/auth/auth"
@@ -15,6 +15,8 @@ import uploadIcon from "../../images/upload.png"
 import { Toaster, toast } from "sonner"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { OrderOptionsLoading } from "../../components/Loading"
+import { AdminHash } from "../admin/AdminLogin"
+
 
 const Chat = () => { 
   const [chats, setChats] = useState([])
@@ -43,8 +45,8 @@ const Chat = () => {
     // e.preventDefault()
    if(text.length > 0){
     saveChat(chatId, {
-      id:auth?.currentUser?.uid,
-      name:auth?.currentUser?.displayName,
+      id:auth?.currentUser?.uid || AdminHash,
+      name:auth?.currentUser?.displayName || "BearCart",
       message: text,
       at: serverTimestamp()
     }).then(setText("")).then(res=>{
@@ -63,8 +65,8 @@ const Chat = () => {
         await uploadBytes(storageRef, file)
         const url = await getDownloadURL(storageRef)
         await saveChat(chatId,{
-          id:auth?.currentUser?.uid,
-          name:auth?.currentUser?.displayName,
+          id:auth?.currentUser?.uid || AdminHash,
+          name:auth?.currentUser?.displayName || "BearCart",
           url,
           at: serverTimestamp()
         }).then(setIsUploading(false)).then(scrollMessage.current.scrollIntoView())

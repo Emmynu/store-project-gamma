@@ -87,3 +87,11 @@ export async function getRefunds(refunds, isLoading) {
     res.exists()? refunds(Object.entries(res.val())) : refunds([])
   })
 }
+
+
+
+export async function updateRefundStatus(orderId, status){
+  const updates = {}
+  updates[`refunds/${orderId}/status`] = status
+  update(ref(getDatabase()), updates)
+}

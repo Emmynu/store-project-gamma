@@ -5,7 +5,7 @@ import { auth } from "../../firebase-config"
 import stats from "../../images/stats.png"
 import allProduct from "../../images/all-products.png"
 import addProduct from "../../images/add-product.png"
-import sell from "../../images/sell.gif"
+import chat from "../../images/chat-2.png"
 import { id } from "../../actions/auth/auth"
 import { Toaster } from "sonner"
 
@@ -75,6 +75,12 @@ const Dashboard = () => {
             <img src={stats} alt="stat" className="mr-2 w-6"/>
              <span>Stats</span>
            </h2></Link>
+
+           <Link to={"/chats"}> <h2 className="my-4 font-normal flex items-center text-slate-600 tracking-wide logo text-base">
+              <img src={chat} alt="stat" className="mr-2 w-6"/>
+                <span>Chats</span>
+            </h2></Link>
+
 
           <Link to="/dashboard/products">
            <h2 className="my-4 font-normal flex items-center  text-slate-600 tracking-wide logo text-base">

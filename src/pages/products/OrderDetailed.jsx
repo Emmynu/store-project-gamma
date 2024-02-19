@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom"
-import getSingleOrder, { getUserOrderProduct, updateVendorOrders } from "../../actions/products/orders";
+import getSingleOrder, { getUserOrderProduct, saveRefund, updateVendorOrders } from "../../actions/products/orders";
 import CustomerSideBar from "../../components/sideBar";
 import { updateOrders } from "../../actions/products/orders";
 import Moment from "react-moment"
@@ -33,7 +33,6 @@ const OrderDetailed = () => {
     autoplaySpeed:3000
   }
 
-  console.log(orders)
 
   async function updateOrderStatus(){
     await updateOrders(auth?.currentUser?.uid, id , "Cancelled").then(res =>{
@@ -49,12 +48,28 @@ const OrderDetailed = () => {
   }
 
     function changeOrderStatus() {
-      const expiryOrderDate =  Date.now() - new Date(orders.createdOrderAt).getTime() * 1000 * 60 * 60 * 24 * 2
+      const expiryOrderDate =  Date.now() - new Date(orders.createdOrderAt).getTime() < 1000 * 60 * 60 * 24 * 2
       if(orders?.status === "pending" && expiryOrderDate){
         if(orders?.paymentOption === "On-Delivery"){
          updateOrderStatus()
         }else{
-         updateOrderStatus()
+         updateOrderStatus().then(res=>{
+          //  console.log(orders?.products);
+          let newTotal = 0
+          orders?.products.reduce((total,price)=>{
+            total += parseInt( price?.price) * parseInt(price?.quantity )
+             newTotal =  total
+             return total
+          },0)
+
+          saveRefund(id, {
+          type: "payment",
+          products:orders?.products,
+          status:"pending",
+          amount: newTotal,
+         })
+
+         })
         }
       }
     }
@@ -80,7 +95,7 @@ const OrderDetailed = () => {
                 return <article>
                   <header className="flex items-center mb-3">
                     <h2 className="px-2 py-1 bg-green-600 text-white uppercase text-xs tracking-wideest rounded-[4px] mr-2">{orders.status}</h2>
-                    {orders.status !== "Cancelled" &&<button  className="text-xs text-red-600 bg-red-100 px-2 py-1.5 mr-1.5 tracking-wide rounded-[4px]" onClick={changeOrderStatus}>{orders.status=== "Delivered"? "Refund" : "Cancel"}</button>}
+                    {orders.status === "pending" &&<button  className="text-xs text-red-600 bg-red-100 px-2 py-1.5 mr-1.5 tracking-wide rounded-[4px]" onClick={changeOrderStatus}>{"Cancel"}</button>}
                     <h4 className="text-sm tracking-wider"><Moment fromNow>{orders?.createdOrderAt}</Moment></h4>
                   </header>
                   <main className="grid grid-cols-2 md:grid-cols-3 ">

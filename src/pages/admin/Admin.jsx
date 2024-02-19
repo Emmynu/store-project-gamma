@@ -91,12 +91,13 @@ const Admin = () => {
           return <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 mt-8 md:mx-7 lg:mx-12">
                 
                 {orderRef.map(ref=>{
+                 
                   return <section className="bg-white shadow-md hover:shadow-lg transition-[2s_all_linear] rounded-md cursor-pointer">
                     <article> 
                      
                      <Slider {...settings}>{ref[1]?.products.map(product=>{
                       return <>
-                        <Product product={product} orderId={ref[0]} userId={order[0]} orders={orderRef} at={ref[1]?.createdOrderAt}/>
+                        <Product product={product} orderId={ref[0]} userId={order[0]} orders={orderRef} at={ref[1]?.createdOrderAt} status={ref[1]?.status}/>
                         </>
                     })} </Slider>
                     </article>          
@@ -113,7 +114,7 @@ const Admin = () => {
 }
 
 
-function Product({ product, orderId, userId, orders, at }) {
+function Product({ product, orderId, userId, orders, at, status }) {
   const [userProducts, setUserProducts] =  useState([])
   const [isLoading, setIsLoading] =  useState(false)
   
@@ -126,7 +127,7 @@ function Product({ product, orderId, userId, orders, at }) {
 
   function cancelOrder() {
     const newOrder  = orders.filter(item=>item[0]=== orderId)
-    // console.log(newOrder, userId);
+  
     newOrder.map(order =>{
       updateOrders(userId,order[0], "Cancelled" )
       // refund
@@ -138,7 +139,7 @@ function Product({ product, orderId, userId, orders, at }) {
             newTotal =  total
             return total
          },0)
-         console.log(newTotal);
+        
          
           saveRefund(orderId, {
             type: "payment",
@@ -161,7 +162,33 @@ function Product({ product, orderId, userId, orders, at }) {
     })
   }
 
+  function deliverOrder() {
+    const newOrder  = orders.filter(item=>item[0] === orderId)
+    newOrder.map(order=>{
+     
+      const deliveredOrderProduct = order[1]?.products?.filter(product=>product.status === "Delivered")
+      if(deliveredOrderProduct.length> 0) {
+        updateOrders( userId,order[0], "Delivered")
+      }
+      
+      const cancelledOrderProduct = order[1]?.products?.filter(product=>product.status === "Cancelled")
+      if (cancelledOrderProduct.length > 0 && order[1]?.paymentOption === "Online-Payment") {
+          let newTotal = 0
+          cancelledOrderProduct.reduce((total,price)=>{
+            total += parseInt( price?.price) * parseInt(price?.quantity )
+            newTotal =  total
+            return total
+          },0)
 
+          saveRefund(orderId, {
+            type: "payment",
+            amount: newTotal,
+            products:cancelledOrderProduct,
+            status:"pending"
+          })
+      }
+    })
+  }
 
   return (
    <main>
@@ -178,6 +205,7 @@ function Product({ product, orderId, userId, orders, at }) {
             </Moment>
         </div>
         </article>
+
        
         <article>
           <h4 className="bg-blue-100 shadow-md px-2 py-1.5 tracking-wider  text-blue-700 text-xs">{product?.status}</h4>
@@ -187,9 +215,10 @@ function Product({ product, orderId, userId, orders, at }) {
             <span>{product?.quantity}</span></h4>
         </article>
       </section>
-  {product?.status !== "pending" && <> <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Delivered</button>
-    <button onClick={cancelOrder} className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Cancel</button>
-    </>}
+      
+    {status === "pending" && <> <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={deliverOrder}>Delivered</button>
+      <button onClick={cancelOrder} className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide">Cancel</button>
+      </>}
   </main>
   )
   
