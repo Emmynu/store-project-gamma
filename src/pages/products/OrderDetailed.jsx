@@ -11,6 +11,7 @@ import { settings } from "../sellers/Products";
 import { auth } from "../../firebase-config";
 import { id as  userId } from "../../actions/auth/auth";
 import { getDatabase, update, ref } from "firebase/database";
+import { toast } from "sonner";
 
 const OrderDetailed = () => {
   const { id, createdOrderAt } = useParams()
@@ -48,20 +49,20 @@ const OrderDetailed = () => {
   }
 
     function changeOrderStatus() {
+      let newTotal = 0
+      orders?.products.reduce((total,price)=>{
+        total += parseInt( price?.price) * parseInt(price?.quantity )
+         newTotal =  total
+         return total
+      },0)
+
       const expiryOrderDate =  Date.now() - new Date(orders.createdOrderAt).getTime() < 1000 * 60 * 60 * 24 * 2
       if(orders?.status === "pending" && expiryOrderDate){
         if(orders?.paymentOption === "On-Delivery"){
          updateOrderStatus()
         }else{
          updateOrderStatus().then(res=>{
-          //  console.log(orders?.products);
-          let newTotal = 0
-          orders?.products.reduce((total,price)=>{
-            total += parseInt( price?.price) * parseInt(price?.quantity )
-             newTotal =  total
-             return total
-          },0)
-
+        
           saveRefund(id, {
           type: "payment",
           products:orders?.products,
@@ -71,6 +72,18 @@ const OrderDetailed = () => {
 
          })
         }
+      }
+      else if(orders?.status === "Delivered" && expiryOrderDate){
+        updateOrders(auth?.currentUser?.uid, id , "Cancelled").then(   saveRefund(id, {
+            type: "product",
+            products:orders?.products,
+            status:"pending",
+            amount: newTotal,
+          }))
+     
+      }
+      else {
+        toast.error("Cannot cancel order")
       }
     }
 
@@ -95,7 +108,7 @@ const OrderDetailed = () => {
                 return <article>
                   <header className="flex items-center mb-3">
                     <h2 className="px-2 py-1 bg-green-600 text-white uppercase text-xs tracking-wideest rounded-[4px] mr-2">{orders.status}</h2>
-                    {orders.status === "pending" &&<button  className="text-xs text-red-600 bg-red-100 px-2 py-1.5 mr-1.5 tracking-wide rounded-[4px]" onClick={changeOrderStatus}>{"Cancel"}</button>}
+                    {orders.status !== "Cancelled" &&<button  className="text-xs text-red-600 bg-red-100 px-2 py-1.5 mr-1.5 tracking-wide rounded-[4px]" onClick={changeOrderStatus}>{"Cancel"}</button>}
                     <h4 className="text-sm tracking-wider"><Moment fromNow>{orders?.createdOrderAt}</Moment></h4>
                   </header>
                   <main className="grid grid-cols-2 md:grid-cols-3 ">

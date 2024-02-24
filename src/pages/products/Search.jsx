@@ -131,12 +131,12 @@ const Search = () => {
                 {filterProducts.reverse().map(item =>{
                 return <div>
                   <Link to={`/product/${item[0]}/${item[1]?.category}/${item[1]?.brands}`}>
-                  <img src={item[1]?.productImages} className={"rounded-[4px] w-full h-[250px] md:h-[350px] object-cover"}/>
+                  <img src={item[1]?.productImages} className={"rounded-[4px] w-full h-[250px] md:h-[300px] object-cover"}/>
                   <article className="my-1.5">
                     <div>
                       <h2 className={"font-bold text-sm md:text-base text-left tracking-wider"} style={{fontFamily: "Arial"}}>{item[1]?.name}</h2>
 
-                      <h2 className=" text-xs md:text-sm tracking-wider my-0.5 text-slate-600">₦{item[1]?.price}</h2>
+                      <h2 className=" text-xs md:text-sm text-blue-600 tracking-wider my-0.5">₦{item[1]?.price}</h2>
                     </div>
                   </article>
                   </Link>

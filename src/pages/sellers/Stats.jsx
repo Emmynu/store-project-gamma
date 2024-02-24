@@ -149,7 +149,7 @@ function UpdateOrderStatus({ status, time }){
   const productId = params.get("productId")
   const [isLoading, setIsLoading] = useState(false)
   const [products, setProducts] = useState(false)
-  const expiryOrderDate =  Date.now() - new Date(time).getTime() < 1000 * 60 * 60 * 24 * 2
+  const expiryOrderDate =  Date.now() - new Date(time).getTime() < 1000 * 60 * 60
 
 
 
@@ -159,11 +159,10 @@ function UpdateOrderStatus({ status, time }){
   },[orderId, orderedBy, productId])
 
   useEffect(()=>{
-    if(expiryOrderDate && products.length > 0){
+    if(!expiryOrderDate && products.length > 0 && status ==="pending"){
       changeOrderStatus("Cancelled")
     }
-  },[expiryOrderDate])
-
+  }, [expiryOrderDate])
 
   function changeOrderStatus(status){
     const newProduct = products.filter(product => product[1]?.productId === productId)
@@ -191,9 +190,9 @@ function UpdateOrderStatus({ status, time }){
 
   return <footer>                
      {status === "pending" && <section>
-        <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={deliveredOrder} disabled={isLoading}>{isLoading ? <span><img src={load} alt=""className="w-5 animate-spin" /></span>: "Delivered"}</button>
+        <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={deliveredOrder}>{isLoading ? <span><img src={load} alt=""className="w-5 animate-spin" /></span>: "Delivered"}</button>
 
-      <button  className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={cancelledOrder} disabled={isLoading}>{isLoading ? <span><img src={load} alt=""className="w-5 animate-spin" /></span>: "Cancel"}</button>
+      <button  className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={cancelledOrder}>{isLoading ? <span><img src={load} alt=""className="w-5 animate-spin" /></span>: "Cancel"}</button>
       </section>}
   </footer>  
 }

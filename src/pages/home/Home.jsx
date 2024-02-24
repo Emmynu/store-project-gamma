@@ -11,11 +11,15 @@ import qualityIcon from "../../images/quality.png"
 import Shop from "../../images/full-cart.png"
 import Loading from "../../components/Loading"
 import AOS from "aos"
+import { id } from "../../actions/auth/auth"
+import { getSellers } from "../../actions/sellers/sellers"
 import "aos/dist/aos.css"
 
 const Home = () => {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [ isVendor, setIsVendor] = useState(null)
+  const [ sellers, setSellers] = useState([])
   const sliderRef = useRef(null)
   const categoryRef = useRef(null)
   const homeSliderRef = useRef(null)
@@ -88,6 +92,13 @@ const Home = () => {
     autoplaySpeed:3000,
   }
 
+  useEffect(()=>{
+    getSellers(setSellers)
+  },[])
+
+  useEffect(()=>{
+    sellers.find(seller => seller[0] === id) ? setIsVendor(true) : setIsVendor(false)
+  })
 
   useEffect(()=>{
     getProducts(setIsLoading,setProducts)
@@ -269,7 +280,7 @@ const Home = () => {
         <article>
           <h2 className=" text-2xl sm:text-4xl text-blue-700 font-[arial] font-bold mb-2" data-aos={"fade-up"} data-aos-duration={"700"}>Become A Vendor</h2>
           <p className="text-slate-600 tracking-wider mb-2 text-xs sm:text-sm" data-aos={"fade-up"} data-aos-duration={"900"}>Unlock new opportunities for your business by joining our platform. Sell your products on our website effortlessly, maximizing your sales potential. Get started Today!!</p>
-          <Link to={"/pricing"}><button className="text-sm sm:text-base mt-1 px-4 py-1.5 bg-blue-700 font-medium tracking-wide rounded-[4px] text-white" data-aos={"zoom-in"} data-aos-duration={"1100"}>Join Now</button></Link>
+          <Link to={isVendor ? "/dashboard": "/pricing"}><button className="text-sm sm:text-base mt-1 px-4 py-1.5 bg-blue-700 font-medium tracking-wide rounded-[4px] text-white" data-aos={"zoom-in"} data-aos-duration={"1100"}>Join Now</button></Link>
         </article>
       </section>
 

@@ -1,7 +1,6 @@
 import { Link, Outlet } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { getSingleSeller, getSellers } from "../../actions/sellers/sellers"
-import { auth } from "../../firebase-config"
 import stats from "../../images/stats.png"
 import allProduct from "../../images/all-products.png"
 import addProduct from "../../images/add-product.png"
@@ -16,28 +15,22 @@ const Dashboard = () => {
   const [showSideBar, setShowSideBar] = useState(false)
   const [isVendor, setIsVendor] = useState(false)
   const [vendor, setVendor] = useState([])
-  const [vendors, setVendors] = useState([])
+  const [sellers, setSellers] = useState([])
 
   
   useEffect(()=>{
     getSingleSeller(id, setVendor)
-    getSellers(setVendors)
   },[])
 
-
+  
+  useEffect(()=>{
+    getSellers(setSellers)
+  },[])
 
   useEffect(()=>{
-    vendors.find(seller => {
-      if(seller[0] === auth?.currentUser?.uid){
-        setIsVendor(true)
-      }
-      else{
-        setIsVendor(false)
-      }
-    })
-  },[vendors])
+    sellers.find(seller => seller[0] === id) ? setIsVendor(true) : setIsVendor(false)
+  })
 
-  
 
   const openSideBar ={
     tranform: "translateX(0%)",
@@ -49,10 +42,8 @@ const Dashboard = () => {
   }
 
 
-
-
   return (
-   <>{ 
+   <>{ isVendor ? 
     <main className="">
    <aside className="fixed top-0 left-0 bottom-0 bg-white z-20 border right-[10%] md:right-1/4 lg:right-[70%]" style={showSideBar ? openSideBar : closeSideBar}>
        <header className="side-bar-container p-3">
@@ -117,11 +108,7 @@ const Dashboard = () => {
    <Toaster richColors position="top-right" closeButton/> 
    <Outlet />
     </main>
-    // <section  className="flex flex-col  items-center text-center mt-24 ">
-    //   <img src={sell} alt="sell" className="w-[300px]" />
-    //   <h4 className="my-3.5 sm:my-2  text-sm tracking-wider md:text-sm px-3">Unfortunately! This page is for sellers only. click the button below to become a vendor</h4>
-    //  <Link to={"/pricing"}> <button className="bg-blue-700 px-5 py-1.5 rounded-[4px] text-white tracking-wider text-sm my-1.5">Become a seller</button></Link>
-    // </section>
+ :  window.location = "pricing"
  }
   </>
   )
