@@ -14,7 +14,6 @@ const ForgotPassword = () => {
     getAllUsersInDb(setUsers)
   },[])
   
-  console.log(users);
   async function findAccount(e){
     e.preventDefault()
     setIsLoading(true)

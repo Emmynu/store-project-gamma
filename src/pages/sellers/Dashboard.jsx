@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom"
 import { useEffect, useState } from "react"
-import { getSingleSeller, getSellers } from "../../actions/sellers/sellers"
+import { getSingleSeller } from "../../actions/sellers/sellers"
 import stats from "../../images/stats.png"
 import allProduct from "../../images/all-products.png"
 import addProduct from "../../images/add-product.png"
@@ -13,23 +13,13 @@ import { Toaster } from "sonner"
 
 const Dashboard = () => {
   const [showSideBar, setShowSideBar] = useState(false)
-  const [isVendor, setIsVendor] = useState(false)
   const [vendor, setVendor] = useState([])
-  const [sellers, setSellers] = useState([])
 
   
   useEffect(()=>{
     getSingleSeller(id, setVendor)
   },[])
 
-  
-  useEffect(()=>{
-    getSellers(setSellers)
-  },[])
-
-  useEffect(()=>{
-    sellers.find(seller => seller[0] === id) ? setIsVendor(true) : setIsVendor(false)
-  })
 
 
   const openSideBar ={
@@ -43,7 +33,7 @@ const Dashboard = () => {
 
 
   return (
-   <>{ isVendor ? 
+   <>{
     <main className="">
    <aside className="fixed top-0 left-0 bottom-0 bg-white z-20 border right-[10%] md:right-1/4 lg:right-[70%]" style={showSideBar ? openSideBar : closeSideBar}>
        <header className="side-bar-container p-3">
@@ -108,7 +98,6 @@ const Dashboard = () => {
    <Toaster richColors position="top-right" closeButton/> 
    <Outlet />
     </main>
- :  window.location = "pricing"
  }
   </>
   )

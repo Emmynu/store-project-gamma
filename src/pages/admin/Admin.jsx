@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getAllOrders, getUserOrderProduct, getVendorOrders, saveRefund, updateOrders, updateVendorOrders } from "../../actions/products/orders"
+import { getAllOrders, getUserOrderProduct, saveRefund, updateOrders, updateVendorOrders } from "../../actions/products/orders"
 import pending from "../../images/pending-2.png"
 import completed from "../../images/completed.png"
 import cancel from "../../images/cancel.png"
@@ -12,8 +12,8 @@ import { LoadVendorProducts } from "../../components/Loading"
 import Moment from "react-moment"
 import clock from "../../images/clock.png"
 import allProduct from "../../images/all-products.png"
-
-
+import empty from "../../images/notFound.png"
+import  { Link } from "react-router-dom"
 
 const Admin = () => {
   const [orders, setOrders] = useState([])
@@ -84,7 +84,7 @@ const Admin = () => {
       <section className="my-10">
         <header className="text-2xl font-[arial] font-medium tracking-wide  text-center">All Orders</header>
 
-       <> { isLoading ? <LoadVendorProducts/> : <main>
+      {orders.length > 0 ?  <> { isLoading ? <LoadVendorProducts/> : <main>
           {orders.reverse().map(order=>{
           const orderRef = Object.entries(order[1])
         
@@ -106,7 +106,14 @@ const Admin = () => {
             </article>
         
           })}
-      </main>}</>
+      </main>}</>:
+       <section className="mt-6 flex flex-col items-center justify-center">
+        <img src={empty} alt="empty" />
+        <h3 className="text-slate-700 text-center tracking-wide font-medium -mt-6">Currently, No Order was found!</h3>
+        <p className="text-sm text-slate-600 tracking-widest mx-1 my-1.5 text-center">Sorry to inform you Emmanuel, But No Order has been made on bearCart</p>
+        <button className="px-4 py-1.5 rounded-[4px] bg-blue-700 font-normal my-4 text-sm text-white tracking-wider "><Link to={"/admin/products"}>View Products</Link></button>
+     </section>
+      }
       </section>
       </main>}
     </main>

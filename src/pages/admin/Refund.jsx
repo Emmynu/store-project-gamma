@@ -13,24 +13,40 @@ import empty from "../../images/notFound.png"
 const Refund = () => {
   const [refunds, setRefunds] = useState([])
   const [isLoading, setIsLoading] = useState([])
+  const [refundHash, setRefundHash] = useState([])
 
   useEffect(() => {
     getRefunds(setRefunds, setIsLoading)
   },[])
 
-  console.log(refunds);
+  function searchRefund() {
+    const newRefund = refunds.filter(refund => refund[0] === refundHash  )
+    if(refundHash.length > 0 ){
+      if(newRefund.length> 0){
+        setRefunds(newRefund)
+      }
+      else{
+        setRefunds(refunds)
+      }
+    }
+    setRefundHash("")
+  }
 
   return (
     <main className='mt-32'>
       <header>
         <h2 className="text-2xl text-center  sm:text-[25px] leading-3 text-slate-700 font-medium font-[arial] tracking-wide">All Refunds</h2>
+        <div className='flex justify-center mt-6 items-center'>
+          <input type="text" value={refundHash} onChange={(e)=>setRefundHash(e.target.value)} placeholder='Refund Hash' className='border border-slate-700 ring-0 outline-none p-1 text-sm tracking-wider rounded-s-[4.5px] '/>
+          <button onClick={searchRefund} className='bg-blue-700 px-4 rounded-e-[4.5px] py-1.5 text-slate-50 text-sm tracking-wider'>Search</button>
+        </div>
       </header>
       <section className='mt-7'>
           {isLoading ?  <LoadVendorProducts /> : <main>
             {refunds.length > 0 ? 
             <section  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mx-3 md:mx-7 lg:mx-12 mt-4">
               {refunds.map(refund=>{
-                console.log(refund[0])
+                
                 return <article className="bg-white shadow-lg hover:shadow-3xl rounded-md transition-[3s] cursor-pointer " >
                 <Slider {...settings}>
                   {refund[1]?.products?.map(product=>{
@@ -65,9 +81,9 @@ const Refund = () => {
                           </article>
 
                           <footer>
-                            <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={()=>updateRefundStatus(refund[0], "Refunded")}>Refund</button>
+                            <button className="ml-3 shadow px-4 py-1 text-blue-700 bg-blue-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" disabled={refund[1]?.status !== "pending"} onClick={()=>updateRefundStatus(refund[0], "Refunded")}>Refund</button>
 
-                            <button className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" onClick={()=>updateRefundStatus(refund[0], "Cancelled")}>Cancel</button>
+                            <button className="ml-3 shadow px-4 py-1 text-red-800 bg-red-100 rounded-[4px] font-medium mb-4 mt-1 tracking-wide" disabled={refund[1]?.status !== "pending"} onClick={()=>updateRefundStatus(refund[0], "Cancelled")}>Cancel</button>
                             </footer>
                       </section>
                     })}
